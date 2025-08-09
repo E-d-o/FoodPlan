@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/mainlist.dart';
 import 'drawer_page.dart';
 import 'components/logo.dart';
 
@@ -69,15 +70,16 @@ class _MyHomePageState extends State<MyHomePage> {
       color: Colors.amber,
       padding: EdgeInsets.all(15),
       child: Column(
+        spacing: 15,
         children: [
+          MainList(),
+          MainList(),
           Container(
-            height: 200,
+            height: 100,
             width: double.infinity,
             padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
             color: Colors.redAccent,
           ),
-          Container(),
-          Container(),
         ],
       ),
     );
