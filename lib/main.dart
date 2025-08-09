@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'drawer_page.dart';
+import 'components/logo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,8 +15,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'FoodPlan',
       theme: ThemeData(
+        textTheme: TextTheme(
+          bodyMedium: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+          titleMedium: TextStyle(
+            fontFamily: "Inter",
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromRGBO(43, 140, 67, 1),
+          brightness: Brightness.light,
         ),
       ),
       home: const MyHomePage(title: 'FoodPlan'),
@@ -35,17 +50,35 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: Drawer(),
+      drawer: DrawerPage(),
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        actions: [Icon(Icons.shopping_bag)],
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        actions: [Logo()],
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+
+        centerTitle: true,
       ),
-      body: Column(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        children: [],
+      body: mainContent(),
+    );
+  }
+
+  Container mainContent() {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      color: Colors.amber,
+      padding: EdgeInsets.all(15),
+      child: Column(
+        children: [
+          Container(
+            height: 200,
+            width: double.infinity,
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+            color: Colors.redAccent,
+          ),
+          Container(),
+          Container(),
+        ],
       ),
     );
   }
