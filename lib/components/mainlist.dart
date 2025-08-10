@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/single_list_page.dart';
 
 class MainList extends StatefulWidget {
   const MainList({super.key});
@@ -54,7 +55,14 @@ class _MainListState extends State<MainList> {
         containedInkWell: true,
         //end of ink splash section
         onTap: () {
-          print("object");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return SingleListPage();
+              },
+            ),
+          );
         },
 
         child: Container(
@@ -69,7 +77,18 @@ class _MainListState extends State<MainList> {
                 padding: EdgeInsets.only(top: 12),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [Icon(Icons.more_vert)],
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Scaffold.of(context).showBottomSheet((
+                          BuildContext context,
+                        ) {
+                          return Container(width: double.infinity, height: 300);
+                        });
+                      },
+                      child: Icon(Icons.more_vert, size: 28),
+                    ),
+                  ],
                 ),
               ),
               Container(
