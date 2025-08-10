@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foodplan/single_list_page.dart';
 
 class MainList extends StatefulWidget {
-  const MainList({super.key});
-
+  const MainList({super.key, required this.title});
+  final String title;
   @override
   State<MainList> createState() => _MainListState();
 }
@@ -35,9 +35,6 @@ class _MainListState extends State<MainList> {
     );
   }
 }
-
-
-
 */
 
 class _MainListState extends State<MainList> {
@@ -50,6 +47,7 @@ class _MainListState extends State<MainList> {
       child: InkResponse(
         //makes the ink splash bound to the cointainer which is a rectangle with circular radius 10.0
         splashColor: Colors.teal,
+
         highlightShape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(10.0),
         containedInkWell: true,
@@ -65,7 +63,7 @@ class _MainListState extends State<MainList> {
           );
         },
 
-        child: Container(
+        child: SizedBox(
           height: 100,
           width: double.infinity,
 
@@ -83,7 +81,18 @@ class _MainListState extends State<MainList> {
                         Scaffold.of(context).showBottomSheet((
                           BuildContext context,
                         ) {
-                          return Container(width: double.infinity, height: 300);
+                          return Container(
+                            width: double.infinity,
+                            height: 300,
+
+                            decoration: BoxDecoration(
+                              color: Colors.blueAccent,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                            ),
+                          );
                         });
                       },
                       child: Icon(Icons.more_vert, size: 28),
@@ -97,7 +106,7 @@ class _MainListState extends State<MainList> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Nuova Lista",
+                      widget.title,
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
                     Text("0/0"),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/mainlist.dart';
+import 'package:foodplan/main.dart';
 
 class AddMainList extends StatefulWidget {
   const AddMainList({super.key});
@@ -26,6 +28,13 @@ class _AddMainListState extends State<AddMainList> {
             containerColors[0] = containerColors[1];
             containerColors[1] = change;
           });
+
+          mainListPages.insert(
+            mainListPages.length - 1,
+            MainList(
+              title: "Nuova Lista",
+            ), //TODO: Usare ChangeNotifier per notificare MainContent dell'avvenuta aggiunta
+          );
         },
         child: Container(
           height: 100,

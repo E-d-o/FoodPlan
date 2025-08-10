@@ -11,7 +11,11 @@ class _SingleListPageState extends State<SingleListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        actions: [Icon(Icons.mode_edit_outlined, size: 28)],
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actionsPadding: EdgeInsets.symmetric(horizontal: 12),
+      ),
       body: Column(children: [SizedBox(height: 500, width: 500)]),
     );
   }

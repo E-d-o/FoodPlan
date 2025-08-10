@@ -8,6 +8,8 @@ void main() {
   runApp(const MyApp());
 }
 
+List<Widget> mainListPages = [MainList(title: "Supermercato"), AddMainList()];
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -45,7 +47,7 @@ class MyHomePage extends StatelessWidget {
         automaticallyImplyLeading: true,
         actions: [Logo()],
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-
+        actionsPadding: EdgeInsets.symmetric(horizontal: 12),
         centerTitle: true,
       ),
       body: _MainContent(),
@@ -58,10 +60,7 @@ class _MainContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(16),
-      child: Column(
-        spacing: 15,
-        children: [MainList(), MainList(), MainList(), AddMainList()],
-      ),
+      child: Column(spacing: 15, children: mainListPages),
     );
   }
 }
