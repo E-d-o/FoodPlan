@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/addmainlist.dart';
 import 'package:foodplan/components/mainlist.dart';
 import 'drawer_page.dart';
 import 'components/logo.dart';
@@ -16,17 +17,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'FoodPlan',
       theme: ThemeData(
+        fontFamily: "Roboto",
         textTheme: TextTheme(
-          bodyMedium: TextStyle(
-            fontFamily: "Inter",
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-          ),
-          titleMedium: TextStyle(
-            fontFamily: "Inter",
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          ),
+          bodyMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          titleMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromRGBO(43, 140, 67, 1),
@@ -63,24 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Container mainContent() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      color: Colors.amber,
-      padding: EdgeInsets.all(15),
+  SingleChildScrollView mainContent() {
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
       child: Column(
         spacing: 15,
-        children: [
-          MainList(),
-          MainList(),
-          Container(
-            height: 100,
-            width: double.infinity,
-            padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-            color: Colors.redAccent,
-          ),
-        ],
+        children: [MainList(), MainList(), MainList(), AddMainList()],
       ),
     );
   }
