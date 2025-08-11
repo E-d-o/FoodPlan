@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/components/mainlist.dart';
-import 'package:foodplan/main.dart';
+import 'package:foodplan/notifiers/add_main_list_notifier.dart';
 
 class AddMainList extends StatefulWidget {
-  const AddMainList({super.key});
+  const AddMainList({super.key, required this.listNotifier});
+  final AddMainListNotifier listNotifier;
 
   @override
   State<AddMainList> createState() => _AddMainListState();
@@ -23,18 +23,14 @@ class _AddMainListState extends State<AddMainList> {
         borderRadius: BorderRadius.circular(10.0),
         containedInkWell: true,
         onTap: () {
+          //cosmetics
           setState(() {
             Color change = containerColors[0];
             containerColors[0] = containerColors[1];
             containerColors[1] = change;
           });
-
-          mainListPages.insert(
-            mainListPages.length - 1,
-            MainList(
-              title: "Nuova Lista",
-            ), //TODO: Usare ChangeNotifier per notificare MainContent dell'avvenuta aggiunta
-          );
+          //notifies body in order to add a new list
+          widget.listNotifier.addMainList();
         },
         child: Container(
           height: 100,

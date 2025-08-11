@@ -7,35 +7,6 @@ class MainList extends StatefulWidget {
   @override
   State<MainList> createState() => _MainListState();
 }
-/*
-class _MainListState extends State<MainList> {
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text("DKFJK", style: Theme.of(context).textTheme.bodyMedium),
-          Text("sdfdskfj"),
-        ],
-      ),
-
-      trailing: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Icon(Icons.more_vert),
-          Container(
-            child: Text("0/0", style: Theme.of(context).textTheme.bodyMedium),
-          ),
-        ],
-      ),
-      tileColor: Colors.blueAccent,
-      contentPadding: EdgeInsets.all(20),
-    );
-  }
-}
-*/
 
 class _MainListState extends State<MainList> {
   @override
