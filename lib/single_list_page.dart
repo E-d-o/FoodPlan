@@ -29,7 +29,7 @@ class BodyContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(18),
+      padding: EdgeInsets.all(12),
       child: Column(
         spacing: 20,
         children: [CustomSearchBar(), _NeededItems(), _AtHomeItems()],

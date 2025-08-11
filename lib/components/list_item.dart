@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key});
+  ListItem({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +23,24 @@ class ListItem extends StatelessWidget {
     );
   }
 
-  SizedBox mainStructure(BuildContext context) {
-    return SizedBox(
+  Container mainStructure(BuildContext context) {
+    return Container(
       height: 80,
-      width: double.infinity,
-      child: Row(spacing: 10, children: [LeftItemPart(), RightItemPart()]),
+      padding: EdgeInsets.only(left: 12),
+      child: Row(spacing: 8, children: [LeftItemPart(), RightItemPart()]),
     );
   }
 }
 
-class LeftItemPart extends StatelessWidget {
+class LeftItemPart extends StatefulWidget {
   const LeftItemPart({super.key});
+
+  @override
+  State<LeftItemPart> createState() => _LeftItemPartState();
+}
+
+class _LeftItemPartState extends State<LeftItemPart> {
+  bool checkValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -41,18 +48,32 @@ class LeftItemPart extends StatelessWidget {
       flex: 4,
       child: Container(
         height: double.infinity,
+        color: Colors.amber,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 8,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Checkbox(value: false, onChanged: (value) {}),
-            Expanded(
-              flex: 2,
-              child: Container(
-                color: Colors.lightGreenAccent,
-                child: Text("data", textAlign: TextAlign.center),
-              ),
+            Checkbox(
+              value: checkValue,
+              onChanged: (value) {
+                setState(() {
+                  checkValue = value!;
+                });
+              },
             ),
-            Container(height: 18, width: 18, color: Colors.green),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("data", style: Theme.of(context).textTheme.displaySmall),
+                Text("Subtitle", style: Theme.of(context).textTheme.bodySmall),
+              ],
+            ),
+            Container(
+              height: 30,
+              width: 30,
+              color: Colors.green,
+              child: Text("My image"),
+            ),
           ],
         ),
       ),
@@ -67,10 +88,19 @@ class RightItemPart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
+        padding: EdgeInsets.symmetric(vertical: 10.0),
         decoration: BoxDecoration(
           border: BoxBorder.fromLTRB(
             left: BorderSide(color: Colors.black, width: 2.0),
           ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 6,
+          children: [
+            Text("x1", style: Theme.of(context).textTheme.bodySmall),
+            Text("2\$", style: Theme.of(context).textTheme.bodySmall),
+          ],
         ),
       ),
     );

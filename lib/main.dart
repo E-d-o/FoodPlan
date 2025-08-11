@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Roboto",
         textTheme: TextTheme(
-          bodyMedium: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+          bodyMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
           titleMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           titleLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
           labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
