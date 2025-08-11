@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/custom_search_bar.dart';
+import 'package:foodplan/components/list_item.dart';
 
 class SingleListPage extends StatefulWidget {
   const SingleListPage({super.key});
@@ -28,26 +30,40 @@ class BodyContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(18),
-      child: Column(children: [_NeededItems(), _AtHomeItems()]),
+      child: Column(
+        spacing: 20,
+        children: [CustomSearchBar(), _NeededItems(), _AtHomeItems()],
+      ),
     );
   }
 }
 
 class _NeededItems extends StatelessWidget {
+  final List<ListItem> itemsList = [
+    ListItem(),
+    ListItem(),
+    ListItem(),
+    ListItem(),
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 300,
       padding: EdgeInsets.all(18),
       width: double.infinity,
       color: Theme.of(context).primaryColor,
       child: Column(
+        spacing: 10,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [Text("Da prendere")],
+            children: [
+              Text(
+                "Da prendere:",
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+            ],
           ),
-          Placeholder(fallbackHeight: 100, fallbackWidth: double.infinity),
+          ...itemsList,
         ],
       ),
     );
