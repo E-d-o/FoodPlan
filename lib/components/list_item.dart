@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ListItem extends StatelessWidget {
-  ListItem({super.key});
+  const ListItem({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class ListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(3.0),
         containedInkWell: true,
         onTap: () {
-          print("Tapped listItem");
+          //TODO:Logic of ListItem onTap
         },
         child: mainStructure(context),
       ),

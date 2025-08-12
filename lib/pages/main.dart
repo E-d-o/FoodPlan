@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
 import 'package:foodplan/notifiers/add_main_list_notifier.dart';
 import 'drawer_page.dart';
-import 'components/logo.dart';
+import '../components/logo.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/single_list_page.dart';
+import 'package:foodplan/pages/single_list_page.dart';
 
 class MainList extends StatefulWidget {
   MainList({super.key, required this.title});
