@@ -71,8 +71,53 @@ class _NeededItems extends StatelessWidget {
 }
 
 class _AtHomeItems extends StatelessWidget {
+  final List<ListItem> atHomeItems = [ListItem(), ListItem(), ListItem()];
+  static const double topRadiusTextRegion = 10.0;
   @override
   Widget build(BuildContext context) {
-    return Placeholder();
+    return Column(
+      spacing: 0,
+      children: [
+        TextRegion(topRadiusTextRegion: topRadiusTextRegion),
+        Container(
+          color: Colors.grey,
+          padding: EdgeInsets.all(12.0),
+          child: Column(spacing: 10, children: [...atHomeItems]),
+        ),
+      ],
+    );
+  }
+}
+
+class TextRegion extends StatelessWidget {
+  const TextRegion({super.key, required this.topRadiusTextRegion});
+
+  final double topRadiusTextRegion;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 70,
+      width: double.infinity,
+
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(topRadiusTextRegion),
+          topRight: Radius.circular(topRadiusTextRegion),
+        ),
+        color: Colors.blueAccent,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+          Text(
+            "Gia' acquistati",
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          Icon(Icons.arrow_drop_down),
+        ],
+      ),
+    );
   }
 }

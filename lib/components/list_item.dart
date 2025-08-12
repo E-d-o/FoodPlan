@@ -41,7 +41,7 @@ class LeftItemPart extends StatefulWidget {
 
 class _LeftItemPartState extends State<LeftItemPart> {
   bool checkValue = false;
-
+  bool isHome = true;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -64,8 +64,8 @@ class _LeftItemPartState extends State<LeftItemPart> {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("data", style: Theme.of(context).textTheme.displaySmall),
-                Text("Subtitle", style: Theme.of(context).textTheme.bodySmall),
+                Text("data", style: isHomeStyle(context, true)),
+                Text("Subtitle", style: isHomeStyle(context, false)),
               ],
             ),
             Container(
@@ -78,6 +78,22 @@ class _LeftItemPartState extends State<LeftItemPart> {
         ),
       ),
     );
+  }
+
+  TextStyle? isHomeStyle(BuildContext context, bool isTitle) {
+    if (isHome) {
+      if (isTitle) {
+        return TextStyle(fontSize: 20, decoration: TextDecoration.lineThrough);
+      } else {
+        return TextStyle(fontSize: 12, decoration: TextDecoration.lineThrough);
+      }
+    } else {
+      if (isTitle) {
+        return Theme.of(context).textTheme.displaySmall;
+      } else {
+        return Theme.of(context).textTheme.displaySmall;
+      }
+    }
   }
 }
 
