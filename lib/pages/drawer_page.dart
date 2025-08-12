@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/pages/settings_page.dart';
 import '../components/logo.dart';
 
 class DrawerPage extends StatelessWidget {
@@ -10,11 +11,11 @@ class DrawerPage extends StatelessWidget {
         padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 27,
+          spacing: 18,
           children: [
-            SizedBox(height: 10, width: double.infinity),
+            SizedBox(height: 20, width: double.infinity),
             Logo(),
-
+            SizedBox(height: 1, width: double.infinity),
             ListTile(
               contentPadding: EdgeInsets.all(0),
               leading: Icon(
@@ -27,7 +28,16 @@ class DrawerPage extends StatelessWidget {
                 "Impostazioni",
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return SettingsPage();
+                    },
+                  ),
+                );
+              },
             ),
             ListTile(
               contentPadding: EdgeInsets.all(0),
