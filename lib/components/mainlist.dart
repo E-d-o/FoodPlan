@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/main_list_bottom_sheet.dart';
 import 'package:foodplan/pages/single_list_page.dart';
 
 class MainList extends StatefulWidget {
@@ -56,22 +57,16 @@ class _MainListState extends State<MainList> {
               children: [
                 InkWell(
                   onTap: () {
-                    Scaffold.of(context).showBottomSheet((
-                      BuildContext context,
-                    ) {
-                      return Container(
-                        width: double.infinity,
-                        height: 300,
-
-                        decoration: BoxDecoration(
-                          color: Colors.blueAccent,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20.0),
-                            topRight: Radius.circular(20.0),
-                          ),
-                        ),
-                      );
-                    });
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.onInverseSurface,
+                      barrierColor: Colors.transparent,
+                      builder: (context) {
+                        return MainListBottomSheet();
+                      },
+                    );
                   },
                   child: Icon(Icons.more_vert, size: 28),
                 ),
