@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MainListBottomSheet extends StatelessWidget {
-  const MainListBottomSheet({super.key});
-
+  MainListBottomSheet({super.key, required this.titleNotifier});
+  ValueNotifier titleNotifier;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -27,7 +27,9 @@ class MainListBottomSheet extends StatelessWidget {
                     ),
                     padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    titleNotifier.value = titleNotifier.value + "1";
+                  },
                   child: Text("Rinomina"),
                 ),
               ),

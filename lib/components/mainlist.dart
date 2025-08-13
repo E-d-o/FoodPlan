@@ -3,14 +3,15 @@ import 'package:foodplan/components/main_list_bottom_sheet.dart';
 import 'package:foodplan/pages/single_list_page.dart';
 
 class MainList extends StatefulWidget {
-  MainList({super.key, required this.title});
-  final String title;
+  MainList({super.key});
   final SingleListPage myPage = SingleListPage();
+
   @override
   State<MainList> createState() => _MainListState();
 }
 
 class _MainListState extends State<MainList> {
+  final title = ValueNotifier("Nuova Lista");
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -54,23 +55,7 @@ class _MainListState extends State<MainList> {
             padding: EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.onInverseSurface,
-                      barrierColor: Colors.transparent,
-                      builder: (context) {
-                        return MainListBottomSheet();
-                      },
-                    );
-                  },
-                  child: Icon(Icons.more_vert, size: 28),
-                ),
-              ],
+              children: [MainListSettings(titleNotifier: title)],
             ),
           ),
           Container(
@@ -78,9 +63,14 @@ class _MainListState extends State<MainList> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  widget.title,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                ValueListenableBuilder(
+                  valueListenable: title,
+                  builder: (context, value, child) {
+                    return Text(
+                      value,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    );
+                  },
                 ),
                 Text("0/0"),
               ],
@@ -88,6 +78,27 @@ class _MainListState extends State<MainList> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MainListSettings extends StatelessWidget {
+  const MainListSettings({super.key, required this.titleNotifier});
+  final ValueNotifier titleNotifier;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+          barrierColor: Colors.transparent,
+          builder: (context) {
+            return MainListBottomSheet(titleNotifier: titleNotifier);
+          },
+        );
+      },
+      child: Icon(Icons.more_vert, size: 28),
     );
   }
 }
