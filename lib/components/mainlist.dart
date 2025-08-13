@@ -23,7 +23,7 @@ class _MainListState extends State<MainList> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.redAccent,
+      color: Colors.transparent,
       borderRadius: BorderRadius.circular(10.0),
 
       child: InkResponse(
@@ -55,23 +55,32 @@ class _MainListState extends State<MainList> {
       height: 100,
       width: double.infinity,
 
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        spacing: 0,
+      child: Stack(
         children: [
-          Container(
-            padding: EdgeInsets.only(top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [MainListSettings(isEditingName: isEditingName)],
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 18),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [renameLogic(), Text("0/0")],
-            ),
+          LinearProgressIndicator(value: 0.6, minHeight: 100),
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            spacing: 0,
+            children: [
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [MainListSettings(isEditingName: isEditingName)],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 18),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    renameLogic(),
+                    Text("0/0"),
+                  ], //TODO: refactor con nuova classe editable title
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -91,9 +100,15 @@ class _MainListState extends State<MainList> {
     if (editValue) {
       return SizedBox(
         width: 280,
+        height: 24,
         child: TextField(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.zero,
+            isCollapsed: true,
+          ),
           controller: textEditingController,
           autofocus: true,
+          style: Theme.of(context).textTheme.bodyMedium,
           onSubmitted: (value) {
             title = value;
             isEditingName.value = !isEditingName.value;
@@ -101,7 +116,10 @@ class _MainListState extends State<MainList> {
         ),
       );
     } else {
-      return Text(title, style: Theme.of(context).textTheme.bodyMedium);
+      return SizedBox(
+        height: 24,
+        child: Text(title, style: Theme.of(context).textTheme.bodyMedium),
+      );
     }
   }
 }
@@ -114,6 +132,7 @@ class MainListSettings extends StatelessWidget {
     return InkWell(
       onTap: () {
         showModalBottomSheet(
+          showDragHandle: true,
           context: context,
           backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
           barrierColor: Colors.transparent,
