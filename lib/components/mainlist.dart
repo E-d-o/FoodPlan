@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/main_list_bottom_sheet.dart';
+import 'package:foodplan/notifiers/main_list_manager.dart';
 import 'package:foodplan/pages/single_list_page.dart';
+import 'package:provider/provider.dart';
 
 class MainList extends StatefulWidget {
-  MainList({super.key});
+  MainList({super.key, required this.listIndex});
   final SingleListPage myPage = SingleListPage();
+  final int listIndex;
 
   @override
   State<MainList> createState() => _MainListState();
@@ -67,7 +70,7 @@ class _MainListState extends State<MainList> {
                 padding: EdgeInsets.only(top: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  children: [MainListSettings(isEditingName: isEditingName)],
+                  children: [listSetting(context)],
                 ),
               ),
               Container(
@@ -84,6 +87,33 @@ class _MainListState extends State<MainList> {
           ),
         ],
       ),
+    );
+  }
+
+  InkWell listSetting(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        final listManager = Provider.of<MainListManager>(
+          context,
+          listen: false,
+        );
+        showModalBottomSheet(
+          showDragHandle: true,
+          context: context,
+          backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+          barrierColor: Colors.transparent,
+          builder: (context) {
+            return ChangeNotifierProvider.value(
+              value: listManager,
+              child: MainListBottomSheet(
+                isEditingName: isEditingName,
+                listIndex: widget.listIndex,
+              ),
+            );
+          },
+        );
+      },
+      child: Icon(Icons.more_vert, size: 28),
     );
   }
 
@@ -121,27 +151,5 @@ class _MainListState extends State<MainList> {
         child: Text(title, style: Theme.of(context).textTheme.bodyMedium),
       );
     }
-  }
-}
-
-class MainListSettings extends StatelessWidget {
-  const MainListSettings({super.key, required this.isEditingName});
-  final ValueNotifier isEditingName;
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        showModalBottomSheet(
-          showDragHandle: true,
-          context: context,
-          backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-          barrierColor: Colors.transparent,
-          builder: (context) {
-            return MainListBottomSheet(isEditingName: isEditingName);
-          },
-        );
-      },
-      child: Icon(Icons.more_vert, size: 28),
-    );
   }
 }

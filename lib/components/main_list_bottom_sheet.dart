@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/notifiers/main_list_manager.dart';
+import 'package:provider/provider.dart';
 
 class MainListBottomSheet extends StatelessWidget {
-  const MainListBottomSheet({super.key, required this.isEditingName});
+  const MainListBottomSheet({
+    super.key,
+    required this.isEditingName,
+    required this.listIndex,
+  });
   final ValueNotifier isEditingName;
+  final int listIndex;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -15,14 +23,40 @@ class MainListBottomSheet extends StatelessWidget {
             spacing: 20,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
 
-            children: [renameButtonBuild(), deleteButtonBuild()],
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    shape: WidgetStatePropertyAll(
+                      RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.black, width: 2.0),
+                        borderRadius: BorderRadiusGeometry.circular(10),
+                      ),
+                    ),
+                    padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
+                  ),
+                  onPressed: () {
+                    isEditingName.value = !isEditingName.value;
+                    Navigator.pop(context);
+                  },
+                  child: Text("Rinomina"),
+                ),
+              ),
+              DeleteButton(listIndex: listIndex),
+            ],
           ),
         ),
       ),
     );
   }
+}
 
-  Expanded deleteButtonBuild() {
+class DeleteButton extends StatelessWidget {
+  const DeleteButton({super.key, required this.listIndex});
+  final int listIndex;
+
+  @override
+  Widget build(BuildContext context) {
     return Expanded(
       child: ElevatedButton(
         style: ButtonStyle(
@@ -37,7 +71,15 @@ class MainListBottomSheet extends StatelessWidget {
           ),
           padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
         ),
-        onPressed: () {},
+        onPressed: () {
+          final listManager = Provider.of<MainListManager>(
+            context,
+            listen: false,
+          );
+          print(listIndex);
+          listManager.removeMainList(listIndex);
+          Navigator.pop(context);
+        },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -45,26 +87,6 @@ class MainListBottomSheet extends StatelessWidget {
             Icon(Icons.delete_outline_rounded, size: 28),
           ],
         ),
-      ),
-    );
-  }
-
-  Expanded renameButtonBuild() {
-    return Expanded(
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(
-              side: BorderSide(color: Colors.black, width: 2.0),
-              borderRadius: BorderRadiusGeometry.circular(10),
-            ),
-          ),
-          padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
-        ),
-        onPressed: () {
-          isEditingName.value = !isEditingName.value;
-        },
-        child: Text("Rinomina"),
       ),
     );
   }
