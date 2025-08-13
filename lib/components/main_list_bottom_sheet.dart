@@ -15,51 +15,56 @@ class MainListBottomSheet extends StatelessWidget {
             spacing: 20,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
 
-            children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.black, width: 2.0),
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                      ),
-                    ),
-                    padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
-                  ),
-                  onPressed: () {
-                    isEditingName.value = !isEditingName.value;
-                  },
-                  child: Text("Rinomina"),
-                ),
-              ),
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStatePropertyAll(Colors.redAccent),
-                    foregroundColor: WidgetStatePropertyAll(Colors.black),
-
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.black, width: 2.0),
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                      ),
-                    ),
-                    padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
-                  ),
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("Elimina Lista"),
-                      Icon(Icons.delete_outline_rounded, size: 28),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+            children: [renameButtonBuild(), deleteButtonBuild()],
           ),
         ),
+      ),
+    );
+  }
+
+  Expanded deleteButtonBuild() {
+    return Expanded(
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: WidgetStatePropertyAll(Colors.redAccent),
+          foregroundColor: WidgetStatePropertyAll(Colors.black),
+
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              side: BorderSide(color: Colors.black, width: 2.0),
+              borderRadius: BorderRadiusGeometry.circular(10),
+            ),
+          ),
+          padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
+        ),
+        onPressed: () {},
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("Elimina Lista"),
+            Icon(Icons.delete_outline_rounded, size: 28),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Expanded renameButtonBuild() {
+    return Expanded(
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              side: BorderSide(color: Colors.black, width: 2.0),
+              borderRadius: BorderRadiusGeometry.circular(10),
+            ),
+          ),
+          padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
+        ),
+        onPressed: () {
+          isEditingName.value = !isEditingName.value;
+        },
+        child: Text("Rinomina"),
       ),
     );
   }
