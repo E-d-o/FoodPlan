@@ -11,7 +11,15 @@ class MainList extends StatefulWidget {
 }
 
 class _MainListState extends State<MainList> {
-  final title = ValueNotifier("Nuova Lista");
+  String title = "Nuova Lista";
+  final isEditingName = ValueNotifier(false);
+  TextEditingController textEditingController = TextEditingController();
+  @override
+  void initState() {
+    textEditingController.text = title;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -55,36 +63,52 @@ class _MainListState extends State<MainList> {
             padding: EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
-              children: [MainListSettings(titleNotifier: title)],
+              children: [MainListSettings(isEditingName: isEditingName)],
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(horizontal: 18),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ValueListenableBuilder(
-                  valueListenable: title,
-                  builder: (context, value, child) {
-                    return Text(
-                      value,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    );
-                  },
-                ),
-                Text("0/0"),
-              ],
+              children: [renameLogic(), Text("0/0")],
             ),
           ),
         ],
       ),
     );
   }
+
+  ValueListenableBuilder<bool> renameLogic() {
+    return ValueListenableBuilder(
+      valueListenable: isEditingName,
+      builder: (context, editValue, child) {
+        return editingElement(editValue, context);
+      },
+    );
+  }
+
+  Widget editingElement(bool editValue, BuildContext context) {
+    if (editValue) {
+      return SizedBox(
+        width: 280,
+        child: TextField(
+          controller: textEditingController,
+          autofocus: true,
+          onSubmitted: (value) {
+            title = value;
+            isEditingName.value = !isEditingName.value;
+          },
+        ),
+      );
+    } else {
+      return Text(title, style: Theme.of(context).textTheme.bodyMedium);
+    }
+  }
 }
 
 class MainListSettings extends StatelessWidget {
-  const MainListSettings({super.key, required this.titleNotifier});
-  final ValueNotifier titleNotifier;
+  const MainListSettings({super.key, required this.isEditingName});
+  final ValueNotifier isEditingName;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -94,7 +118,7 @@ class MainListSettings extends StatelessWidget {
           backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
           barrierColor: Colors.transparent,
           builder: (context) {
-            return MainListBottomSheet(titleNotifier: titleNotifier);
+            return MainListBottomSheet(isEditingName: isEditingName);
           },
         );
       },
