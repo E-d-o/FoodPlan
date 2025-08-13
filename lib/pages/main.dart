@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
-import 'package:foodplan/notifiers/add_main_list_notifier.dart';
+import 'package:foodplan/notifiers/main_list_manager.dart';
+import 'package:provider/provider.dart';
 import 'drawer_page.dart';
 import '../components/logo.dart';
 
@@ -30,7 +31,11 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      home: const MyHomePage(title: 'FoodPlan'),
+      home: ChangeNotifierProvider(
+        create: (context) => MainListManager(),
+
+        child: MyHomePage(title: 'FoodPlan'),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -57,23 +62,15 @@ class MyHomePage extends StatelessWidget {
 }
 
 class _MainContent extends StatelessWidget {
-  final AddMainListNotifier listNotifier = AddMainListNotifier();
   @override
   Widget build(BuildContext context) {
-    return ListenableBuilder(
-      listenable: listNotifier,
-      builder: (context, child) {
-        return SingleChildScrollView(
-          padding: EdgeInsets.all(16),
-          child: Column(
-            spacing: 15,
-            children: [
-              ...listNotifier.mainListPages,
-              (AddMainList(listNotifier: listNotifier)),
-            ],
-          ),
-        );
-      },
+    final listManager = Provider.of<MainListManager>(context);
+    return SingleChildScrollView(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        spacing: 15,
+        children: [...listManager.mainListPages, (AddMainList())],
+      ),
     );
   }
 }

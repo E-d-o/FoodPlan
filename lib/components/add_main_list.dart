@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/notifiers/add_main_list_notifier.dart';
+import 'package:foodplan/notifiers/main_list_manager.dart';
+import 'package:provider/provider.dart';
 
-class AddMainList extends StatefulWidget {
-  const AddMainList({super.key, required this.listNotifier});
-  final AddMainListNotifier listNotifier;
-
-  @override
-  State<AddMainList> createState() => _AddMainListState();
-}
-
-class _AddMainListState extends State<AddMainList> {
-  List containerColors = [Colors.greenAccent, Colors.deepPurpleAccent];
+class AddMainList extends StatelessWidget {
+  const AddMainList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: containerColors[0],
+      color: Colors.blueAccent,
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
       child: InkResponse(
         splashColor: Colors.teal,
@@ -23,14 +16,12 @@ class _AddMainListState extends State<AddMainList> {
         borderRadius: BorderRadius.circular(10.0),
         containedInkWell: true,
         onTap: () {
-          //cosmetics
-          setState(() {
-            Color change = containerColors[0];
-            containerColors[0] = containerColors[1];
-            containerColors[1] = change;
-          });
           //notifies body in order to add a new list
-          widget.listNotifier.addMainList();
+          final managerLists = Provider.of<MainListManager>(
+            context,
+            listen: false,
+          );
+          managerLists.addMainList();
         },
         child: Container(
           height: 100,
