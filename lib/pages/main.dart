@@ -64,7 +64,7 @@ class MyHomePage extends StatelessWidget {
 class _MainContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final listManager = Provider.of<MainListManager>(context);
+    final listManager = Provider.of<MainListManager>(context, listen: true);
     return SingleChildScrollView(
       padding: EdgeInsets.all(16),
       child: Column(

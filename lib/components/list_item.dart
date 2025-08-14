@@ -30,7 +30,7 @@ class ListItem extends StatelessWidget {
           borderRadius: BorderRadius.circular(3.0),
           containedInkWell: true,
           onTap: () {
-            //TODO:Logic of ListItem onTap
+            //TODO: add logic ontap listitem
           },
           child: mainStructure(context),
         ),

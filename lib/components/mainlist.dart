@@ -19,7 +19,6 @@ class MainList extends StatefulWidget {
 }
 
 class _MainListState extends State<MainList> {
-  late final SingleListPage _myPage;
   late String title;
   TextEditingController textEditingController = TextEditingController();
   final double borderRadius = 10.0;
@@ -27,13 +26,14 @@ class _MainListState extends State<MainList> {
   void initState() {
     title = widget.givenTitle;
     textEditingController.text = title;
-    _myPage = SingleListPage();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final singleListManager =
+        SingleListManager(); //ogni mainlist ha il suo manager per la singlepagelist, cosi' da mantere lo stato di ogni mainlist
     return Material(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(borderRadius),
@@ -51,9 +51,9 @@ class _MainListState extends State<MainList> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return ChangeNotifierProvider(
-                  create: (context) => SingleListManager(),
-                  child: _myPage,
+                return ChangeNotifierProvider.value(
+                  value: singleListManager,
+                  child: SingleListPage(),
                 );
               },
             ),

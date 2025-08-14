@@ -58,16 +58,12 @@ class SingleListManager with ChangeNotifier {
 
   void removeItem(String listId, bool isAtHome) {
     if (isAtHome) {
-      print(homeItemsList.toString() + "prima");
       homeItemsList.removeWhere((element) => element.id == listId);
       _checkForEmptyHomeItems();
-      print(homeItemsList.toString() + "dopo");
     } else {
       //in required items
-      print(requiredItemsList);
 
       requiredItemsList.removeWhere((element) => element.id == listId);
-      print(requiredItemsList);
     }
     notifyListeners();
   }
