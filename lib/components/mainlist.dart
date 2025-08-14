@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/components/main_list_bottom_sheet.dart';
+import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:foodplan/pages/main_list_bottom_sheet.dart';
 import 'package:foodplan/notifiers/main_list_manager.dart';
 import 'package:foodplan/pages/single_list_page.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +27,8 @@ class _MainListState extends State<MainList> {
   void initState() {
     title = widget.givenTitle;
     textEditingController.text = title;
-
     _myPage = SingleListPage();
+
     super.initState();
   }
 
@@ -50,7 +51,10 @@ class _MainListState extends State<MainList> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return _myPage;
+                return ChangeNotifierProvider(
+                  create: (context) => SingleListManager(),
+                  child: _myPage,
+                );
               },
             ),
           );
@@ -96,7 +100,7 @@ class _MainListState extends State<MainList> {
                       context: context,
                     ),
                     Text("0/0"),
-                  ], //TODO: refactor con nuova classe editable title
+                  ],
                 ),
               ),
             ],
@@ -114,7 +118,7 @@ class _MainListState extends State<MainList> {
           listen: false,
         );
         listManager.selectedId = widget.id;
-        print(listManager.selectedId);
+
         showModalBottomSheet(
           showDragHandle: true,
           context: context,

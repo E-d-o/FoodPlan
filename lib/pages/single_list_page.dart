@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
 import 'package:foodplan/components/list_item.dart';
+import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:provider/provider.dart';
 
 class SingleListPage extends StatefulWidget {
   const SingleListPage({super.key});
@@ -52,7 +54,7 @@ class _NeededItems extends StatelessWidget {
       width: double.infinity,
       color: Theme.of(context).primaryColor,
       child: Column(
-        spacing: 10,
+        spacing: 18,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -63,7 +65,7 @@ class _NeededItems extends StatelessWidget {
               ),
             ],
           ),
-          ...itemsList,
+          Column(spacing: 10, children: [...itemsList]),
         ],
       ),
     );
@@ -73,22 +75,27 @@ class _NeededItems extends StatelessWidget {
 class _AtHomeItems extends StatelessWidget {
   final List<ListItem> atHomeItems = [ListItem(), ListItem(), ListItem()];
   static const double topRadiusTextRegion = 10.0;
-  final isHomeItemsVisible = true;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 0,
-      children: [
-        TextRegion(topRadiusTextRegion: topRadiusTextRegion),
-        Visibility(
-          visible: isHomeItemsVisible,
-          child: Container(
-            color: Colors.grey,
-            padding: EdgeInsets.all(12.0),
-            child: Column(spacing: 10, children: [...atHomeItems]),
-          ),
-        ),
-      ],
+    return Selector<SingleListManager, bool>(
+      //handles the rebuilding of _AtHomeItems based on the changing of only the value of isHomeItemsVisible
+      selector: (context, provider) => provider.isHomeItemsVisible,
+      builder: (context, isVisible, child) {
+        return Column(
+          spacing: 0,
+          children: [
+            TextRegion(topRadiusTextRegion: topRadiusTextRegion),
+            Visibility(
+              visible: isVisible,
+              child: Container(
+                color: Colors.grey,
+                padding: EdgeInsets.all(12.0),
+                child: Column(spacing: 10, children: [...atHomeItems]),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -100,9 +107,13 @@ class TextRegion extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final singleListManager = Provider.of<SingleListManager>(
+      context,
+      listen: false,
+    );
     return GestureDetector(
       onTap: () {
-        print("Toccato Home Items");
+        singleListManager.changeHomeItemsVisibility();
       },
       child: Container(
         height: 70,
@@ -123,10 +134,28 @@ class TextRegion extends StatelessWidget {
               "Gia' acquistati",
               style: Theme.of(context).textTheme.bodyMedium,
             ),
-            Icon(Icons.arrow_drop_down),
+            _ChangingIcon(),
           ],
         ),
       ),
     );
+  }
+}
+
+class _ChangingIcon extends StatelessWidget {
+  // ignore: unused_element_parameter
+  const _ChangingIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final singleListManager = Provider.of<SingleListManager>(
+      context,
+      listen: false,
+    );
+    if (singleListManager.isHomeItemsVisible) {
+      return Icon(Icons.arrow_drop_down);
+    } else {
+      return Icon(Icons.arrow_drop_up);
+    }
   }
 }

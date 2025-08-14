@@ -50,8 +50,6 @@ class MainListManager with ChangeNotifier {
     );
     _addNewTitle(generatedId, givenTitle);
 
-    print(generatedId);
-
     notifyListeners();
   }
 
