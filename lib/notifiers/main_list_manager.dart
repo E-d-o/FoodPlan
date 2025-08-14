@@ -22,7 +22,10 @@ class MainListManager with ChangeNotifier {
 
   void addMainList() {
     String generatedId = uuid.v4();
-    _mainListPages.insert(_mainListPages.length, MainList(id: generatedId));
+    _mainListPages.insert(
+      _mainListPages.length,
+      MainList(id: generatedId, title: _mainListPages.length.toString()),
+    );
     print(generatedId);
 
     notifyListeners();
@@ -33,7 +36,7 @@ class MainListManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void renameList(String id) {
+  void renameList(String renameId) {
     notifyListeners();
   }
 }

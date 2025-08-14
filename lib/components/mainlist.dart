@@ -5,23 +5,23 @@ import 'package:foodplan/pages/single_list_page.dart';
 import 'package:provider/provider.dart';
 
 class MainList extends StatefulWidget {
-  MainList({super.key, required this.id});
+  MainList({super.key, required this.id, this.title = "Nuova lista"});
 
   final SingleListPage myPage = SingleListPage();
   final String id;
+  String title = "Nuova lista";
 
   @override
   State<MainList> createState() => _MainListState();
 }
 
 class _MainListState extends State<MainList> {
-  String title = "Nuova Lista";
   final isEditingName = ValueNotifier(false);
   TextEditingController textEditingController = TextEditingController();
   final double borderRadius = 10.0;
   @override
   void initState() {
-    textEditingController.text = title;
+    textEditingController.text = widget.title;
     super.initState();
   }
 
@@ -145,7 +145,7 @@ class _MainListState extends State<MainList> {
           autofocus: true,
           style: Theme.of(context).textTheme.bodyMedium,
           onSubmitted: (value) {
-            title = value;
+            widget.title = value;
             isEditingName.value = !isEditingName.value;
           },
         ),
@@ -153,7 +153,10 @@ class _MainListState extends State<MainList> {
     } else {
       return SizedBox(
         height: 24,
-        child: Text(title, style: Theme.of(context).textTheme.bodyMedium),
+        child: Text(
+          widget.title,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
       );
     }
   }
