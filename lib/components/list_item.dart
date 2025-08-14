@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key});
-
+  const ListItem({super.key, required this.id});
+  final String id;
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -27,23 +29,25 @@ class ListItem extends StatelessWidget {
     return Container(
       height: 80,
       padding: EdgeInsets.only(left: 12),
-      child: Row(spacing: 8, children: [LeftItemPart(), RightItemPart()]),
+      child: Row(
+        spacing: 8,
+        children: [
+          LeftItemPart(id: id),
+          RightItemPart(),
+        ],
+      ),
     );
   }
 }
 
-class LeftItemPart extends StatefulWidget {
-  const LeftItemPart({super.key});
+class LeftItemPart extends StatelessWidget {
+  const LeftItemPart({super.key, required this.id});
+  final String id;
 
-  @override
-  State<LeftItemPart> createState() => _LeftItemPartState();
-}
-
-class _LeftItemPartState extends State<LeftItemPart> {
-  bool checkValue = false;
-  bool isHome = true;
   @override
   Widget build(BuildContext context) {
+    final singleListManager = context.watch<SingleListManager>();
+
     return Expanded(
       flex: 4,
       child: Container(
@@ -54,18 +58,16 @@ class _LeftItemPartState extends State<LeftItemPart> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Checkbox(
-              value: checkValue,
+              value: singleListManager.getCheckedValue(id),
               onChanged: (value) {
-                setState(() {
-                  checkValue = value!;
-                });
+                singleListManager.changeCheckedValue(id);
               },
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("data", style: isHomeStyle(context, true)),
-                Text("Subtitle", style: isHomeStyle(context, false)),
+                Text("data", style: null),
+                Text("Subtitle", style: null),
               ],
             ),
             Container(
@@ -78,22 +80,6 @@ class _LeftItemPartState extends State<LeftItemPart> {
         ),
       ),
     );
-  }
-
-  TextStyle? isHomeStyle(BuildContext context, bool isTitle) {
-    if (isHome) {
-      if (isTitle) {
-        return TextStyle(fontSize: 20, decoration: TextDecoration.lineThrough);
-      } else {
-        return TextStyle(fontSize: 12, decoration: TextDecoration.lineThrough);
-      }
-    } else {
-      if (isTitle) {
-        return Theme.of(context).textTheme.displaySmall;
-      } else {
-        return Theme.of(context).textTheme.displaySmall;
-      }
-    }
   }
 }
 

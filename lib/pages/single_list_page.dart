@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
-import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -41,14 +40,10 @@ class BodyContent extends StatelessWidget {
 }
 
 class _NeededItems extends StatelessWidget {
-  final List<ListItem> itemsList = [
-    ListItem(),
-    ListItem(),
-    ListItem(),
-    ListItem(),
-  ];
   @override
   Widget build(BuildContext context) {
+    final singleListManager = context.watch<SingleListManager>();
+    final itemsList = singleListManager.requiredItemsList;
     return Container(
       padding: EdgeInsets.all(18),
       width: double.infinity,
@@ -73,10 +68,11 @@ class _NeededItems extends StatelessWidget {
 }
 
 class _AtHomeItems extends StatelessWidget {
-  final List<ListItem> atHomeItems = [ListItem(), ListItem(), ListItem()];
   static const double topRadiusTextRegion = 10.0;
   @override
   Widget build(BuildContext context) {
+    final singleListManager = context.watch<SingleListManager>();
+    final atHomeItems = singleListManager.homeItemsList;
     return Selector<SingleListManager, bool>(
       //handles the rebuilding of _AtHomeItems based on the changing of only the value of isHomeItemsVisible
       selector: (context, provider) => provider.isHomeItemsVisible,
