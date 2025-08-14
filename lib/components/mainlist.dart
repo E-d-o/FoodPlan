@@ -5,22 +5,29 @@ import 'package:foodplan/pages/single_list_page.dart';
 import 'package:provider/provider.dart';
 
 class MainList extends StatefulWidget {
-  MainList({super.key, required this.id, this.title = "Nuova lista"});
-
-  final SingleListPage myPage = SingleListPage();
+  const MainList({
+    super.key,
+    required this.id,
+    this.givenTitle = "Nuova lista",
+  });
+  final String givenTitle;
   final String id;
-  String title = "Nuova lista";
 
   @override
   State<MainList> createState() => _MainListState();
 }
 
 class _MainListState extends State<MainList> {
+  late final SingleListPage _myPage;
+  late String title;
   TextEditingController textEditingController = TextEditingController();
   final double borderRadius = 10.0;
   @override
   void initState() {
-    textEditingController.text = widget.title;
+    title = widget.givenTitle;
+    textEditingController.text = title;
+
+    _myPage = SingleListPage();
     super.initState();
   }
 
@@ -43,7 +50,7 @@ class _MainListState extends State<MainList> {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return widget.myPage;
+                return _myPage;
               },
             ),
           );
@@ -147,6 +154,8 @@ class EditableTitle extends StatelessWidget {
           context,
           listen: false,
         );
+
+        String changedTitle = listManager.getListTitle(widget.id);
         if (isEditing) {
           return SizedBox(
             width: 280,
@@ -168,7 +177,7 @@ class EditableTitle extends StatelessWidget {
           return SizedBox(
             height: 24,
             child: Text(
-              widget.title,
+              changedTitle,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
           );

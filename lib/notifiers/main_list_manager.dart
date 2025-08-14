@@ -10,6 +10,8 @@ class MainListManager with ChangeNotifier {
   List<MainList> get mainListPages => _mainListPages;
   String _selectedId = "";
   bool _isEditingList = false;
+  String defaultTitle = "Nuova Lista";
+  final Map<String, String> _listTitles = {};
 
   set selectedId(String myId) {
     if (myId.isNotEmpty) {
@@ -27,12 +29,27 @@ class MainListManager with ChangeNotifier {
     notifyListeners();
   }
 
+  String getListTitle(String listId) {
+    return _listTitles[listId] ?? defaultTitle;
+  }
+
+  void _addNewTitle(String listId, String newTitle) {
+    _listTitles[listId] = newTitle;
+  }
+
+  void _removeTitle(String listId) {
+    _listTitles.remove(listId);
+  }
+
   void addMainList() {
     String generatedId = uuid.v4();
+    String givenTitle = _mainListPages.length.toString();
     _mainListPages.insert(
       _mainListPages.length,
-      MainList(id: generatedId, title: _mainListPages.length.toString()),
+      MainList(id: generatedId, givenTitle: givenTitle),
     );
+    _addNewTitle(generatedId, givenTitle);
+
     print(generatedId);
 
     notifyListeners();
@@ -40,15 +57,13 @@ class MainListManager with ChangeNotifier {
 
   void removeMainList(String removeId) {
     _mainListPages.removeWhere((mainlist) => mainlist.id == removeId);
+    _removeTitle(removeId);
     notifyListeners();
   }
 
   void renameList(String renameId, String newTitle) {
     changeEditState();
-    int index = _mainListPages.indexWhere(
-      (mainlist) => mainlist.id == renameId,
-    );
-    _mainListPages[index].title = newTitle;
+    _listTitles[renameId] = newTitle;
     notifyListeners();
   }
 }
