@@ -16,7 +16,6 @@ class MainList extends StatefulWidget {
 }
 
 class _MainListState extends State<MainList> {
-  final isEditingName = ValueNotifier(false);
   TextEditingController textEditingController = TextEditingController();
   final double borderRadius = 10.0;
   @override
@@ -84,7 +83,11 @@ class _MainListState extends State<MainList> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    renameLogic(),
+                    EditableTitle(
+                      textEditingController: textEditingController,
+                      widget: widget,
+                      context: context,
+                    ),
                     Text("0/0"),
                   ], //TODO: refactor con nuova classe editable title
                 ),
@@ -113,7 +116,7 @@ class _MainListState extends State<MainList> {
           builder: (context) {
             return ChangeNotifierProvider.value(
               value: listManager,
-              child: MainListBottomSheet(isEditingName: isEditingName),
+              child: MainListBottomSheet(),
             );
           },
         );
@@ -121,43 +124,56 @@ class _MainListState extends State<MainList> {
       child: Icon(Icons.more_vert, size: 28),
     );
   }
+}
 
-  ValueListenableBuilder<bool> renameLogic() {
-    return ValueListenableBuilder(
-      valueListenable: isEditingName,
-      builder: (context, editValue, child) {
-        return editingElement(editValue, context);
+class EditableTitle extends StatelessWidget {
+  const EditableTitle({
+    super.key,
+    required this.textEditingController,
+    required this.widget,
+    required this.context,
+  });
+
+  final TextEditingController textEditingController;
+  final MainList widget;
+  final BuildContext context;
+
+  @override
+  Widget build(BuildContext context) {
+    return Selector<MainListManager, bool>(
+      selector: (context, provider) => provider.isEditingList,
+      builder: (context, isEditing, child) {
+        final listManager = Provider.of<MainListManager>(
+          context,
+          listen: false,
+        );
+        if (isEditing) {
+          return SizedBox(
+            width: 280,
+            height: 24,
+            child: TextField(
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.zero,
+                isCollapsed: true,
+              ),
+              controller: textEditingController,
+              autofocus: true,
+              style: Theme.of(context).textTheme.bodyMedium,
+              onSubmitted: (newTitle) {
+                listManager.renameList(listManager.selectedId, newTitle);
+              },
+            ),
+          );
+        } else {
+          return SizedBox(
+            height: 24,
+            child: Text(
+              widget.title,
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          );
+        }
       },
     );
-  }
-
-  Widget editingElement(bool editValue, BuildContext context) {
-    if (editValue) {
-      return SizedBox(
-        width: 280,
-        height: 24,
-        child: TextField(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.zero,
-            isCollapsed: true,
-          ),
-          controller: textEditingController,
-          autofocus: true,
-          style: Theme.of(context).textTheme.bodyMedium,
-          onSubmitted: (value) {
-            widget.title = value;
-            isEditingName.value = !isEditingName.value;
-          },
-        ),
-      );
-    } else {
-      return SizedBox(
-        height: 24,
-        child: Text(
-          widget.title,
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-      );
-    }
   }
 }

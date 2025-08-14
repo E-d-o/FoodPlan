@@ -9,6 +9,7 @@ class MainListManager with ChangeNotifier {
   final List<MainList> _mainListPages = [MainList(id: uuid.v4())];
   List<MainList> get mainListPages => _mainListPages;
   String _selectedId = "";
+  bool _isEditingList = false;
 
   set selectedId(String myId) {
     if (myId.isNotEmpty) {
@@ -19,6 +20,12 @@ class MainListManager with ChangeNotifier {
   }
 
   String get selectedId => _selectedId;
+  bool get isEditingList => _isEditingList;
+
+  void changeEditState() {
+    _isEditingList = !isEditingList;
+    notifyListeners();
+  }
 
   void addMainList() {
     String generatedId = uuid.v4();
@@ -32,11 +39,16 @@ class MainListManager with ChangeNotifier {
   }
 
   void removeMainList(String removeId) {
-    _mainListPages.removeWhere((element) => element.id == removeId);
+    _mainListPages.removeWhere((mainlist) => mainlist.id == removeId);
     notifyListeners();
   }
 
-  void renameList(String renameId) {
+  void renameList(String renameId, String newTitle) {
+    changeEditState();
+    int index = _mainListPages.indexWhere(
+      (mainlist) => mainlist.id == renameId,
+    );
+    _mainListPages[index].title = newTitle;
     notifyListeners();
   }
 }

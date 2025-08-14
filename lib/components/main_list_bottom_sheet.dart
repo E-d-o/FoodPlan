@@ -3,8 +3,7 @@ import 'package:foodplan/notifiers/main_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class MainListBottomSheet extends StatelessWidget {
-  const MainListBottomSheet({super.key, required this.isEditingName});
-  final ValueNotifier isEditingName;
+  const MainListBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,10 +17,7 @@ class MainListBottomSheet extends StatelessWidget {
             spacing: 20,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
 
-            children: [
-              RenameButton(isEditingName: isEditingName),
-              DeleteButton(),
-            ],
+            children: [RenameButton(), DeleteButton()],
           ),
         ),
       ),
@@ -30,9 +26,7 @@ class MainListBottomSheet extends StatelessWidget {
 }
 
 class RenameButton extends StatelessWidget {
-  const RenameButton({super.key, required this.isEditingName});
-
-  final ValueNotifier isEditingName;
+  const RenameButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +46,7 @@ class RenameButton extends StatelessWidget {
             context,
             listen: false,
           );
-
-          isEditingName.value = !isEditingName.value;
+          listManager.changeEditState();
           Navigator.pop(context);
         },
         child: Text("Rinomina"),
