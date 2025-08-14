@@ -5,9 +5,10 @@ import 'package:foodplan/pages/single_list_page.dart';
 import 'package:provider/provider.dart';
 
 class MainList extends StatefulWidget {
-  MainList({super.key, required this.listIndex});
+  MainList({super.key, required this.id});
+
   final SingleListPage myPage = SingleListPage();
-  final int listIndex;
+  final String id;
 
   @override
   State<MainList> createState() => _MainListState();
@@ -17,6 +18,7 @@ class _MainListState extends State<MainList> {
   String title = "Nuova Lista";
   final isEditingName = ValueNotifier(false);
   TextEditingController textEditingController = TextEditingController();
+  final double borderRadius = 10.0;
   @override
   void initState() {
     textEditingController.text = title;
@@ -27,14 +29,14 @@ class _MainListState extends State<MainList> {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(10.0),
+      borderRadius: BorderRadius.circular(borderRadius),
 
       child: InkResponse(
         //makes the ink splash bound to the cointainer which is a rectangle with circular radius 10.0
         splashColor: Theme.of(context).splashColor,
 
         highlightShape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(borderRadius),
         containedInkWell: true,
         //end of ink splash section
         onTap: () {
@@ -60,7 +62,11 @@ class _MainListState extends State<MainList> {
 
       child: Stack(
         children: [
-          LinearProgressIndicator(value: 0.6, minHeight: 100),
+          LinearProgressIndicator(
+            value: 0.6,
+            minHeight: 100,
+            borderRadius: BorderRadius.circular(borderRadius),
+          ),
 
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -97,6 +103,8 @@ class _MainListState extends State<MainList> {
           context,
           listen: false,
         );
+        listManager.selectedId = widget.id;
+        print(listManager.selectedId);
         showModalBottomSheet(
           showDragHandle: true,
           context: context,
@@ -105,10 +113,7 @@ class _MainListState extends State<MainList> {
           builder: (context) {
             return ChangeNotifierProvider.value(
               value: listManager,
-              child: MainListBottomSheet(
-                isEditingName: isEditingName,
-                listIndex: widget.listIndex,
-              ),
+              child: MainListBottomSheet(isEditingName: isEditingName),
             );
           },
         );

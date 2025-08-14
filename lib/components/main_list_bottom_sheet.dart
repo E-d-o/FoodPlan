@@ -3,13 +3,8 @@ import 'package:foodplan/notifiers/main_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class MainListBottomSheet extends StatelessWidget {
-  const MainListBottomSheet({
-    super.key,
-    required this.isEditingName,
-    required this.listIndex,
-  });
+  const MainListBottomSheet({super.key, required this.isEditingName});
   final ValueNotifier isEditingName;
-  final int listIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -24,25 +19,8 @@ class MainListBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
 
             children: [
-              Expanded(
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        side: BorderSide(color: Colors.black, width: 2.0),
-                        borderRadius: BorderRadiusGeometry.circular(10),
-                      ),
-                    ),
-                    padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
-                  ),
-                  onPressed: () {
-                    isEditingName.value = !isEditingName.value;
-                    Navigator.pop(context);
-                  },
-                  child: Text("Rinomina"),
-                ),
-              ),
-              DeleteButton(listIndex: listIndex),
+              RenameButton(isEditingName: isEditingName),
+              DeleteButton(),
             ],
           ),
         ),
@@ -51,9 +29,41 @@ class MainListBottomSheet extends StatelessWidget {
   }
 }
 
+class RenameButton extends StatelessWidget {
+  const RenameButton({super.key, required this.isEditingName});
+
+  final ValueNotifier isEditingName;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: WidgetStatePropertyAll(
+            RoundedRectangleBorder(
+              side: BorderSide(color: Colors.black, width: 2.0),
+              borderRadius: BorderRadiusGeometry.circular(10),
+            ),
+          ),
+          padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
+        ),
+        onPressed: () {
+          final listManager = Provider.of<MainListManager>(
+            context,
+            listen: false,
+          );
+
+          isEditingName.value = !isEditingName.value;
+          Navigator.pop(context);
+        },
+        child: Text("Rinomina"),
+      ),
+    );
+  }
+}
+
 class DeleteButton extends StatelessWidget {
-  const DeleteButton({super.key, required this.listIndex});
-  final int listIndex;
+  const DeleteButton({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +86,7 @@ class DeleteButton extends StatelessWidget {
             context,
             listen: false,
           );
-          print(listIndex);
-          listManager.removeMainList(listIndex);
+          listManager.removeMainList(listManager.selectedId);
           Navigator.pop(context);
         },
         child: Row(
