@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
+import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -81,17 +82,38 @@ class _AtHomeItems extends StatelessWidget {
           spacing: 0,
           children: [
             TextRegion(topRadiusTextRegion: topRadiusTextRegion),
-            Visibility(
-              visible: isVisible,
-              child: Container(
-                color: Colors.grey,
-                padding: EdgeInsets.all(12.0),
-                child: Column(spacing: 10, children: [...atHomeItems]),
-              ),
+            HidableList(
+              atHomeItems: atHomeItems,
+              isVisible: isVisible,
+              manager: singleListManager,
             ),
           ],
         );
       },
+    );
+  }
+}
+
+class HidableList extends StatelessWidget {
+  const HidableList({
+    super.key,
+    required this.atHomeItems,
+    required this.isVisible,
+    required this.manager,
+  });
+  final bool isVisible;
+  final List<ListItem> atHomeItems;
+  final SingleListManager manager;
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: isVisible,
+      child: Container(
+        color: Colors.grey,
+        padding: EdgeInsets.all(manager.paddingHomeItems),
+        child: Column(spacing: 10, children: [...atHomeItems]),
+      ),
     );
   }
 }

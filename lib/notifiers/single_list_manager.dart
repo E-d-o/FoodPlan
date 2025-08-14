@@ -12,13 +12,26 @@ class SingleListManager with ChangeNotifier {
   final List<ListItem> homeItemsList = [ListItem(id: "3", isAtHome: true)];
   late final List<List<ListItem>> completeList;
   bool _isHomeItemsVisible = true;
+  double _paddingHomeItems = 16.0;
 
   bool get isHomeItemsVisible => _isHomeItemsVisible;
+  double get paddingHomeItems => _paddingHomeItems;
+
   final Map<String, bool> _listChecked = {};
 
   SingleListManager() {
     completeList = [requiredItemsList, homeItemsList];
-    _listChecked["ciccio"] = false;
+    _listChecked["1"] = false;
+    _listChecked["2"] = false;
+    _listChecked["3"] = false;
+  }
+
+  void _checkForEmptyHomeItems() {
+    if (homeItemsList.isEmpty) {
+      _paddingHomeItems = 0;
+    } else {
+      _paddingHomeItems = 16;
+    }
   }
 
   void changeHomeItemsVisibility() {
@@ -47,6 +60,7 @@ class SingleListManager with ChangeNotifier {
     if (isAtHome) {
       print(homeItemsList.toString() + "prima");
       homeItemsList.removeWhere((element) => element.id == listId);
+      _checkForEmptyHomeItems();
       print(homeItemsList.toString() + "dopo");
     } else {
       //in required items

@@ -12,18 +12,12 @@ class ListItem extends StatelessWidget {
     return Dismissible(
       key: Key(id),
       background: Container(color: Colors.redAccent),
-      direction: DismissDirection.startToEnd,
+      direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        if (direction == DismissDirection.startToEnd) {
-          singleListManager.removeItem(id, isAtHome);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("Rimosso elemento :D")));
-        } else {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("NON PUOI :D")));
-        }
+        singleListManager.removeItem(id, isAtHome);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text("Rimosso elemento :D")));
       },
       child: Material(
         color: Colors.redAccent,
