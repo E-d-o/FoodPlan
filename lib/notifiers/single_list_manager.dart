@@ -6,10 +6,10 @@ final uuid = Uuid();
 
 class SingleListManager with ChangeNotifier {
   final List<ListItem> requiredItemsList = [
-    ListItem(id: "ciccio"),
-    ListItem(id: "ciccio"),
+    ListItem(id: "1", isAtHome: false),
+    ListItem(id: "2", isAtHome: false),
   ];
-  final List<ListItem> homeItemsList = [ListItem(id: "ciccio")];
+  final List<ListItem> homeItemsList = [ListItem(id: "3", isAtHome: true)];
   late final List<List<ListItem>> completeList;
   bool _isHomeItemsVisible = true;
 
@@ -35,10 +35,26 @@ class SingleListManager with ChangeNotifier {
   }
 
   void addNewItem() {
+    //TODO:FIX THIS
     String newid = uuid.v4();
-    requiredItemsList.add(ListItem(id: newid));
+    requiredItemsList.add(ListItem(id: newid, isAtHome: true));
     _listChecked[newid] = false;
 
+    notifyListeners();
+  }
+
+  void removeItem(String listId, bool isAtHome) {
+    if (isAtHome) {
+      print(homeItemsList.toString() + "prima");
+      homeItemsList.removeWhere((element) => element.id == listId);
+      print(homeItemsList.toString() + "dopo");
+    } else {
+      //in required items
+      print(requiredItemsList);
+
+      requiredItemsList.removeWhere((element) => element.id == listId);
+      print(requiredItemsList);
+    }
     notifyListeners();
   }
 

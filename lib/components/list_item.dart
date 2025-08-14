@@ -3,24 +3,43 @@ import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key, required this.id});
+  const ListItem({super.key, required this.id, required this.isAtHome});
+  final bool isAtHome;
   final String id;
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.redAccent,
-      borderRadius: BorderRadius.circular(3.0),
-
-      child: InkResponse(
-        splashColor: Theme.of(context).splashColor,
-
-        highlightShape: BoxShape.rectangle,
+    final singleListManager = context.read<SingleListManager>();
+    return Dismissible(
+      key: Key(id),
+      background: Container(color: Colors.redAccent),
+      direction: DismissDirection.startToEnd,
+      onDismissed: (direction) {
+        if (direction == DismissDirection.startToEnd) {
+          singleListManager.removeItem(id, isAtHome);
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Rimosso elemento :D")));
+        } else {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("NON PUOI :D")));
+        }
+      },
+      child: Material(
+        color: Colors.redAccent,
         borderRadius: BorderRadius.circular(3.0),
-        containedInkWell: true,
-        onTap: () {
-          //TODO:Logic of ListItem onTap
-        },
-        child: mainStructure(context),
+
+        child: InkResponse(
+          splashColor: Theme.of(context).splashColor,
+
+          highlightShape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(3.0),
+          containedInkWell: true,
+          onTap: () {
+            //TODO:Logic of ListItem onTap
+          },
+          child: mainStructure(context),
+        ),
       ),
     );
   }
