@@ -1,0 +1,1 @@
+enum MainListProperty { title, isEditable }
