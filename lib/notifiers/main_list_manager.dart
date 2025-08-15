@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:foodplan/components/mainlist.dart';
+
 import 'package:foodplan/properties/main_list_properties.dart';
 import 'package:foodplan/properties/main_list_property.dart';
 import 'package:uuid/uuid.dart';
@@ -11,9 +12,12 @@ class MainListManager with ChangeNotifier {
   final List<MainList> _mainListPages = [MainList(id: uuid.v4())];
   List<MainList> get mainListPages => _mainListPages;
   String _selectedId = "";
-  bool _isEditingList = false;
   String defaultTitle = "Nuova Lista";
   double progressOfNewList = 0;
+  bool defaultEditState =
+      true; //TODO:defualt edit state true but only false for first list
+  bool startupEditState = false;
+  String startupTitle = "Supermercato";
   final Map<String, MainListProperties> _mainListProperties = {};
 
   set selectedId(String myId) {
@@ -31,14 +35,15 @@ class MainListManager with ChangeNotifier {
   void _initProperties() {
     for (int i = 0; i < mainListPages.length; i++) {
       _mainListProperties[_mainListPages[i].id] = MainListProperties(
-        title: defaultTitle,
+        title: startupTitle, //special title for the list thats already present
         progress: progressOfNewList,
+        isBeingEdited:
+            startupEditState, //the list thats already there has a special value since we dont want to start the app having to rename it
       );
     }
   }
 
   String get selectedId => _selectedId;
-  bool get isEditingList => _isEditingList;
 
   bool _isListInProperties(String listId) {
     if (_mainListProperties.containsKey(listId)) {
@@ -85,8 +90,9 @@ class MainListManager with ChangeNotifier {
     }
   }
 
-  void changeEditState() {
-    _isEditingList = !isEditingList;
+  void changeEditState(String listId) {
+    bool oldValue = _getProperty(listId, MainListProperty.isBeingEdited);
+    _setProperty(listId, MainListProperty.isBeingEdited, !oldValue);
     notifyListeners();
   }
 
@@ -110,6 +116,7 @@ class MainListManager with ChangeNotifier {
     _mainListProperties[listId] = MainListProperties(
       title: defaultTitle,
       progress: progressOfNewList,
+      isBeingEdited: defaultEditState,
     );
   }
 
@@ -135,8 +142,12 @@ class MainListManager with ChangeNotifier {
   }
 
   void renameList(String renameId, String newTitle) {
-    changeEditState();
+    changeEditState(renameId);
     _addNewTitle(renameId, newTitle);
     notifyListeners();
+  }
+
+  bool getEditStatus(String listId) {
+    return _getProperty(listId, MainListProperty.isBeingEdited);
   }
 }

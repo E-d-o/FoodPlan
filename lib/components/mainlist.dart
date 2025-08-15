@@ -139,15 +139,14 @@ class EditableTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Selector<MainListManager, bool>(
-      selector: (context, provider) => provider.isEditingList,
+      selector: (context, provider) => provider.getEditStatus(widget.id),
       builder: (context, isEditing, child) {
         final listManager = Provider.of<MainListManager>(
           context,
           listen: false,
         );
-
         String changedTitle = listManager.getListTitle(widget.id);
-        if (isEditing) {
+        if (listManager.getEditStatus(widget.id)) {
           //introduce editstatus in manager and get it here, editstatus returns the isEditing for the specified id
           return SizedBox(
             width: 280,
@@ -161,7 +160,7 @@ class EditableTitle extends StatelessWidget {
               autofocus: true,
               style: Theme.of(context).textTheme.bodyMedium,
               onSubmitted: (newTitle) {
-                listManager.renameList(listManager.selectedId, newTitle);
+                listManager.renameList(widget.id, newTitle);
               },
             ),
           );

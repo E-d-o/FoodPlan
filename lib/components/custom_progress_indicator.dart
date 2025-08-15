@@ -21,10 +21,8 @@ class CustomProgressIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MainListManager mainManager = context.watch<MainListManager>();
-    print(mainManager.getListProgress(id));
-    double progress =
-        1; //problema di gestione della larghezza della progress bar, in totale deve fare progress, (Container+Gradient)=parent*progress
 
+    double progress = mainManager.getListProgress(id);
     return LayoutBuilder(
       builder: (context, constraints) {
         final double parentWidth = constraints.maxWidth;

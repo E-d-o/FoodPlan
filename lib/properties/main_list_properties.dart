@@ -1,11 +1,16 @@
 import 'package:foodplan/properties/main_list_property.dart';
 
 class MainListProperties {
-  MainListProperties({required this.title, required this.progress});
+  MainListProperties({
+    required this.title,
+    required this.progress,
+    required this.isBeingEdited,
+  });
 
   String title;
   //TODO: add progress of mainlist property (how many more obj left to take)
   double progress;
+  bool isBeingEdited;
   bool hasProperty(MainListProperty property) {
     return true; //add logic here if you want to check that you wrote all of the mainListProperties specified in the enum MainLIstProperty
   }
@@ -24,6 +29,12 @@ class MainListProperties {
         } else {
           throw ArgumentError("progress non e' un double");
         }
+      case MainListProperty.isBeingEdited:
+        if (value is bool) {
+          isBeingEdited = value;
+        } else {
+          throw ArgumentError("isbeingEdited non e' un bool");
+        }
       default:
         throw ArgumentError("sbagliato set property");
     }
@@ -35,6 +46,8 @@ class MainListProperties {
         return title;
       case MainListProperty.progress:
         return progress;
+      case MainListProperty.isBeingEdited:
+        return isBeingEdited;
       default:
         throw ArgumentError("sbagliato get property");
     }

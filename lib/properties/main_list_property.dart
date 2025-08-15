@@ -1,1 +1,1 @@
-enum MainListProperty { title, progress }
+enum MainListProperty { title, progress, isBeingEdited }

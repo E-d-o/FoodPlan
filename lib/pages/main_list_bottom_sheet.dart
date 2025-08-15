@@ -46,7 +46,7 @@ class RenameButton extends StatelessWidget {
             context,
             listen: false,
           );
-          listManager.changeEditState();
+          listManager.changeEditState(listManager.selectedId);
           Navigator.pop(context);
         },
         child: Text("Rinomina"),
