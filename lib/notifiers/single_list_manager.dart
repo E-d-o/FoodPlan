@@ -1,5 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:foodplan/components/list_item.dart';
+import 'package:foodplan/myclasses/list_properties.dart';
+import 'package:foodplan/myclasses/list_property.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
@@ -10,20 +12,80 @@ class SingleListManager with ChangeNotifier {
     ListItem(id: "2", isAtHome: false),
   ];
   final List<ListItem> homeItemsList = [ListItem(id: "3", isAtHome: true)];
-  late final List<List<ListItem>> completeList;
+
   bool _isHomeItemsVisible = true;
   double _paddingHomeItems = 16.0;
 
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
 
-  final Map<String, bool> _listChecked = {};
+  final Map<String, ListProperties> _properties = {};
 
   SingleListManager() {
-    completeList = [requiredItemsList, homeItemsList];
-    _listChecked["1"] = false;
-    _listChecked["2"] = false;
-    _listChecked["3"] = false;
+    _initProperties();
+  }
+
+  void _initProperties() {
+    _initItems(requiredItemsList);
+    _initItems(homeItemsList);
+  }
+
+  void _initItems(List<ListItem> list) {
+    for (int i = 0; i < list.length; i++) {
+      _properties[list[i].id] = ListProperties(
+        isChecked: false,
+        isEditing: false,
+      );
+    }
+  }
+
+  bool _isListInProperties(String listId) {
+    if (_properties.containsKey(listId)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool _isPropertyInProperties(String listId, ListProperty property) {
+    switch (property) {
+      case ListProperty.isChecked:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  bool _isSafeToAccessProperty(String listId, ListProperty property) {
+    if (_isListInProperties(listId)) {
+      if (_isPropertyInProperties(listId, property)) {
+        return true;
+      } else {
+        throw ArgumentError("property given is not in properties");
+      }
+    } else {
+      throw ArgumentError("id is not in properties");
+    }
+  }
+
+  void _setProperty(String listId, ListProperty property, dynamic value) {
+    if (_isSafeToAccessProperty(listId, property)) {
+      _properties[listId]!.setProperty(property, value);
+    } else {
+      throw ArgumentError(
+        "Not safe to access, property or id is not in properties",
+      );
+    }
+  }
+
+  dynamic _getProperty(String listId, ListProperty property) {
+    if (_isSafeToAccessProperty(listId, property)) {
+      return _properties[listId]!.getProperty(property);
+    } else {
+      throw ArgumentError(
+        "Not safe to access, property or id is not in properties",
+      );
+    }
   }
 
   void _checkForEmptyHomeItems() {
@@ -40,18 +102,14 @@ class SingleListManager with ChangeNotifier {
   }
 
   bool getCheckedValue(String listId) {
-    if (_listChecked[listId] == null) {
-      return false;
-    } else {
-      return _listChecked[listId]!;
-    }
+    return _getProperty(listId, ListProperty.isChecked);
   }
 
   void addNewItem() {
     //TODO:FIX THIS
     String newid = uuid.v4();
     requiredItemsList.add(ListItem(id: newid, isAtHome: true));
-    _listChecked[newid] = false;
+    _setProperty(newid, ListProperty.isChecked, false);
 
     notifyListeners();
   }
@@ -69,11 +127,8 @@ class SingleListManager with ChangeNotifier {
   }
 
   void changeCheckedValue(String listId) {
-    if (_listChecked[listId] != null) {
-      _listChecked[listId] = !_listChecked[listId]!;
-    } else {
-      throw Exception("checking list: value in map is null");
-    }
+    bool newvalue = !_getProperty(listId, ListProperty.isChecked);
+    _setProperty(listId, ListProperty.isChecked, newvalue);
 
     notifyListeners();
   }

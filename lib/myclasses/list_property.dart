@@ -1,0 +1,1 @@
+enum ListProperty { isChecked, isEditing }
