@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:foodplan/pages/modify_list_item_page.dart';
 import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {
@@ -24,13 +25,25 @@ class ListItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(3.0),
 
         child: InkResponse(
-          splashColor: Theme.of(context).splashColor,
+          splashColor: Colors.blueAccent,
 
           highlightShape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(3.0),
           containedInkWell: true,
           onTap: () {
-            //TODO: add logic ontap listitem
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return ChangeNotifierProvider.value(
+                    value: singleListManager,
+                    child: ModifyListItemPage(
+                      id: id,
+                    ), //change with modify item page
+                  );
+                },
+              ),
+            );
           },
           child: mainStructure(context),
         ),
@@ -67,7 +80,7 @@ class LeftItemPart extends StatelessWidget {
       flex: 4,
       child: Container(
         height: double.infinity,
-        color: Colors.amber,
+        color: Colors.transparent, //can change for testing
         child: Row(
           spacing: 8,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
