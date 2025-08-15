@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:foodplan/components/list_item.dart';
-import 'package:foodplan/properties/list_properties.dart';
-import 'package:foodplan/properties/list_property.dart';
+import 'package:foodplan/properties/single_list_properties.dart';
+import 'package:foodplan/properties/single_list_property.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
@@ -19,7 +19,7 @@ class SingleListManager with ChangeNotifier {
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
 
-  final Map<String, ListProperties> _properties = {};
+  final Map<String, SingleListProperties> _properties = {};
   SingleListManager() {
     _initProperties();
   }
@@ -31,7 +31,7 @@ class SingleListManager with ChangeNotifier {
 
   void _initItems(List<ListItem> list) {
     for (int i = 0; i < list.length; i++) {
-      _properties[list[i].id] = ListProperties(
+      _properties[list[i].id] = SingleListProperties(
         isChecked: false,
         isAtHome: false,
       );
@@ -46,12 +46,12 @@ class SingleListManager with ChangeNotifier {
     }
   }
 
-  bool _isPropertyInProperties(String listId, ListProperty property) {
+  bool _isPropertyInProperties(String listId, SingleListProperty property) {
     //to ensure that the property exists
     return true;
   }
 
-  bool _isSafeToAccessProperty(String listId, ListProperty property) {
+  bool _isSafeToAccessProperty(String listId, SingleListProperty property) {
     if (_isListInProperties(listId)) {
       if (_isPropertyInProperties(listId, property)) {
         return true;
@@ -63,7 +63,7 @@ class SingleListManager with ChangeNotifier {
     }
   }
 
-  void _setProperty(String listId, ListProperty property, dynamic value) {
+  void _setProperty(String listId, SingleListProperty property, dynamic value) {
     if (_isSafeToAccessProperty(listId, property)) {
       _properties[listId]!.setProperty(property, value);
     } else {
@@ -73,7 +73,7 @@ class SingleListManager with ChangeNotifier {
     }
   }
 
-  dynamic _getProperty(String listId, ListProperty property) {
+  dynamic _getProperty(String listId, SingleListProperty property) {
     if (_isSafeToAccessProperty(listId, property)) {
       return _properties[listId]!.getProperty(property);
     } else {
@@ -97,11 +97,14 @@ class SingleListManager with ChangeNotifier {
   }
 
   bool getCheckedValue(String listId) {
-    return _getProperty(listId, ListProperty.isChecked);
+    return _getProperty(listId, SingleListProperty.isChecked);
   }
 
   void _addProperty(String listId) {
-    _properties[listId] = ListProperties(isChecked: false, isAtHome: false);
+    _properties[listId] = SingleListProperties(
+      isChecked: false,
+      isAtHome: false,
+    );
   }
 
   void addNewItem() {
@@ -117,7 +120,7 @@ class SingleListManager with ChangeNotifier {
   }
 
   void removeItem(String listId) {
-    if (_getProperty(listId, ListProperty.isAtHome)) {
+    if (_getProperty(listId, SingleListProperty.isAtHome)) {
       homeItemsList.removeWhere((element) => element.id == listId);
       _checkForEmptyHomeItems();
     } else {
@@ -130,8 +133,8 @@ class SingleListManager with ChangeNotifier {
   }
 
   void changeCheckedValue(String listId) {
-    bool newvalue = !_getProperty(listId, ListProperty.isChecked);
-    _setProperty(listId, ListProperty.isChecked, newvalue);
+    bool newvalue = !_getProperty(listId, SingleListProperty.isChecked);
+    _setProperty(listId, SingleListProperty.isChecked, newvalue);
 
     notifyListeners();
   }

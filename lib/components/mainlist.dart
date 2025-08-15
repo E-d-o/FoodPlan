@@ -156,7 +156,8 @@ class EditableTitle extends StatelessWidget {
                 contentPadding: EdgeInsets.zero,
                 isCollapsed: true,
               ),
-              controller: textEditingController,
+              controller:
+                  textEditingController, //TODO:when clicked outside it needs to rename to the old value, it saves only on submitted
               autofocus: true,
               style: Theme.of(context).textTheme.bodyMedium,
               onSubmitted: (newTitle) {

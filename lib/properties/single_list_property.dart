@@ -1,0 +1,1 @@
+enum SingleListProperty { isChecked, isAtHome }

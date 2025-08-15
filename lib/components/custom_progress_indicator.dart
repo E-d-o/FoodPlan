@@ -23,6 +23,7 @@ class CustomProgressIndicator extends StatelessWidget {
     MainListManager mainManager = context.watch<MainListManager>();
 
     double progress = mainManager.getListProgress(id);
+    //progress = 0.6; //for testing purpuses
     return LayoutBuilder(
       builder: (context, constraints) {
         final double parentWidth = constraints.maxWidth;
@@ -46,18 +47,18 @@ class CustomProgressIndicator extends StatelessWidget {
               height: height,
               width: progressBarWidth,
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Theme.of(context).primaryColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(borderRadius),
                   bottomLeft: Radius.circular(borderRadius),
                 ),
               ),
             ),
-            blurProgress(progressBarWidth, progressBarBlurWidth),
+            blurProgress(progressBarWidth, progressBarBlurWidth, context),
             Material(
               color: Colors.transparent,
               child: InkResponse(
-                splashColor: Colors.redAccent,
+                splashColor: Theme.of(context).splashColor,
                 highlightShape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(borderRadius),
                 containedInkWell: true,
@@ -85,15 +86,17 @@ class CustomProgressIndicator extends StatelessWidget {
   Positioned blurProgress(
     double progressBarWidth,
     double progressBarBlurWidth,
+    dynamic context,
   ) {
+    Color primaryColor = Theme.of(context).primaryColor;
     return Positioned(
       left: progressBarWidth - 1,
       child: ShaderMask(
         shaderCallback: (bounds) {
           return LinearGradient(
             colors: [
-              Colors.blue.withValues(alpha: 1),
-              Colors.blue.withValues(alpha: 0.7),
+              primaryColor.withValues(alpha: 1),
+              primaryColor.withValues(alpha: 0.7),
               Colors.white,
             ],
             stops: [0.0, 0.5, 1],

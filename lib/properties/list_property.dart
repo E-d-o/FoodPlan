@@ -1,1 +1,0 @@
-enum ListProperty { isChecked, isAtHome }

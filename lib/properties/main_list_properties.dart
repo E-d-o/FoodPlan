@@ -8,7 +8,6 @@ class MainListProperties {
   });
 
   String title;
-  //TODO: add progress of mainlist property (how many more obj left to take)
   double progress;
   bool isBeingEdited;
   bool hasProperty(MainListProperty property) {
@@ -36,7 +35,9 @@ class MainListProperties {
           throw ArgumentError("isbeingEdited non e' un bool");
         }
       default:
-        throw ArgumentError("sbagliato set property");
+        throw ArgumentError(
+          "Ti sei dimenticato di inserire una Mainlistproperty nello switch ",
+        );
     }
   }
 
@@ -49,7 +50,9 @@ class MainListProperties {
       case MainListProperty.isBeingEdited:
         return isBeingEdited;
       default:
-        throw ArgumentError("sbagliato get property");
+        throw ArgumentError(
+          "Ti sei dimenticato di inserire una Mainlistproperty nello switch ",
+        );
     }
   }
 }
