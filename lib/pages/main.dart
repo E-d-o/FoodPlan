@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
           labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
-        splashColor: Colors.amber,
+        splashColor: Colors.redAccent,
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color.fromRGBO(43, 140, 67, 1),
           brightness: Brightness.light,

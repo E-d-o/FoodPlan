@@ -4,6 +4,7 @@ import '../components/logo.dart';
 
 class DrawerPage extends StatelessWidget {
   const DrawerPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -17,6 +18,7 @@ class DrawerPage extends StatelessWidget {
             Logo(),
             SizedBox(height: 1, width: double.infinity),
             ListTile(
+              splashColor: Theme.of(context).splashColor,
               contentPadding: EdgeInsets.all(0),
               leading: Icon(
                 Icons.settings_sharp,
@@ -40,6 +42,7 @@ class DrawerPage extends StatelessWidget {
               },
             ),
             ListTile(
+              splashColor: Theme.of(context).splashColor,
               contentPadding: EdgeInsets.all(0),
               leading: Icon(
                 Icons.help,
@@ -54,6 +57,7 @@ class DrawerPage extends StatelessWidget {
               onTap: () {},
             ),
             ListTile(
+              splashColor: Theme.of(context).splashColor,
               contentPadding: EdgeInsets.all(0),
               leading: Icon(
                 Icons.mail,
