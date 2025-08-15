@@ -34,6 +34,7 @@ class MainListProperties {
         } else {
           throw ArgumentError("isbeingEdited non e' un bool");
         }
+      // ignore: unreachable_switch_default
       default:
         throw ArgumentError(
           "Ti sei dimenticato di inserire una Mainlistproperty nello switch ",
@@ -49,6 +50,7 @@ class MainListProperties {
         return progress;
       case MainListProperty.isBeingEdited:
         return isBeingEdited;
+      // ignore: unreachable_switch_default
       default:
         throw ArgumentError(
           "Ti sei dimenticato di inserire una Mainlistproperty nello switch ",

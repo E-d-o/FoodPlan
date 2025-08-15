@@ -25,15 +25,21 @@ class SingleListManager with ChangeNotifier {
   }
 
   void _initProperties() {
-    _initItems(requiredItemsList);
-    _initItems(homeItemsList);
+    _initItems(requiredItemsList, false);
+    _initItems(homeItemsList, true);
   }
 
-  void _initItems(List<ListItem> list) {
+  void _initItems(List<ListItem> list, bool isAtHome) {
     for (int i = 0; i < list.length; i++) {
       _properties[list[i].id] = SingleListProperties(
         isChecked: false,
-        isAtHome: false,
+        isAtHome: isAtHome,
+        title: 'Cipolla',
+        subtitle: "corsia 5",
+        price: 2.7,
+        priceMeasurementUnit: "\$",
+        quantityMeasurementUnit: "g",
+        quantityValue: 200,
       );
     }
   }
@@ -100,17 +106,42 @@ class SingleListManager with ChangeNotifier {
     return _getProperty(listId, SingleListProperty.isChecked);
   }
 
-  void _addProperty(String listId) {
+  String getTitle(String listId) {
+    return _getProperty(listId, SingleListProperty.title);
+  }
+
+  String? getSubtitle(String listId) {
+    return _getProperty(listId, SingleListProperty.subtitle);
+  }
+
+  double? getPrice(String listId) {
+    return _getProperty(listId, SingleListProperty.price);
+  }
+
+  int? getQuantity(String listId) {
+    return _getProperty(listId, SingleListProperty.quantityValue);
+  }
+
+  String? getPriceMeasurementUnit(String listId) {
+    return _getProperty(listId, SingleListProperty.priceMeasurementUnit);
+  }
+
+  String? getMeasurementUnit(String listId) {
+    return _getProperty(listId, SingleListProperty.quantityMeasurementUnit);
+  }
+
+  void _addProperty(String listId, String title) {
     _properties[listId] = SingleListProperties(
       isChecked: false,
       isAtHome: false,
+      title: title,
     );
   }
 
-  void addNewItem() {
+  void addNewItem(String title) {
     String newid = uuid.v4();
     requiredItemsList.add(ListItem(id: newid));
-    _addProperty(newid);
+    _addProperty(newid, title);
 
     notifyListeners();
   }

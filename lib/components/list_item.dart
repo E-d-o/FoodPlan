@@ -46,7 +46,7 @@ class ListItem extends StatelessWidget {
         spacing: 8,
         children: [
           LeftItemPart(id: id),
-          RightItemPart(),
+          RightItemPart(id: id),
         ],
       ),
     );
@@ -60,6 +60,8 @@ class LeftItemPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final singleListManager = context.watch<SingleListManager>();
+    final title = singleListManager.getTitle(id);
+    final subtitle = singleListManager.getSubtitle(id);
 
     return Expanded(
       flex: 4,
@@ -79,8 +81,8 @@ class LeftItemPart extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("data", style: null),
-                Text("Subtitle", style: null),
+                Text(title, style: null),
+                HidableSubtitle(subtitle: subtitle),
               ],
             ),
             Container(
@@ -96,11 +98,40 @@ class LeftItemPart extends StatelessWidget {
   }
 }
 
-class RightItemPart extends StatelessWidget {
-  const RightItemPart({super.key});
+class HidableSubtitle extends StatelessWidget {
+  const HidableSubtitle({super.key, required this.subtitle});
+
+  final String? subtitle;
 
   @override
   Widget build(BuildContext context) {
+    bool isVisible = true;
+    if (subtitle == null) {
+      isVisible = false;
+      return Visibility(
+        visible: isVisible,
+        child: Text("dovrebbe essere invisibile", style: null),
+      );
+    } else {
+      return Visibility(
+        visible: isVisible,
+        child: Text(subtitle!, style: null),
+      );
+    }
+  }
+}
+
+class RightItemPart extends StatelessWidget {
+  const RightItemPart({super.key, required this.id});
+  final String id;
+  @override
+  Widget build(BuildContext context) {
+    final singleListManager = context.watch<SingleListManager>();
+    final double? price = singleListManager.getPrice(id);
+    final String? priceMeasurementUnit = singleListManager
+        .getPriceMeasurementUnit(id);
+    final int? quantity = singleListManager.getQuantity(id);
+    final String? measurementUnit = singleListManager.getMeasurementUnit(id);
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -113,11 +144,65 @@ class RightItemPart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 6,
           children: [
-            Text("x1", style: Theme.of(context).textTheme.bodySmall),
-            Text("2\$", style: Theme.of(context).textTheme.bodySmall),
+            quantityPart(quantity, measurementUnit, context),
+            pricePart(price, priceMeasurementUnit, context),
           ],
         ),
       ),
     );
+  }
+
+  Visibility pricePart(
+    double? price,
+    String? priceMeasurementUnit,
+    BuildContext context,
+  ) {
+    if (price == null) {
+      return Visibility(
+        visible: false,
+        child: Text("this price should not be visible"),
+      );
+    } else {
+      if (price.floor() - price == 0) {
+        //if is int
+        return Visibility(
+          visible: true,
+          child: Text(
+            price.toInt().toString() +
+                priceMeasurementUnit!, //cant get here with no quantity so measurment unit is not null here
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+        );
+      }
+      return Visibility(
+        visible: true,
+        child: Text(
+          price.toString() + priceMeasurementUnit!,
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      );
+    }
+  }
+
+  Visibility quantityPart(
+    int? quantity,
+    String? measurementUnit,
+    BuildContext context,
+  ) {
+    if (quantity == null) {
+      return Visibility(
+        visible: false,
+        child: Text("this price should not be visible"),
+      );
+    } else {
+      return Visibility(
+        visible: true,
+        child: Text(
+          quantity.toString() +
+              measurementUnit!, //cant get here with no quantity so measurment unit is not null here
+          style: Theme.of(context).textTheme.bodySmall,
+        ),
+      );
+    }
   }
 }

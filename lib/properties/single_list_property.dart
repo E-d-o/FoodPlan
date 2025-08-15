@@ -1,1 +1,10 @@
-enum SingleListProperty { isChecked, isAtHome }
+enum SingleListProperty {
+  isChecked,
+  isAtHome,
+  title,
+  subtitle,
+  price,
+  priceMeasurementUnit,
+  quantityValue,
+  quantityMeasurementUnit,
+}
