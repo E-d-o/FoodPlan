@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:foodplan/components/mainlist.dart';
-import 'package:foodplan/myclasses/main_list_properties.dart';
-import 'package:foodplan/myclasses/main_list_property.dart';
+import 'package:foodplan/properties/main_list_properties.dart';
+import 'package:foodplan/properties/main_list_property.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
@@ -13,6 +13,7 @@ class MainListManager with ChangeNotifier {
   String _selectedId = "";
   bool _isEditingList = false;
   String defaultTitle = "Nuova Lista";
+  double progressOfNewList = 0;
   final Map<String, MainListProperties> _mainListProperties = {};
 
   set selectedId(String myId) {
@@ -31,6 +32,7 @@ class MainListManager with ChangeNotifier {
     for (int i = 0; i < mainListPages.length; i++) {
       _mainListProperties[_mainListPages[i].id] = MainListProperties(
         title: defaultTitle,
+        progress: progressOfNewList,
       );
     }
   }
@@ -92,6 +94,10 @@ class MainListManager with ChangeNotifier {
     return _getProperty(listId, MainListProperty.title);
   }
 
+  double getListProgress(String listId) {
+    return _getProperty(listId, MainListProperty.progress);
+  }
+
   void _addNewTitle(String listId, String newTitle) {
     _setProperty(listId, MainListProperty.title, newTitle);
   }
@@ -101,7 +107,10 @@ class MainListManager with ChangeNotifier {
   }
 
   void _addProperties(String listId) {
-    _mainListProperties[listId] = MainListProperties(title: defaultTitle);
+    _mainListProperties[listId] = MainListProperties(
+      title: defaultTitle,
+      progress: progressOfNewList,
+    );
   }
 
   void addMainList() {

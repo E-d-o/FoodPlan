@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:foodplan/components/list_item.dart';
-import 'package:foodplan/myclasses/list_properties.dart';
-import 'package:foodplan/myclasses/list_property.dart';
+import 'package:foodplan/properties/list_properties.dart';
+import 'package:foodplan/properties/list_property.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();

@@ -1,4 +1,4 @@
-import 'package:foodplan/myclasses/list_property.dart';
+import 'package:foodplan/properties/list_property.dart';
 
 class ListProperties {
   ListProperties({required this.isChecked, required this.isAtHome});

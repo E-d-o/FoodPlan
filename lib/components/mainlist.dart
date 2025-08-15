@@ -54,6 +54,7 @@ class _MainListState extends State<MainList> {
             borderRadius: borderRadius,
             height: boxHeight,
             manager: singleListManager,
+            id: widget.id,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -87,29 +88,37 @@ class _MainListState extends State<MainList> {
     );
   }
 
-  InkWell listSetting(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        final listManager = Provider.of<MainListManager>(
-          context,
-          listen: false,
-        );
-        listManager.selectedId = widget.id;
+  Material listSetting(BuildContext context) {
+    double inkBorderRadius = 5;
+    return Material(
+      color: Colors.transparent,
+      child: InkResponse(
+        splashColor: Colors.redAccent,
+        highlightShape: BoxShape.rectangle,
+        borderRadius: BorderRadius.circular(inkBorderRadius),
+        containedInkWell: true,
+        onTap: () {
+          final listManager = Provider.of<MainListManager>(
+            context,
+            listen: false,
+          );
+          listManager.selectedId = widget.id;
 
-        showModalBottomSheet(
-          showDragHandle: true,
-          context: context,
-          backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
-          barrierColor: Colors.transparent,
-          builder: (context) {
-            return ChangeNotifierProvider.value(
-              value: listManager,
-              child: MainListBottomSheet(),
-            );
-          },
-        );
-      },
-      child: Icon(Icons.more_vert, size: 28),
+          showModalBottomSheet(
+            showDragHandle: true,
+            context: context,
+            backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+            barrierColor: Colors.transparent,
+            builder: (context) {
+              return ChangeNotifierProvider.value(
+                value: listManager,
+                child: MainListBottomSheet(),
+              );
+            },
+          );
+        },
+        child: Icon(Icons.more_vert, size: 28),
+      ),
     );
   }
 }
