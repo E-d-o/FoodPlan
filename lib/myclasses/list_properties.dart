@@ -1,10 +1,10 @@
 import 'package:foodplan/myclasses/list_property.dart';
 
 class ListProperties {
-  ListProperties({required this.isChecked, required this.isEditing});
+  ListProperties({required this.isChecked, required this.isAtHome});
 
   bool isChecked;
-  bool isEditing;
+  bool isAtHome;
 
   void setProperty(ListProperty property, dynamic value) {
     switch (property) {
@@ -12,9 +12,9 @@ class ListProperties {
         if (value is bool) {
           isChecked = value;
         }
-      case ListProperty.isEditing:
+      case ListProperty.isAtHome:
         if (value is bool) {
-          isEditing = value;
+          isAtHome = value;
         }
     }
   }
@@ -23,8 +23,8 @@ class ListProperties {
     switch (property) {
       case ListProperty.isChecked:
         return isChecked;
-      case ListProperty.isEditing:
-        return isEditing;
+      case ListProperty.isAtHome:
+        return isAtHome;
     }
   }
 }

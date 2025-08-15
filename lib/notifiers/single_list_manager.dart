@@ -8,10 +8,10 @@ final uuid = Uuid();
 
 class SingleListManager with ChangeNotifier {
   final List<ListItem> requiredItemsList = [
-    ListItem(id: "1", isAtHome: false),
-    ListItem(id: "2", isAtHome: false),
+    ListItem(id: "1"),
+    ListItem(id: "2"),
   ];
-  final List<ListItem> homeItemsList = [ListItem(id: "3", isAtHome: true)];
+  final List<ListItem> homeItemsList = [ListItem(id: "3")];
 
   bool _isHomeItemsVisible = true;
   double _paddingHomeItems = 16.0;
@@ -19,9 +19,7 @@ class SingleListManager with ChangeNotifier {
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
 
-  final Map<String, ListProperties> _properties =
-      {}; //TODO: encode isAtHOme in properties
-
+  final Map<String, ListProperties> _properties = {};
   SingleListManager() {
     _initProperties();
   }
@@ -35,7 +33,7 @@ class SingleListManager with ChangeNotifier {
     for (int i = 0; i < list.length; i++) {
       _properties[list[i].id] = ListProperties(
         isChecked: false,
-        isEditing: false,
+        isAtHome: false,
       );
     }
   }
@@ -49,12 +47,8 @@ class SingleListManager with ChangeNotifier {
   }
 
   bool _isPropertyInProperties(String listId, ListProperty property) {
-    switch (property) {
-      case ListProperty.isChecked:
-        return true;
-      default:
-        return false;
-    }
+    //to ensure that the property exists
+    return true;
   }
 
   bool _isSafeToAccessProperty(String listId, ListProperty property) {
@@ -107,13 +101,12 @@ class SingleListManager with ChangeNotifier {
   }
 
   void _addProperty(String listId) {
-    _properties[listId] = ListProperties(isChecked: false, isEditing: false);
+    _properties[listId] = ListProperties(isChecked: false, isAtHome: false);
   }
 
   void addNewItem() {
-    //TODO:FIX THIS
     String newid = uuid.v4();
-    requiredItemsList.add(ListItem(id: newid, isAtHome: true));
+    requiredItemsList.add(ListItem(id: newid));
     _addProperty(newid);
 
     notifyListeners();
@@ -123,8 +116,8 @@ class SingleListManager with ChangeNotifier {
     _properties.remove(listId);
   }
 
-  void removeItem(String listId, bool isAtHome) {
-    if (isAtHome) {
+  void removeItem(String listId) {
+    if (_getProperty(listId, ListProperty.isAtHome)) {
       homeItemsList.removeWhere((element) => element.id == listId);
       _checkForEmptyHomeItems();
     } else {

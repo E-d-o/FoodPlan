@@ -1,1 +1,1 @@
-enum ListProperty { isChecked, isEditing }
+enum ListProperty { isChecked, isAtHome }

@@ -3,8 +3,8 @@ import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {
-  const ListItem({super.key, required this.id, required this.isAtHome});
-  final bool isAtHome;
+  const ListItem({super.key, required this.id});
+
   final String id;
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class ListItem extends StatelessWidget {
       background: Container(color: Colors.redAccent),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        singleListManager.removeItem(id, isAtHome);
+        singleListManager.removeItem(id);
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("Rimosso elemento :D")));
