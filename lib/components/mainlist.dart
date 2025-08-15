@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/custom_progress_indicator.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:foodplan/pages/main_list_bottom_sheet.dart';
 import 'package:foodplan/notifiers/main_list_manager.dart';
@@ -22,6 +23,8 @@ class _MainListState extends State<MainList> {
   late String title;
   TextEditingController textEditingController = TextEditingController();
   final double borderRadius = 10.0;
+  final singleListManager =
+      SingleListManager(); //ogni mainlist ha il suo manager per la singlepagelist, cosi' da mantere lo stato di ogni mainlist
   @override
   void initState() {
     title = widget.givenTitle;
@@ -32,52 +35,26 @@ class _MainListState extends State<MainList> {
 
   @override
   Widget build(BuildContext context) {
-    final singleListManager =
-        SingleListManager(); //ogni mainlist ha il suo manager per la singlepagelist, cosi' da mantere lo stato di ogni mainlist
     return Material(
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(borderRadius),
 
-      child: InkResponse(
-        //makes the ink splash bound to the cointainer which is a rectangle with circular radius 10.0
-        splashColor: Theme.of(context).splashColor,
-
-        highlightShape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(borderRadius),
-        containedInkWell: true,
-        //end of ink splash section
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return ChangeNotifierProvider.value(
-                  value: singleListManager,
-                  child: SingleListPage(),
-                );
-              },
-            ),
-          );
-        },
-
-        child: mainStructure(context),
-      ),
+      child: mainStructure(context),
     );
   }
 
   SizedBox mainStructure(BuildContext context) {
+    double boxHeight = 100;
     return SizedBox(
-      height: 100,
+      height: boxHeight,
       width: double.infinity,
-
       child: Stack(
         children: [
-          LinearProgressIndicator(
-            value: 0.6,
-            minHeight: 100,
-            borderRadius: BorderRadius.circular(borderRadius),
+          CustomProgressIndicator(
+            borderRadius: borderRadius,
+            height: boxHeight,
+            manager: singleListManager,
           ),
-
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             spacing: 0,
@@ -138,6 +115,7 @@ class _MainListState extends State<MainList> {
 }
 
 class EditableTitle extends StatelessWidget {
+  //TODO: FIx bug that on rename every TItle is Editable at the same time, i want only the selected element to be editable
   const EditableTitle({
     super.key,
     required this.textEditingController,
@@ -161,6 +139,7 @@ class EditableTitle extends StatelessWidget {
 
         String changedTitle = listManager.getListTitle(widget.id);
         if (isEditing) {
+          //introduce editstatus in manager and get it here, editstatus returns the isEditing for the specified id
           return SizedBox(
             width: 280,
             height: 24,
