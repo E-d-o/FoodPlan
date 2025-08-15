@@ -19,7 +19,8 @@ class SingleListManager with ChangeNotifier {
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
 
-  final Map<String, ListProperties> _properties = {};
+  final Map<String, ListProperties> _properties =
+      {}; //TODO: encode isAtHOme in properties
 
   SingleListManager() {
     _initProperties();
@@ -105,13 +106,21 @@ class SingleListManager with ChangeNotifier {
     return _getProperty(listId, ListProperty.isChecked);
   }
 
+  void _addProperty(String listId) {
+    _properties[listId] = ListProperties(isChecked: false, isEditing: false);
+  }
+
   void addNewItem() {
     //TODO:FIX THIS
     String newid = uuid.v4();
     requiredItemsList.add(ListItem(id: newid, isAtHome: true));
-    _setProperty(newid, ListProperty.isChecked, false);
+    _addProperty(newid);
 
     notifyListeners();
+  }
+
+  void _removeProperty(String listId) {
+    _properties.remove(listId);
   }
 
   void removeItem(String listId, bool isAtHome) {
@@ -123,6 +132,7 @@ class SingleListManager with ChangeNotifier {
 
       requiredItemsList.removeWhere((element) => element.id == listId);
     }
+    _removeProperty(listId);
     notifyListeners();
   }
 

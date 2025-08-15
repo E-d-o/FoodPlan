@@ -21,7 +21,7 @@ class MainListProperties {
           title = value;
         }
       default:
-        print("sbagliato set property");
+        throw ArgumentError("sbagliato set property");
     }
   }
 
@@ -30,7 +30,7 @@ class MainListProperties {
       case MainListProperty.title:
         return title;
       default:
-        print("sbagliato get property");
+        throw ArgumentError("sbagliato get property");
     }
   }
 }
