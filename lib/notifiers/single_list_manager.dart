@@ -189,7 +189,7 @@ class SingleListManager extends Editable {
     bool isAtHome = _getProperty(listId, SingleListProperty.isChecked);
 
     _changeToOtherList(listId, isAtHome);
-
+    _checkForEmptyHomeItems();
     notifyListeners();
   }
 

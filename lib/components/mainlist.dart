@@ -48,6 +48,8 @@ class _MainListState extends State<MainList> {
     double boxHeight = 100;
     final MainListManager listManager = context.read<MainListManager>();
     textEditingController.text = listManager.getTitle(widget.id);
+    final TextStyle? titleStyle = Theme.of(context).textTheme.bodyMedium
+        ?.copyWith(color: Theme.of(context).colorScheme.onPrimary);
 
     return SizedBox(
       height: boxHeight,
@@ -83,6 +85,7 @@ class _MainListState extends State<MainList> {
                       isAutofocused: true,
                       textAlign: TextAlign.start,
                       maxLength: 26,
+                      titleStyle: titleStyle,
                     ),
                     Text(
                       "0/0",

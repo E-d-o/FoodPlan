@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/editable_title.dart';
+import 'package:foodplan/components/modify_list_property.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -11,6 +12,8 @@ class ModifyListItemPage extends StatelessWidget {
     final listItemManager = context.read<SingleListManager>();
     final String title = listItemManager.getTitle(id);
     final TextEditingController controller = TextEditingController(text: title);
+    final TextStyle? titleStyle = Theme.of(context).textTheme.titleLarge
+        ?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -55,6 +58,7 @@ class ModifyListItemPage extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Container(
+                            height: 100,
                             decoration: BoxDecoration(
                               color: Colors.blueAccent,
                               border: Border(
@@ -72,6 +76,7 @@ class ModifyListItemPage extends StatelessWidget {
                                 isAutofocused: false,
                                 textAlign: TextAlign.center,
                                 maxLength: 20,
+                                titleStyle: titleStyle,
                               ),
                             ),
                           ),
@@ -88,6 +93,15 @@ class ModifyListItemPage extends StatelessWidget {
                             topLeft: Radius.circular(30),
                             topRight: Radius.circular(30),
                           ),
+                        ),
+                        child: Column(
+                          children: [
+                            ModifyListProperty(),
+                            ModifyListProperty(),
+                            ModifyListProperty(),
+                            ModifyListProperty(),
+                            ModifyListProperty(),
+                          ],
                         ),
                       ),
                     ),

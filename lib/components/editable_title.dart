@@ -13,6 +13,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
     required this.isAutofocused,
     required this.textAlign,
     required this.maxLength,
+    required this.titleStyle,
   });
 
   final TextEditingController textEditingController;
@@ -21,6 +22,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
   final bool isAutofocused;
   final TextAlign textAlign;
   final int maxLength;
+  final TextStyle? titleStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +47,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
               controller:
                   textEditingController, //TODO:when clicked outside it needs to rename to the old value, it saves only on submitted
               autofocus: isAutofocused,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
+              style: titleStyle,
               maxLength: maxLength,
               onSubmitted: (newTitle) {
                 listManager.renameItem(id, newTitle);
@@ -57,12 +57,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
         } else {
           return SizedBox(
             height: 28,
-            child: Text(
-              changedTitle,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onPrimary,
-              ),
-            ),
+            child: Text(changedTitle, style: titleStyle),
           );
         }
       },
