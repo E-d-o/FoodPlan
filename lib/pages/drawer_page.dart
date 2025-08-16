@@ -7,7 +7,17 @@ class DrawerPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color backgroundColor = Theme.of(
+      context,
+    ).colorScheme.secondaryContainer;
+    final Color onBackgroundColor = Theme.of(
+      context,
+    ).colorScheme.onSecondaryContainer;
+    final TextStyle? textStyle = Theme.of(
+      context,
+    ).textTheme.bodyMedium?.copyWith(color: onBackgroundColor);
     return Drawer(
+      backgroundColor: backgroundColor,
       child: Container(
         padding: EdgeInsets.all(20),
         child: Column(
@@ -15,7 +25,7 @@ class DrawerPage extends StatelessWidget {
           spacing: 18,
           children: [
             SizedBox(height: 20, width: double.infinity),
-            Logo(),
+            Logo(onBackgroundColor: onBackgroundColor),
             SizedBox(height: 1, width: double.infinity),
             ListTile(
               splashColor: Theme.of(context).splashColor,
@@ -26,10 +36,8 @@ class DrawerPage extends StatelessWidget {
                 color: Colors.black,
                 weight: 50.0,
               ),
-              title: Text(
-                "Impostazioni",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              title: Text("Impostazioni", style: textStyle),
+
               onTap: () {
                 Navigator.push(
                   context,
@@ -50,10 +58,7 @@ class DrawerPage extends StatelessWidget {
                 color: Colors.black,
                 weight: 50.0,
               ),
-              title: Text(
-                "Aiuto",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              title: Text("Aiuto", style: textStyle),
               onTap: () {},
             ),
             ListTile(
@@ -65,10 +70,7 @@ class DrawerPage extends StatelessWidget {
                 color: Colors.black,
                 weight: 50.0,
               ),
-              title: Text(
-                "Invia Feedback",
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              title: Text("Invia Feedback", style: textStyle),
               onTap: () {},
             ),
           ],

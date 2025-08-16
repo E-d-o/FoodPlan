@@ -77,7 +77,12 @@ class _MainListState extends State<MainList> {
                       widget: widget,
                       context: context,
                     ),
-                    Text("0/0"),
+                    Text(
+                      "0/0",
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -93,7 +98,7 @@ class _MainListState extends State<MainList> {
     return Material(
       color: Colors.transparent,
       child: InkResponse(
-        splashColor: Colors.redAccent,
+        splashColor: Theme.of(context).splashColor,
         highlightShape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(inkBorderRadius),
         containedInkWell: true,
@@ -117,7 +122,11 @@ class _MainListState extends State<MainList> {
             },
           );
         },
-        child: Icon(Icons.more_vert, size: 28),
+        child: Icon(
+          Icons.more_vert,
+          size: 28,
+          color: Theme.of(context).colorScheme.onPrimary,
+        ),
       ),
     );
   }
@@ -125,6 +134,7 @@ class _MainListState extends State<MainList> {
 
 class EditableTitle extends StatelessWidget {
   //TODO: FIx bug that on rename every TItle is Editable at the same time, i want only the selected element to be editable
+  //TODO: Fix max length of title
   const EditableTitle({
     super.key,
     required this.textEditingController,
@@ -159,7 +169,9 @@ class EditableTitle extends StatelessWidget {
               controller:
                   textEditingController, //TODO:when clicked outside it needs to rename to the old value, it saves only on submitted
               autofocus: true,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
               onSubmitted: (newTitle) {
                 listManager.renameList(widget.id, newTitle);
               },
@@ -170,7 +182,9 @@ class EditableTitle extends StatelessWidget {
             height: 24,
             child: Text(
               changedTitle,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
             ),
           );
         }

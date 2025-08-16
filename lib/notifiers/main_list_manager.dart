@@ -15,7 +15,7 @@ class MainListManager with ChangeNotifier {
   String defaultTitle = "Nuova Lista";
   double progressOfNewList = 0;
   bool defaultEditState =
-      true; //TODO:defualt edit state true but only false for first list
+      true; //defualt edit state true but is startUpEditState for startup list
   bool startupEditState = false;
   String startupTitle = "Supermercato";
   final Map<String, MainListProperties> _mainListProperties = {};

@@ -110,7 +110,7 @@ class HidableList extends StatelessWidget {
     return Visibility(
       visible: isVisible,
       child: Container(
-        color: Colors.grey,
+        color: Theme.of(context).primaryColor,
         padding: EdgeInsets.all(manager.paddingHomeItems),
         child: Column(spacing: 10, children: [...atHomeItems]),
       ),

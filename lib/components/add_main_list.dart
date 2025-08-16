@@ -7,11 +7,15 @@ class AddMainList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Color backGroundColor = Theme.of(context).colorScheme.secondary;
+    final TextStyle? textStyle = Theme.of(context).textTheme.bodyMedium
+        ?.copyWith(color: Theme.of(context).colorScheme.onSecondary);
+
     return Material(
-      color: Colors.blueAccent,
+      color: backGroundColor,
       borderRadius: BorderRadius.all(Radius.circular(10.0)),
       child: InkResponse(
-        splashColor: Colors.teal,
+        splashColor: Theme.of(context).splashColor,
         highlightShape: BoxShape.rectangle,
         borderRadius: BorderRadius.circular(10.0),
         containedInkWell: true,
@@ -28,12 +32,7 @@ class AddMainList extends StatelessWidget {
           width: double.infinity,
           padding: EdgeInsets.all(18),
 
-          child: Center(
-            child: Text(
-              "Aggiungi Lista",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
-          ),
+          child: Center(child: Text("Aggiungi Lista", style: textStyle)),
         ),
       ),
     );

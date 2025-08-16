@@ -23,7 +23,7 @@ class CustomProgressIndicator extends StatelessWidget {
     MainListManager mainManager = context.watch<MainListManager>();
 
     double progress = mainManager.getListProgress(id);
-    //progress = 0.6; //for testing purpuses
+    progress = 0.6; //for testing purpuses
     return LayoutBuilder(
       builder: (context, constraints) {
         final double parentWidth = constraints.maxWidth;
@@ -38,7 +38,7 @@ class CustomProgressIndicator extends StatelessWidget {
             Container(
               height: height,
               decoration: BoxDecoration(
-                color: Colors.transparent,
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
             ),
@@ -47,7 +47,7 @@ class CustomProgressIndicator extends StatelessWidget {
               height: height,
               width: progressBarWidth,
               decoration: BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: Theme.of(context).colorScheme.primary,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(borderRadius),
                   bottomLeft: Radius.circular(borderRadius),
@@ -88,7 +88,7 @@ class CustomProgressIndicator extends StatelessWidget {
     double progressBarBlurWidth,
     dynamic context,
   ) {
-    Color primaryColor = Theme.of(context).primaryColor;
+    Color primaryColor = Theme.of(context).colorScheme.primary;
     return Positioned(
       left: progressBarWidth - 1,
       child: ShaderMask(
@@ -97,7 +97,7 @@ class CustomProgressIndicator extends StatelessWidget {
             colors: [
               primaryColor.withValues(alpha: 1),
               primaryColor.withValues(alpha: 0.7),
-              Colors.white,
+              Colors.transparent,
             ],
             stops: [0.0, 0.5, 1],
             begin: Alignment.centerLeft,
@@ -108,7 +108,7 @@ class CustomProgressIndicator extends StatelessWidget {
         child: Container(
           width: progressBarBlurWidth,
           height: height,
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.secondary,
         ),
       ),
     );

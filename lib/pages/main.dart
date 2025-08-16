@@ -15,6 +15,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final Color seedColor = const Color.fromARGB(255, 115, 125, 203);
+    final ColorScheme colorScheme = ColorScheme.fromSeed(
+      seedColor: seedColor,
+      brightness: Brightness.light,
+    );
     return MaterialApp(
       title: 'FoodPlan',
       theme: ThemeData(
@@ -25,12 +30,17 @@ class MyApp extends StatelessWidget {
           titleLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
           labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
         ),
-        splashColor: Colors.redAccent,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color.fromRGBO(43, 140, 67, 1),
-          brightness: Brightness.light,
+
+        colorScheme: colorScheme,
+        splashColor: colorScheme.onPrimary,
+        scaffoldBackgroundColor: colorScheme.primaryContainer,
+        appBarTheme: AppBarTheme(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
         ),
       ),
+
+      darkTheme: ThemeData.dark(), //DarkTheme
       home: ChangeNotifierProvider(
         create: (context) => MainListManager(),
 
@@ -48,11 +58,17 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //TODO: add floating action button to go back up ONLY when i scrolled down and the appbar is not visible
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       drawer: DrawerPage(),
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        actions: [Logo()],
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actions: [
+          Logo(
+            onBackgroundColor: Theme.of(context).appBarTheme.foregroundColor,
+          ),
+        ],
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         actionsPadding: EdgeInsets.symmetric(horizontal: 12),
         centerTitle: true,
       ),

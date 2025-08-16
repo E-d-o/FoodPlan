@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
