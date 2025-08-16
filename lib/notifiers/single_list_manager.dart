@@ -32,8 +32,8 @@ class SingleListManager with ChangeNotifier {
   void _initItems(List<ListItem> list, bool isAtHome) {
     for (int i = 0; i < list.length; i++) {
       _properties[list[i].id] = SingleListProperties(
-        isChecked: false,
-        isAtHome: isAtHome,
+        isChecked: isAtHome,
+
         title: 'Cipolla',
         subtitle: "corsia 5",
         price: 2.7,
@@ -131,11 +131,7 @@ class SingleListManager with ChangeNotifier {
   }
 
   void _addProperty(String listId, String title) {
-    _properties[listId] = SingleListProperties(
-      isChecked: false,
-      isAtHome: false,
-      title: title,
-    );
+    _properties[listId] = SingleListProperties(isChecked: false, title: title);
   }
 
   void addNewItem(String title) {
@@ -150,8 +146,28 @@ class SingleListManager with ChangeNotifier {
     _properties.remove(listId);
   }
 
+  void _addExistingItemToList(String listId, List<ListItem> list) {
+    list.add(ListItem(id: listId));
+  }
+
+  void _removeExistingItemFromList(String listId, List<ListItem> list) {
+    list.removeWhere((listItem) => listItem.id == listId);
+  }
+
+  void _changeToOtherList(String listId, bool isAtHome) {
+    if (isAtHome) {
+      _addExistingItemToList(listId, requiredItemsList); //add to other list
+      _removeExistingItemFromList(listId, homeItemsList); //remove from old list
+    } else {
+      _addExistingItemToList(listId, homeItemsList);
+      _removeExistingItemFromList(listId, requiredItemsList);
+    }
+    _setProperty(listId, SingleListProperty.isChecked, !isAtHome);
+  }
+
   void removeItem(String listId) {
-    if (_getProperty(listId, SingleListProperty.isAtHome)) {
+    if (_getProperty(listId, SingleListProperty.isChecked)) {
+      //if is checked that means its at home
       homeItemsList.removeWhere((element) => element.id == listId);
       _checkForEmptyHomeItems();
     } else {
@@ -164,8 +180,9 @@ class SingleListManager with ChangeNotifier {
   }
 
   void changeCheckedValue(String listId) {
-    bool newvalue = !_getProperty(listId, SingleListProperty.isChecked);
-    _setProperty(listId, SingleListProperty.isChecked, newvalue);
+    bool isAtHome = _getProperty(listId, SingleListProperty.isChecked);
+
+    _changeToOtherList(listId, isAtHome);
 
     notifyListeners();
   }

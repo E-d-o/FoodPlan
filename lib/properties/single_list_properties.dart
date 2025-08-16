@@ -3,7 +3,7 @@ import 'package:foodplan/properties/single_list_property.dart';
 class SingleListProperties {
   SingleListProperties({
     required this.isChecked,
-    required this.isAtHome,
+
     required this.title,
     this.subtitle,
     this.price,
@@ -13,7 +13,7 @@ class SingleListProperties {
   });
 
   bool isChecked;
-  bool isAtHome;
+
   String title;
   String? subtitle; //
   double? price; //
@@ -30,12 +30,7 @@ class SingleListProperties {
         } else {
           throw UnimplementedError();
         }
-      case SingleListProperty.isAtHome:
-        if (value is bool) {
-          isAtHome = value;
-        } else {
-          throw UnimplementedError();
-        }
+
       case SingleListProperty.title:
         if (value is String) {
           title = value;
@@ -80,8 +75,7 @@ class SingleListProperties {
     switch (property) {
       case SingleListProperty.isChecked:
         return isChecked;
-      case SingleListProperty.isAtHome:
-        return isAtHome;
+
       case SingleListProperty.title:
         return title;
       case SingleListProperty.subtitle:

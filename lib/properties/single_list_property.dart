@@ -1,6 +1,6 @@
 enum SingleListProperty {
   isChecked,
-  isAtHome,
+
   title,
   subtitle,
   price,
