@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:foodplan/components/mainlist.dart';
+import 'package:foodplan/notifiers/editable.dart';
 
 import 'package:foodplan/properties/main_list_properties.dart';
 import 'package:foodplan/properties/main_list_property.dart';
@@ -8,7 +9,7 @@ import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
 
-class MainListManager with ChangeNotifier {
+class MainListManager extends Editable {
   final List<MainList> _mainListPages = [MainList(id: uuid.v4())];
   List<MainList> get mainListPages => _mainListPages;
   String _selectedId = "";
@@ -90,13 +91,15 @@ class MainListManager with ChangeNotifier {
     }
   }
 
+  @override
   void changeEditState(String listId) {
     bool oldValue = _getProperty(listId, MainListProperty.isBeingEdited);
     _setProperty(listId, MainListProperty.isBeingEdited, !oldValue);
     notifyListeners();
   }
 
-  String getListTitle(String listId) {
+  @override
+  String getTitle(String listId) {
     return _getProperty(listId, MainListProperty.title);
   }
 
@@ -141,12 +144,14 @@ class MainListManager with ChangeNotifier {
     notifyListeners();
   }
 
-  void renameList(String renameId, String newTitle) {
+  @override
+  void renameItem(String renameId, String newTitle) {
     changeEditState(renameId);
     _addNewTitle(renameId, newTitle);
     notifyListeners();
   }
 
+  @override
   bool getEditStatus(String listId) {
     return _getProperty(listId, MainListProperty.isBeingEdited);
   }

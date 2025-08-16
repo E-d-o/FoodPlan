@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/editable_title.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -8,7 +9,7 @@ class ModifyListItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final listItemManager = context.read<SingleListManager>();
-
+    final TextEditingController controller = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -63,17 +64,18 @@ class ModifyListItemPage extends StatelessWidget {
                               ),
                             ),
                             child: Center(
-                              child: Text(
-                                listItemManager.getTitle(
-                                  id,
-                                ), //TODO:make editable title
-                                style: Theme.of(context).textTheme.titleLarge,
+                              child: EditableTitle<SingleListManager>(
+                                textEditingController: controller,
+                                id: id,
+                                context: context,
+                                isAutofocused: false,
                               ),
                             ),
                           ),
                         ),
                       ],
                     ),
+
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(

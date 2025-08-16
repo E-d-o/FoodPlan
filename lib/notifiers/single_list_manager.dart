@@ -1,12 +1,12 @@
-import 'package:flutter/widgets.dart';
 import 'package:foodplan/components/list_item.dart';
+import 'package:foodplan/notifiers/editable.dart';
 import 'package:foodplan/properties/single_list_properties.dart';
 import 'package:foodplan/properties/single_list_property.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
 
-class SingleListManager with ChangeNotifier {
+class SingleListManager extends Editable {
   final List<ListItem> requiredItemsList = [
     ListItem(id: "1"),
     ListItem(id: "2"),
@@ -40,6 +40,7 @@ class SingleListManager with ChangeNotifier {
         priceMeasurementUnit: "\$",
         quantityMeasurementUnit: "g",
         quantityValue: 200,
+        isBeingEdited: false,
       );
     }
   }
@@ -106,6 +107,7 @@ class SingleListManager with ChangeNotifier {
     return _getProperty(listId, SingleListProperty.isChecked);
   }
 
+  @override
   String getTitle(String listId) {
     return _getProperty(listId, SingleListProperty.title);
   }
@@ -131,7 +133,11 @@ class SingleListManager with ChangeNotifier {
   }
 
   void _addProperty(String listId, String title) {
-    _properties[listId] = SingleListProperties(isChecked: false, title: title);
+    _properties[listId] = SingleListProperties(
+      isChecked: false,
+      title: title,
+      isBeingEdited: false,
+    );
   }
 
   void addNewItem(String title) {
@@ -184,6 +190,29 @@ class SingleListManager with ChangeNotifier {
 
     _changeToOtherList(listId, isAtHome);
 
+    notifyListeners();
+  }
+
+  @override
+  bool getEditStatus(String id) {
+    return true;
+  }
+
+  void _addNewTitle(String listId, String newTitle) {
+    _setProperty(listId, SingleListProperty.title, newTitle);
+  }
+
+  @override
+  void changeEditState(String listId) {
+    bool oldValue = _getProperty(listId, SingleListProperty.isBeingEdited);
+    _setProperty(listId, SingleListProperty.isBeingEdited, !oldValue);
+    notifyListeners();
+  }
+
+  @override
+  void renameItem(String renameId, String newTitle) {
+    changeEditState(renameId);
+    _addNewTitle(renameId, newTitle);
     notifyListeners();
   }
 }

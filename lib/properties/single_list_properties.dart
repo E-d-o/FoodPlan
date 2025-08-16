@@ -10,6 +10,7 @@ class SingleListProperties {
     this.priceMeasurementUnit,
     this.quantityValue,
     this.quantityMeasurementUnit,
+    required this.isBeingEdited,
   });
 
   bool isChecked;
@@ -21,6 +22,7 @@ class SingleListProperties {
   int? quantityValue; //
   String? quantityMeasurementUnit; //
   //are optional
+  bool isBeingEdited;
 
   void setProperty(SingleListProperty property, dynamic value) {
     switch (property) {
@@ -68,6 +70,12 @@ class SingleListProperties {
         } else {
           throw UnimplementedError();
         }
+      case SingleListProperty.isBeingEdited:
+        if (value is bool) {
+          isBeingEdited = value;
+        } else {
+          throw UnimplementedError();
+        }
     }
   }
 
@@ -88,6 +96,8 @@ class SingleListProperties {
         return quantityValue;
       case SingleListProperty.quantityMeasurementUnit:
         return quantityMeasurementUnit;
+      case SingleListProperty.isBeingEdited:
+        return isBeingEdited;
     }
   }
 }
