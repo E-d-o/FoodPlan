@@ -10,9 +10,12 @@ class ListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final singleListManager = context.read<SingleListManager>();
+    final Color backgroundColor = Theme.of(context).colorScheme.secondary;
+    final Color dismissBackground = Theme.of(context).colorScheme.error;
+
     return Dismissible(
       key: Key(id),
-      background: Container(color: Colors.redAccent),
+      background: Container(color: dismissBackground),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
         singleListManager.removeItem(id);
@@ -21,7 +24,7 @@ class ListItem extends StatelessWidget {
         ).showSnackBar(SnackBar(content: Text("Rimosso elemento :D")));
       },
       child: Material(
-        color: Colors.redAccent,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(3.0),
 
         child: InkResponse(
@@ -75,6 +78,10 @@ class LeftItemPart extends StatelessWidget {
     final singleListManager = context.watch<SingleListManager>();
     final title = singleListManager.getTitle(id);
     final subtitle = singleListManager.getSubtitle(id);
+    final TextStyle? titleStyle = Theme.of(context).textTheme.bodyMedium
+        ?.copyWith(color: Theme.of(context).colorScheme.onSecondary);
+    final TextStyle? subtitleStyle = Theme.of(context).textTheme.bodySmall
+        ?.copyWith(color: Theme.of(context).colorScheme.onSecondary);
 
     return Expanded(
       flex: 4,
@@ -94,11 +101,15 @@ class LeftItemPart extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(title, style: null),
-                HidableSubtitle(subtitle: subtitle),
+                Text(title, style: titleStyle),
+                HidableSubtitle(
+                  subtitle: subtitle,
+                  subtitleStyle: subtitleStyle,
+                ),
               ],
             ),
             Container(
+              //TODO: IMPLEMENT HidableImage
               height: 30,
               width: 30,
               color: Colors.green,
@@ -112,9 +123,14 @@ class LeftItemPart extends StatelessWidget {
 }
 
 class HidableSubtitle extends StatelessWidget {
-  const HidableSubtitle({super.key, required this.subtitle});
+  const HidableSubtitle({
+    super.key,
+    required this.subtitle,
+    required this.subtitleStyle,
+  });
 
   final String? subtitle;
+  final TextStyle? subtitleStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +144,7 @@ class HidableSubtitle extends StatelessWidget {
     } else {
       return Visibility(
         visible: isVisible,
-        child: Text(subtitle!, style: null),
+        child: Text(subtitle!, style: subtitleStyle),
       );
     }
   }
@@ -145,6 +161,8 @@ class RightItemPart extends StatelessWidget {
         .getPriceMeasurementUnit(id);
     final int? quantity = singleListManager.getQuantity(id);
     final String? measurementUnit = singleListManager.getMeasurementUnit(id);
+    final TextStyle? textStyle = Theme.of(context).textTheme.bodySmall
+        ?.copyWith(color: Theme.of(context).colorScheme.onSecondary);
     return Expanded(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -157,8 +175,8 @@ class RightItemPart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 6,
           children: [
-            quantityPart(quantity, measurementUnit, context),
-            pricePart(price, priceMeasurementUnit, context),
+            quantityPart(quantity, measurementUnit, textStyle, context),
+            pricePart(price, priceMeasurementUnit, textStyle, context),
           ],
         ),
       ),
@@ -168,6 +186,7 @@ class RightItemPart extends StatelessWidget {
   Visibility pricePart(
     double? price,
     String? priceMeasurementUnit,
+    TextStyle? textStyle,
     BuildContext context,
   ) {
     if (price == null) {
@@ -183,16 +202,13 @@ class RightItemPart extends StatelessWidget {
           child: Text(
             price.toInt().toString() +
                 priceMeasurementUnit!, //cant get here with no quantity so measurment unit is not null here
-            style: Theme.of(context).textTheme.bodySmall,
+            style: textStyle,
           ),
         );
       }
       return Visibility(
         visible: true,
-        child: Text(
-          price.toString() + priceMeasurementUnit!,
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
+        child: Text(price.toString() + priceMeasurementUnit!, style: textStyle),
       );
     }
   }
@@ -200,6 +216,7 @@ class RightItemPart extends StatelessWidget {
   Visibility quantityPart(
     int? quantity,
     String? measurementUnit,
+    TextStyle? textStyle,
     BuildContext context,
   ) {
     if (quantity == null) {
@@ -213,7 +230,7 @@ class RightItemPart extends StatelessWidget {
         child: Text(
           quantity.toString() +
               measurementUnit!, //cant get here with no quantity so measurment unit is not null here
-          style: Theme.of(context).textTheme.bodySmall,
+          style: textStyle,
         ),
       );
     }

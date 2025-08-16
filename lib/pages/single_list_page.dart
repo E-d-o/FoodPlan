@@ -48,7 +48,7 @@ class _NeededItems extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(18),
       width: double.infinity,
-      color: Theme.of(context).primaryColor,
+      color: Theme.of(context).colorScheme.secondaryContainer,
       child: Column(
         spacing: 18,
         children: [
@@ -74,6 +74,7 @@ class _AtHomeItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final singleListManager = context.watch<SingleListManager>();
     final atHomeItems = singleListManager.homeItemsList;
+
     return Selector<SingleListManager, bool>(
       //handles the rebuilding of _AtHomeItems based on the changing of only the value of isHomeItemsVisible
       selector: (context, provider) => provider.isHomeItemsVisible,
@@ -110,7 +111,7 @@ class HidableList extends StatelessWidget {
     return Visibility(
       visible: isVisible,
       child: Container(
-        color: Theme.of(context).primaryColor,
+        color: Theme.of(context).colorScheme.secondaryContainer,
         padding: EdgeInsets.all(manager.paddingHomeItems),
         child: Column(spacing: 10, children: [...atHomeItems]),
       ),
@@ -129,6 +130,11 @@ class TextRegion extends StatelessWidget {
       context,
       listen: false,
     );
+    final Color backgroundColor = Theme.of(
+      context,
+    ).colorScheme.secondaryContainer;
+    final TextStyle? textStyle = Theme.of(context).textTheme.bodyMedium
+        ?.copyWith(color: Theme.of(context).colorScheme.onSecondaryContainer);
     return GestureDetector(
       onTap: () {
         singleListManager.changeHomeItemsVisibility();
@@ -142,16 +148,13 @@ class TextRegion extends StatelessWidget {
             topLeft: Radius.circular(topRadiusTextRegion),
             topRight: Radius.circular(topRadiusTextRegion),
           ),
-          color: Colors.blueAccent,
+          color: backgroundColor,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
 
           children: [
-            Text(
-              "Gia' acquistati",
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text("Gia' acquistati", style: textStyle),
             _ChangingIcon(),
           ],
         ),

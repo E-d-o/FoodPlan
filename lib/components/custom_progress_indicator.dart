@@ -24,6 +24,10 @@ class CustomProgressIndicator extends StatelessWidget {
 
     double progress = mainManager.getListProgress(id);
     progress = 0.6; //for testing purpuses
+    final Color backgroundColor = Theme.of(
+      context,
+    ).colorScheme.secondaryContainer;
+    final Color primaryColor = Theme.of(context).colorScheme.primary;
     return LayoutBuilder(
       builder: (context, constraints) {
         final double parentWidth = constraints.maxWidth;
@@ -38,7 +42,7 @@ class CustomProgressIndicator extends StatelessWidget {
             Container(
               height: height,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.secondary,
+                color: backgroundColor,
                 borderRadius: BorderRadius.circular(borderRadius),
               ),
             ),
@@ -47,14 +51,20 @@ class CustomProgressIndicator extends StatelessWidget {
               height: height,
               width: progressBarWidth,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
+                color: primaryColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(borderRadius),
                   bottomLeft: Radius.circular(borderRadius),
                 ),
               ),
             ),
-            blurProgress(progressBarWidth, progressBarBlurWidth, context),
+            blurProgress(
+              progressBarWidth,
+              progressBarBlurWidth,
+              context,
+              primaryColor,
+              backgroundColor,
+            ),
             Material(
               color: Colors.transparent,
               child: InkResponse(
@@ -87,8 +97,9 @@ class CustomProgressIndicator extends StatelessWidget {
     double progressBarWidth,
     double progressBarBlurWidth,
     dynamic context,
+    Color primaryColor,
+    Color backgroundColor,
   ) {
-    Color primaryColor = Theme.of(context).colorScheme.primary;
     return Positioned(
       left: progressBarWidth - 1,
       child: ShaderMask(
@@ -108,7 +119,7 @@ class CustomProgressIndicator extends StatelessWidget {
         child: Container(
           width: progressBarBlurWidth,
           height: height,
-          color: Theme.of(context).colorScheme.secondary,
+          color: backgroundColor,
         ),
       ),
     );
