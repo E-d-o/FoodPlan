@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 import 'package:foodplan/components/mainlist.dart';
 import 'package:foodplan/notifiers/editable.dart';
 

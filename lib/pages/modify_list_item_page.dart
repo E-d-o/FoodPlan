@@ -9,7 +9,8 @@ class ModifyListItemPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final listItemManager = context.read<SingleListManager>();
-    final TextEditingController controller = TextEditingController();
+    final String title = listItemManager.getTitle(id);
+    final TextEditingController controller = TextEditingController(text: title);
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -69,6 +70,8 @@ class ModifyListItemPage extends StatelessWidget {
                                 id: id,
                                 context: context,
                                 isAutofocused: false,
+                                textAlign: TextAlign.center,
+                                maxLength: 20,
                               ),
                             ),
                           ),

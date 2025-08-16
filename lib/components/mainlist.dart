@@ -46,6 +46,9 @@ class _MainListState extends State<MainList> {
 
   SizedBox mainStructure(BuildContext context) {
     double boxHeight = 100;
+    final MainListManager listManager = context.read<MainListManager>();
+    textEditingController.text = listManager.getTitle(widget.id);
+
     return SizedBox(
       height: boxHeight,
       width: double.infinity,
@@ -78,6 +81,8 @@ class _MainListState extends State<MainList> {
                       id: widget.id,
                       context: context,
                       isAutofocused: true,
+                      textAlign: TextAlign.start,
+                      maxLength: 26,
                     ),
                     Text(
                       "0/0",
