@@ -11,6 +11,8 @@ class SingleListProperties {
     this.quantityValue,
     this.quantityMeasurementUnit,
     required this.isBeingEdited,
+    this.category,
+    this.expireDate,
   });
 
   bool isChecked;
@@ -21,9 +23,11 @@ class SingleListProperties {
   String? priceMeasurementUnit; //
   int? quantityValue; //
   String? quantityMeasurementUnit; //
+
   //are optional
   bool isBeingEdited;
-
+  String? category; //
+  DateTime? expireDate; //
   void setProperty(SingleListProperty property, dynamic value) {
     switch (property) {
       case SingleListProperty.isChecked:
@@ -50,7 +54,7 @@ class SingleListProperties {
         if (value is double) {
           price = value;
         } else {
-          throw UnimplementedError();
+          throw UnimplementedError(); //TODO:FIX WHEN YOU PUT TWO DECIMAL POINTERS
         }
       case SingleListProperty.priceMeasurementUnit:
         if (value is String) {
@@ -76,6 +80,18 @@ class SingleListProperties {
         } else {
           throw UnimplementedError();
         }
+      case SingleListProperty.category:
+        if (value is String) {
+          category = value;
+        } else {
+          throw UnimplementedError();
+        }
+      case SingleListProperty.expireDate:
+        if (value is DateTime) {
+          expireDate = value;
+        } else {
+          throw UnimplementedError(); //TODO: fix when click outside and value is null i think
+        }
     }
   }
 
@@ -98,6 +114,10 @@ class SingleListProperties {
         return quantityMeasurementUnit;
       case SingleListProperty.isBeingEdited:
         return isBeingEdited;
+      case SingleListProperty.category:
+        return category;
+      case SingleListProperty.expireDate:
+        return expireDate;
     }
   }
 }

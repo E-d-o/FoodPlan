@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/notifiers/editable.dart';
 import 'package:foodplan/properties/single_list_properties.dart';
@@ -40,7 +41,8 @@ class SingleListManager extends Editable {
         priceMeasurementUnit: "\$",
         quantityMeasurementUnit: "g",
         quantityValue: 200,
-        isBeingEdited: false,
+        isBeingEdited: true,
+        category: "Salumi",
       );
     }
   }
@@ -132,11 +134,19 @@ class SingleListManager extends Editable {
     return _getProperty(listId, SingleListProperty.quantityMeasurementUnit);
   }
 
+  String? getCategory(String listId) {
+    return _getProperty(listId, SingleListProperty.category);
+  }
+
+  DateTime? getExpireDate(String listId) {
+    return _getProperty(listId, SingleListProperty.expireDate);
+  }
+
   void _addProperty(String listId, String title) {
     _properties[listId] = SingleListProperties(
       isChecked: false,
       title: title,
-      isBeingEdited: false,
+      isBeingEdited: true,
     );
   }
 
@@ -193,9 +203,9 @@ class SingleListManager extends Editable {
     notifyListeners();
   }
 
-  @override
+  @override // since title is always editable will always return true
   bool getEditStatus(String id) {
-    return true;
+    return _getProperty(id, SingleListProperty.isBeingEdited);
   }
 
   void _addNewTitle(String listId, String newTitle) {
@@ -204,8 +214,66 @@ class SingleListManager extends Editable {
 
   @override
   void changeEditState(String listId) {
-    bool oldValue = _getProperty(listId, SingleListProperty.isBeingEdited);
-    _setProperty(listId, SingleListProperty.isBeingEdited, !oldValue);
+    //title is always editable, editState is always true and we dont need to change it
+
+    notifyListeners();
+  }
+
+  void setPrice(String listId, double? newPrice) {
+    _setProperty(listId, SingleListProperty.price, newPrice);
+    notifyListeners();
+  }
+
+  //TODO: refactor to have only one public set and one public get?
+  void setQuantityMeasurementUnit(
+    String listId,
+    String? quantityMeasurementUnit,
+  ) {
+    _setProperty(
+      listId,
+      SingleListProperty.quantityMeasurementUnit,
+      quantityMeasurementUnit,
+    );
+    notifyListeners();
+  }
+
+  void setSubtitle(String listId, String? subtitle) {
+    _setProperty(listId, SingleListProperty.subtitle, subtitle);
+    notifyListeners();
+  }
+
+  void setPriceMeasurementUnit(String listId, String? priceMeasurementUnit) {
+    _setProperty(
+      listId,
+      SingleListProperty.priceMeasurementUnit,
+      priceMeasurementUnit,
+    );
+    notifyListeners();
+  }
+
+  void setQuantity(String listId, int? quantity) {
+    _setProperty(listId, SingleListProperty.quantityValue, quantity);
+    notifyListeners();
+  }
+
+  void setCategory(String listId, String? category) {
+    _setProperty(listId, SingleListProperty.category, category);
+    notifyListeners();
+  }
+
+  Future<void> setDate(
+    String listId,
+    BuildContext context,
+    DateTime? oldDate,
+  ) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: oldDate,
+      firstDate: DateTime(2024),
+      lastDate: DateTime.now().add(Duration(days: 365 * 10)), // +10 anni
+    );
+
+    _setProperty(listId, SingleListProperty.expireDate, pickedDate);
     notifyListeners();
   }
 

@@ -7,4 +7,6 @@ enum SingleListProperty {
   quantityValue,
   quantityMeasurementUnit,
   isBeingEdited,
+  category,
+  expireDate,
 }

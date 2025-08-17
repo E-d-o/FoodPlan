@@ -4,7 +4,6 @@ import 'package:foodplan/notifiers/editable.dart';
 import 'package:provider/provider.dart';
 
 class EditableTitle<T extends Editable> extends StatelessWidget {
-  //TODO: Fix max length of title
   const EditableTitle({
     super.key,
     required this.textEditingController,
@@ -40,17 +39,23 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
               enableInteractiveSelection: false,
               textAlign: textAlign,
               decoration: InputDecoration(
+                //TODO: do better decoration for editableTitle when clicked
                 contentPadding: EdgeInsets.zero,
                 isCollapsed: false,
               ),
 
-              controller:
-                  textEditingController, //TODO:when clicked outside it needs to rename to the old value, it saves only on submitted
+              controller: textEditingController,
               autofocus: isAutofocused,
               style: titleStyle,
               maxLength: maxLength,
               onSubmitted: (newTitle) {
                 listManager.renameItem(id, newTitle);
+              },
+
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+                listManager.changeEditState(id);
+                textEditingController.text = changedTitle;
               },
             ),
           );

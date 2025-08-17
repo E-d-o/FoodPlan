@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:foodplan/components/editable_title.dart';
 import 'package:foodplan/components/modify_list_property.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
+
 import 'package:provider/provider.dart';
 
 class ModifyListItemPage extends StatelessWidget {
@@ -29,23 +31,24 @@ class ModifyListItemPage extends StatelessWidget {
           ),
         ],
       ),
-      body: Container(
-        color: Colors.amber,
-        child: Column(
-          spacing: 20,
-          children: [
-            Container(
-              height: 300,
-              padding: EdgeInsets.only(
-                right: 50,
-                left: 50,
-                top: 20,
-                bottom: 20,
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.amber,
+          child: Column(
+            spacing: 20,
+            children: [
+              Container(
+                height: 300,
+                padding: EdgeInsets.only(
+                  right: 50,
+                  left: 50,
+                  top: 20,
+                  bottom: 20,
+                ),
+                child: Center(child: Placeholder()),
               ),
-              child: Center(child: Placeholder()),
-            ),
-            Expanded(
-              child: Container(
+              Container(
+                height: 600,
                 padding: EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.redAccent,
@@ -56,28 +59,26 @@ class ModifyListItemPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.blueAccent,
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.black,
-                                  width: 2.0,
-                                ),
+                        Container(
+                          height: 100,
+                          decoration: BoxDecoration(
+                            color: Colors.blueAccent,
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Colors.black,
+                                width: 2.0,
                               ),
                             ),
-                            child: Center(
-                              child: EditableTitle<SingleListManager>(
-                                textEditingController: controller,
-                                id: id,
-                                context: context,
-                                isAutofocused: false,
-                                textAlign: TextAlign.center,
-                                maxLength: 20,
-                                titleStyle: titleStyle,
-                              ),
+                          ),
+                          child: Center(
+                            child: EditableTitle<SingleListManager>(
+                              textEditingController: controller,
+                              id: id,
+                              context: context,
+                              isAutofocused: false,
+                              textAlign: TextAlign.center,
+                              maxLength: 20,
+                              titleStyle: titleStyle,
                             ),
                           ),
                         ),
@@ -94,24 +95,151 @@ class ModifyListItemPage extends StatelessWidget {
                             topRight: Radius.circular(30),
                           ),
                         ),
-                        child: Column(
-                          children: [
-                            ModifyListProperty(),
-                            ModifyListProperty(),
-                            ModifyListProperty(),
-                            ModifyListProperty(),
-                            ModifyListProperty(),
-                          ],
-                        ),
+                        child: Properties(id: id),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class Properties extends StatelessWidget {
+  const Properties({super.key, required this.id});
+  final String id;
+  final String property1 = "Categoria";
+  final String property2 = "Prezzo";
+  final String property3 = "Quantita'";
+  final String property4 = "Descrizione";
+  final String property5 = "Scadenza";
+
+  @override
+  Widget build(BuildContext context) {
+    final SingleListManager singleListManager = context.read();
+    final String? category = singleListManager.getCategory(id);
+    final double? price = singleListManager.getPrice(id);
+    final int? quantity = singleListManager.getQuantity(id);
+    final String? subtitle = singleListManager.getSubtitle(id);
+    final DateTime? expireDate = singleListManager.getExpireDate(id);
+    final Map<String, dynamic> valueBeforeMap = {
+      property1: category,
+      property2: price,
+      property3: quantity,
+
+      property4: subtitle,
+      property5: expireDate,
+    };
+    final Map<String, TextEditingController> controllerMap = {
+      property1: TextEditingController(
+        text: valueBeforeMap[property1].toString(),
+      ),
+      property2: TextEditingController(
+        text: valueBeforeMap[property2].toString(),
+      ),
+      property3: TextEditingController(
+        text: valueBeforeMap[property3].toString(),
+      ),
+      property4: TextEditingController(
+        text: valueBeforeMap[property4].toString(),
+      ),
+      property5: TextEditingController(
+        text: valueBeforeMap[property5].toString() == "null"
+            ? ""
+            : '${valueBeforeMap[property5].day}/${valueBeforeMap[property5].month}/${valueBeforeMap[property5].year}',
+      ),
+    };
+
+    void undoChanges(
+      TextEditingController textEditingController,
+      dynamic valueBefore,
+    ) {
+      //TODO: choose when to undo changes and when not
+      FocusScope.of(context).unfocus();
+
+      textEditingController.text = valueBefore.toString();
+    }
+
+    return Column(
+      children: [
+        //TODO: ONLY SAVE ON SAVE BUTTON
+        ModifyListProperty(
+          propertyName: property1,
+          widget: TextField(
+            controller: controllerMap[property1],
+            onTapOutside: (event) {
+              undoChanges(controllerMap[property1]!, valueBeforeMap[property1]);
+            },
+            onSubmitted: (value) {
+              singleListManager.setCategory(id, value);
+            },
+          ),
+        ),
+        ModifyListProperty(
+          propertyName: property2,
+
+          widget: TextField(
+            controller: controllerMap[property2],
+            keyboardType: TextInputType.numberWithOptions(),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
+            ],
+            onTapOutside: (event) {
+              undoChanges(controllerMap[property2]!, valueBeforeMap[property2]);
+            },
+            onSubmitted: (value) {
+              double? doubleValue = double.tryParse(value);
+              singleListManager.setPrice(id, doubleValue);
+            },
+          ),
+        ),
+        ModifyListProperty(
+          propertyName: property3,
+          widget: TextField(
+            controller: controllerMap[property3],
+            onTapOutside: (event) {
+              undoChanges(controllerMap[property3]!, valueBeforeMap[property2]);
+            },
+            onSubmitted: (value) {
+              int? newValue = int.tryParse(value);
+              singleListManager.setQuantity(id, newValue);
+            },
+          ),
+        ),
+
+        ModifyListProperty(
+          propertyName: property5,
+          widget: TextField(
+            controller: controllerMap[property5],
+            readOnly: true,
+            onTap: () async {
+              DateTime? oldDate = singleListManager.getExpireDate(id);
+
+              await singleListManager.setDate(id, context, oldDate);
+              DateTime? newDate = singleListManager.getExpireDate(id);
+
+              controllerMap[property5]!.text =
+                  '${newDate!.day}/${newDate.month}/${newDate.year}';
+            },
+          ),
+        ),
+        ModifyListProperty(
+          propertyName: property4,
+          widget: TextField(
+            controller: controllerMap[property4],
+            onTapOutside: (event) {
+              undoChanges(controllerMap[property4]!, valueBeforeMap[property4]);
+            },
+            onSubmitted: (value) {
+              singleListManager.setSubtitle(id, value);
+            },
+          ),
+        ),
+      ],
     );
   }
 }

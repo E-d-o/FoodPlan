@@ -87,11 +87,11 @@ class _MainListState extends State<MainList> {
                       maxLength: 26,
                       titleStyle: titleStyle,
                     ),
+                    //TODO:show save button to save EditableTitle changes
                     Text(
+                      //TODO: use mainlistProperty to show proper value
                       "0/0",
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
+                      style: titleStyle,
                     ),
                   ],
                 ),
