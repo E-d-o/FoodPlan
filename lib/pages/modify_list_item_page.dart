@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodplan/components/editable_title.dart';
 import 'package:foodplan/components/modify_list_property.dart';
+import 'package:foodplan/notifiers/save_manager.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 class ModifyListItemPage extends StatelessWidget {
   const ModifyListItemPage({super.key, required this.id});
   final String id;
+
   @override
   Widget build(BuildContext context) {
     final listItemManager = context.read<SingleListManager>();
@@ -16,6 +18,7 @@ class ModifyListItemPage extends StatelessWidget {
     final TextEditingController controller = TextEditingController(text: title);
     final TextStyle? titleStyle = Theme.of(context).textTheme.titleLarge
         ?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer);
+    final SaveManager saveManager = SaveManager();
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -72,6 +75,7 @@ class ModifyListItemPage extends StatelessWidget {
                           ),
                           child: Center(
                             child: EditableTitle<SingleListManager>(
+                              //TODO:savemanager on title also
                               textEditingController: controller,
                               id: id,
                               context: context,
@@ -95,7 +99,15 @@ class ModifyListItemPage extends StatelessWidget {
                             topRight: Radius.circular(30),
                           ),
                         ),
-                        child: Properties(id: id),
+                        child: Properties(id: id, saveManager: saveManager),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: Text("Salva"),
                       ),
                     ),
                   ],
@@ -110,13 +122,14 @@ class ModifyListItemPage extends StatelessWidget {
 }
 
 class Properties extends StatelessWidget {
-  const Properties({super.key, required this.id});
+  const Properties({super.key, required this.id, required this.saveManager});
   final String id;
   final String property1 = "Categoria";
   final String property2 = "Prezzo";
   final String property3 = "Quantita'";
   final String property4 = "Descrizione";
   final String property5 = "Scadenza";
+  final SaveManager saveManager;
 
   @override
   Widget build(BuildContext context) {
@@ -126,6 +139,7 @@ class Properties extends StatelessWidget {
     final int? quantity = singleListManager.getQuantity(id);
     final String? subtitle = singleListManager.getSubtitle(id);
     final DateTime? expireDate = singleListManager.getExpireDate(id);
+
     final Map<String, dynamic> valueBeforeMap = {
       property1: category,
       property2: price,
@@ -171,11 +185,9 @@ class Properties extends StatelessWidget {
           propertyName: property1,
           widget: TextField(
             controller: controllerMap[property1],
-            onTapOutside: (event) {
-              undoChanges(controllerMap[property1]!, valueBeforeMap[property1]);
-            },
+
             onSubmitted: (value) {
-              singleListManager.setCategory(id, value);
+              saveManager.saveCategory(singleListManager, id, value);
             },
           ),
         ),
@@ -188,12 +200,9 @@ class Properties extends StatelessWidget {
             inputFormatters: [
               FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),
             ],
-            onTapOutside: (event) {
-              undoChanges(controllerMap[property2]!, valueBeforeMap[property2]);
-            },
+
             onSubmitted: (value) {
-              double? doubleValue = double.tryParse(value);
-              singleListManager.setPrice(id, doubleValue);
+              saveManager.savePrice(singleListManager, id, value);
             },
           ),
         ),
@@ -201,12 +210,9 @@ class Properties extends StatelessWidget {
           propertyName: property3,
           widget: TextField(
             controller: controllerMap[property3],
-            onTapOutside: (event) {
-              undoChanges(controllerMap[property3]!, valueBeforeMap[property2]);
-            },
+
             onSubmitted: (value) {
-              int? newValue = int.tryParse(value);
-              singleListManager.setQuantity(id, newValue);
+              saveManager.saveQuantity(singleListManager, id, value);
             },
           ),
         ),
@@ -217,13 +223,13 @@ class Properties extends StatelessWidget {
             controller: controllerMap[property5],
             readOnly: true,
             onTap: () async {
-              DateTime? oldDate = singleListManager.getExpireDate(id);
-
-              await singleListManager.setDate(id, context, oldDate);
-              DateTime? newDate = singleListManager.getExpireDate(id);
-
-              controllerMap[property5]!.text =
-                  '${newDate!.day}/${newDate.month}/${newDate.year}';
+              saveManager.saveDate(
+                singleListManager,
+                id,
+                context,
+                controllerMap,
+                property5,
+              );
             },
           ),
         ),
@@ -231,11 +237,9 @@ class Properties extends StatelessWidget {
           propertyName: property4,
           widget: TextField(
             controller: controllerMap[property4],
-            onTapOutside: (event) {
-              undoChanges(controllerMap[property4]!, valueBeforeMap[property4]);
-            },
+
             onSubmitted: (value) {
-              singleListManager.setSubtitle(id, value);
+              saveManager.saveSubtitle(singleListManager, id, value);
             },
           ),
         ),
