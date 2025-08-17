@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
+import 'package:foodplan/notifiers/homepage_manager.dart';
 
 import 'package:foodplan/notifiers/main_list_manager.dart';
 import 'package:provider/provider.dart';
@@ -42,11 +43,14 @@ class MyApp extends StatelessWidget {
       ),
 
       darkTheme: ThemeData.dark(), //DarkTheme
-      home: ChangeNotifierProvider(
-        create: (context) => MainListManager(),
-
+      home: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (context) => MainListManager()),
+          ChangeNotifierProvider(create: (context) => HomepageManager()),
+        ],
         child: MyHomePage(title: 'FoodPlan'),
       ),
+
       debugShowCheckedModeBanner: false,
     );
   }
@@ -85,10 +89,13 @@ class HidableActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    HomepageManager homepageManager = context.watch<HomepageManager>();
     return Visibility(
-      visible: true,
+      visible: homepageManager.isFloatingButtonVisible,
       child: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          homepageManager.scrollToTop();
+        },
         child: Icon(Icons.keyboard_arrow_up),
       ),
     );
@@ -102,11 +109,15 @@ class _MainContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final listManager = Provider.of<MainListManager>(context, listen: true);
     return SingleChildScrollView(
-      controller: null,
+      controller: context.read<HomepageManager>().scrollController,
       padding: EdgeInsets.all(16),
       child: Column(
         spacing: 15,
-        children: [...listManager.mainListPages, (AddMainList())],
+        children: [
+          ...listManager.mainListPages,
+          (AddMainList()),
+          SizedBox(height: 400),
+        ],
       ),
     );
   }
