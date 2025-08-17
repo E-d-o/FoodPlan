@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
+
 import 'package:foodplan/notifiers/main_list_manager.dart';
 import 'package:provider/provider.dart';
 import 'drawer_page.dart';
@@ -59,10 +60,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       //TODO: add floating action button to go back up ONLY when i scrolled down and the appbar is not visible
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Icon(Icons.keyboard_arrow_up),
-      ),
+      floatingActionButton: HidableActionButton(),
 
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       drawer: DrawerPage(),
@@ -82,11 +80,29 @@ class MyHomePage extends StatelessWidget {
   }
 }
 
+class HidableActionButton extends StatelessWidget {
+  const HidableActionButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: true,
+      child: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.keyboard_arrow_up),
+      ),
+    );
+  }
+}
+
 class _MainContent extends StatelessWidget {
+  const _MainContent();
+
   @override
   Widget build(BuildContext context) {
     final listManager = Provider.of<MainListManager>(context, listen: true);
     return SingleChildScrollView(
+      controller: null,
       padding: EdgeInsets.all(16),
       child: Column(
         spacing: 15,
