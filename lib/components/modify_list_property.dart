@@ -20,7 +20,7 @@ class ModifyListProperty extends StatelessWidget {
             right: BorderSide(color: Colors.black, width: 2),
           ),
         ),
-        child: Text(propertyName + ":"),
+        child: Text("$propertyName:"),
       ),
 
       title: Container(

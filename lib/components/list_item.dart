@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:foodplan/pages/modify_list_item_page.dart';
+import 'package:foodplan/properties/single_list_property.dart';
 import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {
@@ -76,8 +77,11 @@ class LeftItemPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final singleListManager = context.watch<SingleListManager>();
-    final title = singleListManager.getTitle(id);
-    final subtitle = singleListManager.getSubtitle(id);
+    final title = singleListManager.getProperty(id, SingleListProperty.title);
+    final subtitle = singleListManager.getProperty(
+      id,
+      SingleListProperty.subtitle,
+    );
     final TextStyle? titleStyle = Theme.of(context).textTheme.bodyMedium
         ?.copyWith(color: Theme.of(context).colorScheme.onSecondary);
     final TextStyle? subtitleStyle = Theme.of(context).textTheme.bodySmall
@@ -156,11 +160,22 @@ class RightItemPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final singleListManager = context.watch<SingleListManager>();
-    final double? price = singleListManager.getPrice(id);
-    final String? priceMeasurementUnit = singleListManager
-        .getPriceMeasurementUnit(id);
-    final int? quantity = singleListManager.getQuantity(id);
-    final String? measurementUnit = singleListManager.getMeasurementUnit(id);
+    final double? price = singleListManager.getProperty(
+      id,
+      SingleListProperty.price,
+    );
+    final String? priceMeasurementUnit = singleListManager.getProperty(
+      id,
+      SingleListProperty.priceMeasurementUnit,
+    );
+    final int? quantity = singleListManager.getProperty(
+      id,
+      SingleListProperty.quantityValue,
+    );
+    final String? quantityMeasurementUnit = singleListManager.getProperty(
+      id,
+      SingleListProperty.quantityMeasurementUnit,
+    );
     final TextStyle? textStyle = Theme.of(context).textTheme.bodySmall
         ?.copyWith(color: Theme.of(context).colorScheme.onSecondary);
     return Expanded(
@@ -175,7 +190,7 @@ class RightItemPart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 6,
           children: [
-            quantityPart(quantity, measurementUnit, textStyle, context),
+            quantityPart(quantity, quantityMeasurementUnit, textStyle, context),
             pricePart(price, priceMeasurementUnit, textStyle, context),
           ],
         ),

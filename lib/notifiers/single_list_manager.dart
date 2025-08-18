@@ -72,7 +72,7 @@ class SingleListManager extends Editable {
     }
   }
 
-  void _setProperty(String listId, SingleListProperty property, dynamic value) {
+  void setProperty<T>(String listId, SingleListProperty property, T value) {
     if (_isSafeToAccessProperty(listId, property)) {
       _properties[listId]!.setProperty(property, value);
     } else {
@@ -82,7 +82,7 @@ class SingleListManager extends Editable {
     }
   }
 
-  dynamic _getProperty(String listId, SingleListProperty property) {
+  dynamic getProperty(String listId, SingleListProperty property) {
     if (_isSafeToAccessProperty(listId, property)) {
       return _properties[listId]!.getProperty(property);
     } else {
@@ -106,40 +106,7 @@ class SingleListManager extends Editable {
   }
 
   bool getCheckedValue(String listId) {
-    return _getProperty(listId, SingleListProperty.isChecked);
-  }
-
-  @override
-  String getTitle(String listId) {
-    return _getProperty(listId, SingleListProperty.title);
-  }
-
-  String? getSubtitle(String listId) {
-    return _getProperty(listId, SingleListProperty.subtitle);
-  }
-
-  double? getPrice(String listId) {
-    return _getProperty(listId, SingleListProperty.price);
-  }
-
-  int? getQuantity(String listId) {
-    return _getProperty(listId, SingleListProperty.quantityValue);
-  }
-
-  String? getPriceMeasurementUnit(String listId) {
-    return _getProperty(listId, SingleListProperty.priceMeasurementUnit);
-  }
-
-  String? getMeasurementUnit(String listId) {
-    return _getProperty(listId, SingleListProperty.quantityMeasurementUnit);
-  }
-
-  String? getCategory(String listId) {
-    return _getProperty(listId, SingleListProperty.category);
-  }
-
-  DateTime? getExpireDate(String listId) {
-    return _getProperty(listId, SingleListProperty.expireDate);
+    return getProperty(listId, SingleListProperty.isChecked);
   }
 
   void _addProperty(String listId, String title) {
@@ -178,11 +145,11 @@ class SingleListManager extends Editable {
       _addExistingItemToList(listId, homeItemsList);
       _removeExistingItemFromList(listId, requiredItemsList);
     }
-    _setProperty(listId, SingleListProperty.isChecked, !isAtHome);
+    setProperty<bool>(listId, SingleListProperty.isChecked, !isAtHome);
   }
 
   void removeItem(String listId) {
-    if (_getProperty(listId, SingleListProperty.isChecked)) {
+    if (getProperty(listId, SingleListProperty.isChecked)) {
       //if is checked that means its at home
       homeItemsList.removeWhere((element) => element.id == listId);
       _checkForEmptyHomeItems();
@@ -196,7 +163,7 @@ class SingleListManager extends Editable {
   }
 
   void changeCheckedValue(String listId) {
-    bool isAtHome = _getProperty(listId, SingleListProperty.isChecked);
+    bool isAtHome = getProperty(listId, SingleListProperty.isChecked);
 
     _changeToOtherList(listId, isAtHome);
     _checkForEmptyHomeItems();
@@ -205,11 +172,11 @@ class SingleListManager extends Editable {
 
   @override // since title is always editable will always return true
   bool getEditStatus(String id) {
-    return _getProperty(id, SingleListProperty.isBeingEdited);
+    return getProperty(id, SingleListProperty.isBeingEdited);
   }
 
   void _addNewTitle(String listId, String newTitle) {
-    _setProperty(listId, SingleListProperty.title, newTitle);
+    setProperty<String>(listId, SingleListProperty.title, newTitle);
   }
 
   @override
@@ -219,61 +186,38 @@ class SingleListManager extends Editable {
     notifyListeners();
   }
 
-  void setPrice(String listId, double? newPrice) {
-    _setProperty(listId, SingleListProperty.price, newPrice);
+  void saveCategory(String id, String category) {
+    setProperty<String>(id, SingleListProperty.category, category);
+  }
+
+  void savePrice(String id, String priceString) {
+    double? priceDouble = double.tryParse(priceString);
+    setProperty<double?>(id, SingleListProperty.price, priceDouble);
     notifyListeners();
   }
 
-  //TODO: refactor to have only one public set and one public get?
-  void setQuantityMeasurementUnit(
-    String listId,
-    String? quantityMeasurementUnit,
-  ) {
-    _setProperty(
-      listId,
-      SingleListProperty.quantityMeasurementUnit,
-      quantityMeasurementUnit,
-    );
+  void saveSubtitle(String id, String subtitle) {
+    setProperty<String?>(id, SingleListProperty.subtitle, subtitle);
     notifyListeners();
   }
 
-  void setSubtitle(String listId, String? subtitle) {
-    _setProperty(listId, SingleListProperty.subtitle, subtitle);
-    notifyListeners();
-  }
-
-  void setPriceMeasurementUnit(String listId, String? priceMeasurementUnit) {
-    _setProperty(
-      listId,
-      SingleListProperty.priceMeasurementUnit,
-      priceMeasurementUnit,
-    );
-    notifyListeners();
-  }
-
-  void setQuantity(String listId, int? quantity) {
-    _setProperty(listId, SingleListProperty.quantityValue, quantity);
-    notifyListeners();
-  }
-
-  void setCategory(String listId, String? category) {
-    _setProperty(listId, SingleListProperty.category, category);
-    notifyListeners();
-  }
-
-  Future<void> setDate(
-    String listId,
+  void saveDate(
+    String id,
     BuildContext context,
-    DateTime? oldDate,
+    TextEditingController controller,
   ) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: oldDate,
-      firstDate: DateTime(2024),
-      lastDate: DateTime.now().add(Duration(days: 365 * 10)), // +10 anni
-    );
+    DateTime? oldDate = getProperty(id, SingleListProperty.expireDate);
 
-    _setProperty(listId, SingleListProperty.expireDate, pickedDate);
+    setProperty<DateTime?>(id, SingleListProperty.expireDate, oldDate);
+    DateTime? newDate = getProperty(id, SingleListProperty.expireDate);
+
+    controller.text = '${newDate!.day}/${newDate.month}/${newDate.year}';
+    notifyListeners();
+  }
+
+  void saveQuantity(String id, String quantityString) {
+    int? newValue = int.tryParse(quantityString);
+    setProperty<int?>(id, SingleListProperty.quantityValue, newValue);
     notifyListeners();
   }
 
@@ -282,5 +226,10 @@ class SingleListManager extends Editable {
     changeEditState(renameId);
     _addNewTitle(renameId, newTitle);
     notifyListeners();
+  }
+
+  @override
+  String getTitle(String listId) {
+    return getProperty(listId, SingleListProperty.title);
   }
 }

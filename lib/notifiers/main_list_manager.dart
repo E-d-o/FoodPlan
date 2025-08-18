@@ -79,7 +79,7 @@ class MainListManager extends Editable {
     }
   }
 
-  dynamic _getProperty(String listId, MainListProperty property) {
+  dynamic getProperty(String listId, MainListProperty property) {
     if (_isSafeToAccessProperty(listId, property)) {
       return _mainListProperties[listId]!.getProperty(property);
     } else {
@@ -91,18 +91,18 @@ class MainListManager extends Editable {
 
   @override
   void changeEditState(String listId) {
-    bool oldValue = _getProperty(listId, MainListProperty.isBeingEdited);
+    bool oldValue = getProperty(listId, MainListProperty.isBeingEdited);
     _setProperty(listId, MainListProperty.isBeingEdited, !oldValue);
     notifyListeners();
   }
 
   @override
   String getTitle(String listId) {
-    return _getProperty(listId, MainListProperty.title);
+    return getProperty(listId, MainListProperty.title);
   }
 
   double getListProgress(String listId) {
-    return _getProperty(listId, MainListProperty.progress);
+    return getProperty(listId, MainListProperty.progress);
   }
 
   void _addNewTitle(String listId, String newTitle) {
@@ -151,6 +151,6 @@ class MainListManager extends Editable {
 
   @override
   bool getEditStatus(String listId) {
-    return _getProperty(listId, MainListProperty.isBeingEdited);
+    return getProperty(listId, MainListProperty.isBeingEdited);
   }
 }
