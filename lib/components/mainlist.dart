@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_progress_indicator.dart';
 import 'package:foodplan/components/editable_title.dart';
-import 'package:foodplan/notifiers/single_list_manager.dart';
+
 import 'package:foodplan/pages/main_list_bottom_sheet.dart';
 import 'package:foodplan/notifiers/main_list_manager.dart';
 
@@ -22,16 +22,21 @@ class MainList extends StatefulWidget {
 
 class _MainListState extends State<MainList> {
   late String title;
-  TextEditingController textEditingController = TextEditingController();
+  late TextEditingController textEditingController;
   final double borderRadius = 10.0;
-  final singleListManager =
-      SingleListManager(); //ogni mainlist ha il suo manager per la singlepagelist, cosi' da mantere lo stato di ogni mainlist
+
   @override
   void initState() {
     title = widget.givenTitle;
-    textEditingController.text = title;
+    textEditingController = TextEditingController(text: title);
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
   }
 
   @override
@@ -59,7 +64,7 @@ class _MainListState extends State<MainList> {
           CustomProgressIndicator(
             borderRadius: borderRadius,
             height: boxHeight,
-            manager: singleListManager,
+
             id: widget.id,
           ),
           Column(

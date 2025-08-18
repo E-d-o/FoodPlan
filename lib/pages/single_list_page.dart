@@ -12,6 +12,7 @@ class SingleListPage extends StatefulWidget {
 }
 
 class _SingleListPageState extends State<SingleListPage> {
+  final SingleListManager singleListManager = SingleListManager();
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -9,13 +9,13 @@ class CustomProgressIndicator extends StatelessWidget {
     super.key,
     required this.borderRadius,
     required this.height,
-    required this.manager,
+
     required this.id,
   });
   final double borderRadius;
   final double height;
   final String id;
-  final SingleListManager manager;
+
   final double percentageBlurToNonBlur = 0.1;
 
   @override
@@ -77,9 +77,9 @@ class CustomProgressIndicator extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return ChangeNotifierProvider.value(
-                          value: manager,
-                          child: SingleListPage(),
+                        return ChangeNotifierProvider(
+                          create: (context) => SingleListManager(),
+                          builder: (context, child) => SingleListPage(),
                         );
                       },
                     ),
