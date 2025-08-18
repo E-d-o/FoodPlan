@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/notifiers/editable.dart';
-import 'package:foodplan/properties/single_list_property.dart';
 
 import 'package:provider/provider.dart';
 

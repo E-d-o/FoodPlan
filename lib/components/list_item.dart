@@ -18,6 +18,11 @@ class ListItem extends StatelessWidget {
       key: Key(id),
       background: Container(color: dismissBackground),
       direction: DismissDirection.endToStart,
+      /*TODO: confirmDismiss on dismissable item
+      confirmDismiss: (direction) {
+        return 
+      },
+      */
       onDismissed: (direction) {
         singleListManager.removeItem(id);
         ScaffoldMessenger.of(
@@ -141,10 +146,7 @@ class HidableSubtitle extends StatelessWidget {
     bool isVisible = true;
     if (subtitle == null) {
       isVisible = false;
-      return Visibility(
-        visible: isVisible,
-        child: Text("dovrebbe essere invisibile", style: null),
-      );
+      return SizedBox.shrink();
     } else {
       return Visibility(
         visible: isVisible,
@@ -198,55 +200,40 @@ class RightItemPart extends StatelessWidget {
     );
   }
 
-  Visibility pricePart(
+  Widget pricePart(
     double? price,
     String? priceMeasurementUnit,
     TextStyle? textStyle,
     BuildContext context,
   ) {
     if (price == null) {
-      return Visibility(
-        visible: false,
-        child: Text("this price should not be visible"),
-      );
+      return SizedBox.shrink();
     } else {
       if (price.floor() - price == 0) {
         //if is int
-        return Visibility(
-          visible: true,
-          child: Text(
-            price.toInt().toString() +
-                priceMeasurementUnit!, //cant get here with no quantity so measurment unit is not null here
-            style: textStyle,
-          ),
+        return Text(
+          price.toInt().toString() +
+              priceMeasurementUnit!, //cant get here with no quantity so measurment unit is not null here
+          style: textStyle,
         );
       }
-      return Visibility(
-        visible: true,
-        child: Text(price.toString() + priceMeasurementUnit!, style: textStyle),
-      );
+      return Text(price.toString() + priceMeasurementUnit!, style: textStyle);
     }
   }
 
-  Visibility quantityPart(
+  Widget quantityPart(
     int? quantity,
     String? measurementUnit,
     TextStyle? textStyle,
     BuildContext context,
   ) {
     if (quantity == null) {
-      return Visibility(
-        visible: false,
-        child: Text("this price should not be visible"),
-      );
+      return SizedBox.shrink();
     } else {
-      return Visibility(
-        visible: true,
-        child: Text(
-          quantity.toString() +
-              measurementUnit!, //cant get here with no quantity so measurment unit is not null here
-          style: textStyle,
-        ),
+      return Text(
+        quantity.toString() +
+            measurementUnit!, //cant get here with no quantity so measurment unit is not null here
+        style: textStyle,
       );
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/notifiers/editable.dart';
+import 'package:foodplan/pages/modify_list_item_page.dart';
 import 'package:foodplan/properties/single_list_properties.dart';
 import 'package:foodplan/properties/single_list_property.dart';
 import 'package:uuid/uuid.dart';
@@ -36,7 +37,7 @@ class SingleListManager extends Editable {
         isChecked: isAtHome,
 
         title: 'Cipolla',
-        subtitle: "corsia 5",
+
         price: 2.7,
         priceMeasurementUnit: "\$",
         quantityMeasurementUnit: "g",
@@ -72,7 +73,7 @@ class SingleListManager extends Editable {
     }
   }
 
-  void setProperty<T>(String listId, SingleListProperty property, T value) {
+  void setProperty(String listId, SingleListProperty property, dynamic value) {
     if (_isSafeToAccessProperty(listId, property)) {
       _properties[listId]!.setProperty(property, value);
     } else {
@@ -145,7 +146,7 @@ class SingleListManager extends Editable {
       _addExistingItemToList(listId, homeItemsList);
       _removeExistingItemFromList(listId, requiredItemsList);
     }
-    setProperty<bool>(listId, SingleListProperty.isChecked, !isAtHome);
+    setProperty(listId, SingleListProperty.isChecked, !isAtHome);
   }
 
   void removeItem(String listId) {
@@ -176,7 +177,7 @@ class SingleListManager extends Editable {
   }
 
   void _addNewTitle(String listId, String newTitle) {
-    setProperty<String>(listId, SingleListProperty.title, newTitle);
+    setProperty(listId, SingleListProperty.title, newTitle);
   }
 
   @override
@@ -187,18 +188,62 @@ class SingleListManager extends Editable {
   }
 
   void saveCategory(String id, String category) {
-    setProperty<String>(id, SingleListProperty.category, category);
+    setProperty(id, SingleListProperty.category, category);
   }
 
-  void savePrice(String id, String priceString) {
+  void savePrice(String id, String priceString, {bool isNotified = true}) {
     double? priceDouble = double.tryParse(priceString);
-    setProperty<double?>(id, SingleListProperty.price, priceDouble);
+    setProperty(id, SingleListProperty.price, priceDouble);
+    if (isNotified) {
+      notifyListeners();
+    }
+  }
+
+  void saveSubtitle(String id, String subtitle, {bool isNotified = true}) {
+    setProperty(id, SingleListProperty.subtitle, subtitle);
+    if (isNotified) {
+      notifyListeners();
+    }
+  }
+
+  //every property besides date
+  void saveProperty(
+    String id,
+    SingleListProperty propertyName,
+    dynamic property, {
+    bool isNotified = true,
+  }) {
+    setProperty(id, propertyName, property);
+    if (isNotified) {
+      notifyListeners();
+    }
+  }
+
+  void notifyChange() {
     notifyListeners();
   }
 
-  void saveSubtitle(String id, String subtitle) {
-    setProperty<String?>(id, SingleListProperty.subtitle, subtitle);
-    notifyListeners();
+  void setDate(
+    String id,
+    BuildContext context,
+    TextEditingController controller,
+  ) async {
+    DateTime? firstAllowedDate = DateTime.now().subtract(
+      Duration(days: 365 * 1),
+    );
+    DateTime? lastAllowedDate = DateTime(2030);
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      firstDate: firstAllowedDate,
+      lastDate: lastAllowedDate,
+    );
+
+    if (pickedDate != null) {
+      _properties[id]!.setProperty(SingleListProperty.expireDate, pickedDate);
+      controller.text =
+          '${pickedDate!.day}/${pickedDate.month}/${pickedDate.year}';
+      notifyListeners();
+    }
   }
 
   void saveDate(
@@ -208,8 +253,12 @@ class SingleListManager extends Editable {
   ) async {
     DateTime? oldDate = getProperty(id, SingleListProperty.expireDate);
 
-    setProperty<DateTime?>(id, SingleListProperty.expireDate, oldDate);
     DateTime? newDate = getProperty(id, SingleListProperty.expireDate);
+    setProperty(
+      id,
+      SingleListProperty.expireDate,
+      newDate,
+    ); //TODO: implement use setDate
 
     controller.text = '${newDate!.day}/${newDate.month}/${newDate.year}';
     notifyListeners();
@@ -217,7 +266,7 @@ class SingleListManager extends Editable {
 
   void saveQuantity(String id, String quantityString) {
     int? newValue = int.tryParse(quantityString);
-    setProperty<int?>(id, SingleListProperty.quantityValue, newValue);
+    setProperty(id, SingleListProperty.quantityValue, newValue);
     notifyListeners();
   }
 

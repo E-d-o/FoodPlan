@@ -29,13 +29,11 @@ class SingleListProperties {
   String? category; //
   DateTime? expireDate; //
   void setProperty(SingleListProperty property, dynamic value) {
+    //change to generic
     switch (property) {
       case SingleListProperty.isChecked:
-        if (value is bool) {
-          isChecked = value;
-        } else {
-          throw UnimplementedError();
-        }
+        isChecked = value as bool;
+        break;
 
       case SingleListProperty.title:
         if (value is String) {
