@@ -29,7 +29,6 @@ class SingleListProperties {
   String? category; //
   DateTime? expireDate; //
   void setProperty(SingleListProperty property, dynamic value) {
-    //change to generic
     switch (property) {
       case SingleListProperty.isChecked:
         isChecked = value as bool;
@@ -52,7 +51,7 @@ class SingleListProperties {
         if (value is double) {
           price = value;
         } else {
-          throw UnimplementedError(); //TODO:FIX WHEN YOU PUT TWO DECIMAL POINTERS
+          throw UnimplementedError();
         }
       case SingleListProperty.priceMeasurementUnit:
         if (value is String) {

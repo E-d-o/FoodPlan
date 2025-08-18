@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/notifiers/editable.dart';
-import 'package:foodplan/pages/modify_list_item_page.dart';
+
 import 'package:foodplan/properties/single_list_properties.dart';
 import 'package:foodplan/properties/single_list_property.dart';
 import 'package:uuid/uuid.dart';
@@ -241,7 +241,7 @@ class SingleListManager extends Editable {
     if (pickedDate != null) {
       _properties[id]!.setProperty(SingleListProperty.expireDate, pickedDate);
       controller.text =
-          '${pickedDate!.day}/${pickedDate.month}/${pickedDate.year}';
+          '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
       notifyListeners();
     }
   }
@@ -251,8 +251,6 @@ class SingleListManager extends Editable {
     BuildContext context,
     TextEditingController controller,
   ) async {
-    DateTime? oldDate = getProperty(id, SingleListProperty.expireDate);
-
     DateTime? newDate = getProperty(id, SingleListProperty.expireDate);
     setProperty(
       id,

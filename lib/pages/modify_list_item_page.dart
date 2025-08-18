@@ -241,6 +241,7 @@ class _PropertiesState extends State<Properties> {
     }
     */
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         //TODO: ONLY SAVE ON SAVE BUTTON
         CategoryProperty(
@@ -425,8 +426,21 @@ class PriceProperty extends StatelessWidget {
   }
 }
 
+/*
+
+ SizedBox(
+          width: 100,
+          child: DropdownMenu(
+            dropdownMenuEntries: [
+              DropdownMenuEntry<String>(value: "g", label: "g"),
+            ],
+          ),
+        ),
+
+*/
+
 class QuantityProperty extends StatelessWidget {
-  const QuantityProperty({
+  QuantityProperty({
     super.key,
     required this.quantityProperty,
     required this.controller,
@@ -440,24 +454,48 @@ class QuantityProperty extends StatelessWidget {
   final SingleListManager singleListManager;
   final String id;
   final Map<String, SingleListProperty> propertyMap;
+  final List<String> measuramentUnits = ["g", "hg", "kg", "mg", ""];
+
+  List<DropdownMenuEntry> getDropdownEntries() {
+    List<DropdownMenuEntry> dropdownList = [];
+    for (int i = 0; i < measuramentUnits.length; i++) {
+      dropdownList.add(
+        DropdownMenuEntry<String>(
+          value: measuramentUnits[i],
+          label: measuramentUnits[i],
+        ),
+      );
+    }
+    return dropdownList;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return ModifyListProperty(
-      propertyName: quantityProperty,
-      widget: TextField(
-        controller: controller,
-        keyboardType: TextInputType.number,
-        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))],
-        onSubmitted: (value) {
-          int? quantityInt = int.tryParse(value);
-          singleListManager.saveProperty(
-            id,
-            propertyMap[quantityProperty]!,
-            quantityInt,
-          );
-        },
-      ),
+    return Row(
+      children: [
+        ModifyListProperty(
+          propertyName: quantityProperty,
+          widget: TextField(
+            controller: controller,
+            keyboardType: TextInputType.number,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
+            onSubmitted: (value) {
+              int? quantityInt = int.tryParse(value);
+              singleListManager.saveProperty(
+                id,
+                propertyMap[quantityProperty]!,
+                quantityInt,
+              );
+            },
+          ),
+        ),
+        SizedBox(
+          width: 80,
+          child: DropdownMenu(dropdownMenuEntries: getDropdownEntries()),
+        ),
+      ],
     );
   }
 }

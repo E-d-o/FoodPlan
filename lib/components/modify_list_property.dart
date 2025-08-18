@@ -11,23 +11,35 @@ class ModifyListProperty extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        padding: EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 40),
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          border: BoxBorder.fromLTRB(
-            right: BorderSide(color: Colors.black, width: 2),
+    return Row(
+      children: [
+        SizedBox(
+          width: 300,
+          child: ListTile(
+            leading: Container(
+              padding: EdgeInsets.only(
+                top: 10,
+                bottom: 10,
+                left: 10,
+                right: 40,
+              ),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+                border: BoxBorder.fromLTRB(
+                  right: BorderSide(color: Colors.black, width: 2),
+                ),
+              ),
+              child: Text("$propertyName:"),
+            ),
+
+            title: Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(color: Colors.blue),
+              child: widget,
+            ),
           ),
         ),
-        child: Text("$propertyName:"),
-      ),
-
-      title: Container(
-        padding: EdgeInsets.all(10),
-        decoration: BoxDecoration(color: Colors.blue),
-        child: widget,
-      ),
+      ],
     );
   }
 }
