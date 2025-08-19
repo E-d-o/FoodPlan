@@ -115,6 +115,8 @@ class _PropertiesState extends State<Properties> {
         CategoryProperty(
           property1: property1,
           controller: controllerMap[property1],
+          singleListManager: singleListManager,
+          id: widget.id,
         ),
         PriceProperty(
           priceProperty: property2,
@@ -138,7 +140,7 @@ class _PropertiesState extends State<Properties> {
           id: widget.id,
         ),
         DescriptionProperty(
-          property4: property4,
+          descriptionProperty: property4,
           controller: controllerMap[property4],
           singleListManager: singleListManager,
           id: widget.id,
@@ -172,7 +174,12 @@ class DateProperty extends StatelessWidget {
         textAlign: TextAlign.center,
         readOnly: true,
         onTap: () async {
-          singleListManager.setDate(id, context, controller!);
+          singleListManager.saveDate(
+            id,
+            context,
+            controller!,
+            isPermanent: false,
+          );
         },
       ),
     );
@@ -182,14 +189,14 @@ class DateProperty extends StatelessWidget {
 class DescriptionProperty extends StatelessWidget {
   const DescriptionProperty({
     super.key,
-    required this.property4,
+    required this.descriptionProperty,
     required this.controller,
     required this.singleListManager,
     required this.id,
     required this.propertyMap,
   });
 
-  final String property4;
+  final String descriptionProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
@@ -198,7 +205,7 @@ class DescriptionProperty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModifyListProperty(
-      propertyName: property4,
+      propertyName: descriptionProperty,
       fieldHeight: 200,
 
       widget: TextField(
@@ -206,13 +213,16 @@ class DescriptionProperty extends StatelessWidget {
         maxLines: null,
         minLines: 3,
         keyboardType: TextInputType.multiline,
-        onSubmitted: (value) {
+        onTapOutside: (event) {
+          String? descriptionText = controller!.text;
           singleListManager.saveProperty(
             id,
-            propertyMap[property4]!,
-            value,
-          ); //TODO: onsumbitted non viene chiamato su multiline, cambiare logica
+            propertyMap[descriptionProperty]!, //TODO: refactor without property map, i already know that im in quantity
+            descriptionText,
+            isPermanent: false,
+          );
         },
+        onSubmitted: (value) {},
       ),
     );
   }
@@ -223,10 +233,14 @@ class CategoryProperty extends StatelessWidget {
     super.key,
     required this.property1,
     required this.controller,
+    required this.singleListManager,
+    required this.id,
   });
 
   final String property1;
   final TextEditingController? controller;
+  final SingleListManager singleListManager;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
@@ -238,7 +252,7 @@ class CategoryProperty extends StatelessWidget {
         textAlign: TextAlign.center,
 
         onSubmitted: (value) {
-          // saveManager.saveCategory(singleListManager, id, value);
+          // singleListManager.saveProperty(id, SignleListP, property)
         },
       ),
     );
@@ -293,14 +307,7 @@ class PriceProperty extends StatelessWidget {
             isPermanent: false,
           );
         },
-        onSubmitted: (value) {
-          double? priceDouble = double.tryParse(value);
-          singleListManager.saveProperty(
-            id,
-            propertyMap[priceProperty]!,
-            priceDouble,
-          );
-        },
+        onSubmitted: (value) {},
       ),
     );
   }
@@ -364,14 +371,17 @@ class QuantityProperty extends StatelessWidget {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
-              onSubmitted: (value) {
-                int? quantityInt = int.tryParse(value);
+
+              onTapOutside: (event) {
+                int? quantityInt = int.tryParse(controller!.text);
                 singleListManager.saveProperty(
                   id,
-                  propertyMap[quantityProperty]!,
+                  propertyMap[quantityProperty]!, //TODO: refactor without property map, i already know that im in quantity
                   quantityInt,
+                  isPermanent: false,
                 );
               },
+              onSubmitted: (value) {},
             ),
           ),
         ),

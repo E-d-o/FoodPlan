@@ -233,10 +233,11 @@ class SingleListManager extends Editable {
     notifyListeners();
   }
 
-  void setDate(
+  void _setDate(
     String id,
     BuildContext context,
     TextEditingController controller,
+    Map<String, SingleListProperties> properties,
   ) async {
     DateTime? firstAllowedDate = DateTime.now().subtract(
       Duration(days: 365 * 1),
@@ -249,27 +250,23 @@ class SingleListManager extends Editable {
     );
 
     if (pickedDate != null) {
-      _properties[id]!.setProperty(SingleListProperty.expireDate, pickedDate);
+      properties[id]!.setProperty(SingleListProperty.expireDate, pickedDate);
       controller.text =
           '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
-      notifyListeners();
     }
   }
 
   void saveDate(
     String id,
     BuildContext context,
-    TextEditingController controller,
-  ) async {
-    DateTime? newDate = getProperty(id, SingleListProperty.expireDate);
-    setProperty(
-      id,
-      SingleListProperty.expireDate,
-      newDate,
-    ); //TODO: implement use setDate
-
-    controller.text = '${newDate!.day}/${newDate.month}/${newDate.year}';
-    notifyListeners();
+    TextEditingController controller, {
+    bool isPermanent = true,
+  }) async {
+    if (isPermanent) {
+      _setDate(id, context, controller, _properties);
+      notifyListeners();
+    }
+    _setDate(id, context, controller, _tempProperties);
   }
 
   void saveQuantity(String id, String quantityString) {
