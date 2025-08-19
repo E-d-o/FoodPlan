@@ -290,7 +290,7 @@ class PriceProperty extends StatelessWidget {
             id,
             propertyMap[priceProperty]!,
             priceDouble,
-            isNotified: false,
+            isPermanent: false,
           );
         },
         onSubmitted: (value) {

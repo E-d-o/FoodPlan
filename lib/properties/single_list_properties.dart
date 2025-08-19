@@ -28,6 +28,22 @@ class SingleListProperties {
   bool isBeingEdited;
   String? category; //
   DateTime? expireDate; //
+
+  SingleListProperties copy() {
+    return SingleListProperties(
+      isChecked: isChecked,
+      title: title,
+      isBeingEdited: isBeingEdited,
+      subtitle: subtitle,
+      price: price,
+      priceMeasurementUnit: priceMeasurementUnit,
+      quantityValue: quantityValue,
+      quantityMeasurementUnit: quantityMeasurementUnit,
+      category: category,
+      expireDate: expireDate,
+    );
+  }
+
   void setProperty(SingleListProperty property, dynamic value) {
     switch (property) {
       case SingleListProperty.isChecked:

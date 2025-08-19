@@ -25,10 +25,15 @@ class SingleListManager extends Editable {
   SingleListManager() {
     _initProperties();
   }
+  final Map<String, SingleListProperties> _tempProperties = {};
 
   void _initProperties() {
     _initItems(requiredItemsList, false);
     _initItems(homeItemsList, true);
+    _properties.forEach((key, value) {
+      //copio tutte le proprieta' iniziali
+      _tempProperties[key] = value.copy();
+    });
   }
 
   void _initItems(List<ListItem> list, bool isAtHome) {
@@ -211,15 +216,20 @@ class SingleListManager extends Editable {
     String id,
     SingleListProperty propertyName,
     dynamic property, {
-    bool isNotified = true,
+    bool isPermanent = true,
   }) {
-    setProperty(id, propertyName, property);
-    if (isNotified) {
+    if (isPermanent) {
+      setProperty(id, propertyName, property);
       notifyListeners();
+    } else {
+      _tempProperties[id]!.setProperty(propertyName, property);
     }
   }
 
   void notifyChange() {
+    _tempProperties.forEach((key, value) {
+      _properties[key] = value.copy();
+    });
     notifyListeners();
   }
 
