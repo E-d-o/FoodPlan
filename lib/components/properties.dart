@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:foodplan/components/single%20properties/category_property.dart';
-import 'package:foodplan/components/single%20properties/date_property.dart';
-import 'package:foodplan/components/single%20properties/description_property.dart';
-import 'package:foodplan/components/single%20properties/price_property.dart';
-import 'package:foodplan/components/single%20properties/quantity_property.dart';
+import 'package:foodplan/components/single_properties/category_property.dart';
+import 'package:foodplan/components/single_properties/date_property.dart';
+import 'package:foodplan/components/single_properties/description_property.dart';
+import 'package:foodplan/components/single_properties/price_property.dart';
+import 'package:foodplan/components/single_properties/quantity_property.dart';
 import 'package:foodplan/notifiers/single_list_manager.dart';
 import 'package:foodplan/properties/single_list_property.dart';
 import 'package:provider/provider.dart';
