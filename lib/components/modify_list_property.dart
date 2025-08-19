@@ -5,38 +5,34 @@ class ModifyListProperty extends StatelessWidget {
     super.key,
     required this.propertyName,
     required this.widget,
+    this.fieldHeight,
   });
   final String propertyName;
-  final Widget widget;
+  final TextField widget;
+  final double? fieldHeight;
 
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 300,
-          child: ListTile(
-            leading: Container(
-              padding: EdgeInsets.only(
-                top: 10,
-                bottom: 10,
-                left: 10,
-                right: 40,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.blue,
-                border: BoxBorder.fromLTRB(
-                  right: BorderSide(color: Colors.black, width: 2),
-                ),
-              ),
-              child: Text("$propertyName:"),
+        Container(
+          padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 40),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            border: BoxBorder.fromLTRB(
+              right: BorderSide(color: Colors.black, width: 2),
             ),
+          ),
+          child: Text("$propertyName:"),
+        ),
 
-            title: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.blue),
-              child: widget,
-            ),
+        Expanded(
+          child: Container(
+            height: fieldHeight,
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(color: Colors.blue),
+            child: widget,
           ),
         ),
       ],
