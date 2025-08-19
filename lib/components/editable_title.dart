@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/notifiers/editable.dart';
+import 'package:foodplan/notifiers/main_list_manager.dart';
+import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:foodplan/properties/single_list_property.dart';
 
 import 'package:provider/provider.dart';
 
@@ -53,9 +56,22 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
               },
 
               onTapOutside: (event) {
-                FocusScope.of(context).unfocus();
-                listManager.changeEditState(id);
-                textEditingController.text = changedTitle;
+                switch (listManager) {
+                  case SingleListManager():
+                    FocusScope.of(context).unfocus();
+                    listManager.saveProperty(
+                      id,
+                      SingleListProperty.title,
+                      textEditingController.text,
+                      isPermanent: false,
+                    );
+                    break;
+                  case MainListManager():
+                    FocusScope.of(context).unfocus();
+                    listManager.changeEditState(id);
+                    textEditingController.text = changedTitle;
+                    break;
+                }
               },
             ),
           );

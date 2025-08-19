@@ -113,7 +113,7 @@ class _PropertiesState extends State<Properties> {
       children: [
         //TODO: ONLY SAVE ON SAVE BUTTON
         CategoryProperty(
-          property1: property1,
+          categoryProperty: property1,
           controller: controllerMap[property1],
           singleListManager: singleListManager,
           id: widget.id,
@@ -214,7 +214,9 @@ class DescriptionProperty extends StatelessWidget {
         minLines: 3,
         keyboardType: TextInputType.multiline,
         onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
           String? descriptionText = controller!.text;
+
           singleListManager.saveProperty(
             id,
             propertyMap[descriptionProperty]!, //TODO: refactor without property map, i already know that im in quantity
@@ -231,13 +233,13 @@ class DescriptionProperty extends StatelessWidget {
 class CategoryProperty extends StatelessWidget {
   const CategoryProperty({
     super.key,
-    required this.property1,
+    required this.categoryProperty,
     required this.controller,
     required this.singleListManager,
     required this.id,
   });
 
-  final String property1;
+  final String categoryProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
@@ -245,15 +247,23 @@ class CategoryProperty extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ModifyListProperty(
-      propertyName: property1,
+      propertyName: categoryProperty,
 
       widget: TextField(
         controller: controller,
         textAlign: TextAlign.center,
-
-        onSubmitted: (value) {
-          // singleListManager.saveProperty(id, SignleListP, property)
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+          String? categoryText = controller!.text;
+          singleListManager.saveProperty(
+            id,
+            SingleListProperty
+                .category, //TODO: refactor without property map, i already know that im in quantity
+            categoryText,
+            isPermanent: false,
+          );
         },
+        onSubmitted: (value) {},
       ),
     );
   }
@@ -298,7 +308,7 @@ class PriceProperty extends StatelessWidget {
         ],
 
         onTapOutside: (event) {
-          //TODO: fix when save it should undo changes when i pop out of page
+          FocusScope.of(context).unfocus();
           double? priceDouble = double.tryParse(controller!.text);
           singleListManager.saveProperty(
             id,
@@ -373,6 +383,7 @@ class QuantityProperty extends StatelessWidget {
               ],
 
               onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
                 int? quantityInt = int.tryParse(controller!.text);
                 singleListManager.saveProperty(
                   id,
@@ -400,6 +411,7 @@ class QuantityProperty extends StatelessWidget {
               id,
               SingleListProperty.quantityMeasurementUnit,
               value,
+              isPermanent: false,
             );
           },
         ),
