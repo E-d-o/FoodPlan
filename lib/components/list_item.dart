@@ -117,15 +117,27 @@ class LeftItemPart extends StatelessWidget {
                 ),
               ],
             ),
-            Container(
-              //TODO: IMPLEMENT HidableImage
-              height: 30,
-              width: 30,
-              color: Colors.green,
-              child: Text("My image"),
-            ),
+            HidableImage(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class HidableImage extends StatelessWidget {
+  const HidableImage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Visibility(
+      visible: false,
+      child: Container(
+        //TODO: IMPLEMENT HidableImage
+        height: 30,
+        width: 30,
+        color: Colors.green,
+        child: Text("My image"),
       ),
     );
   }

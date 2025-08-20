@@ -88,13 +88,31 @@ class SingleListManager extends Editable {
     }
   }
 
-  dynamic getProperty(String listId, SingleListProperty property) {
+  dynamic getProperty(
+    String listId,
+    SingleListProperty property, {
+    bool isPermanent = true,
+  }) {
     if (_isSafeToAccessProperty(listId, property)) {
-      return _properties[listId]!.getProperty(property);
+      if (isPermanent) {
+        return _properties[listId]!.getProperty(property);
+      } else {
+        return _tempProperties[listId]!.getProperty(property);
+      }
     } else {
       throw ArgumentError(
         "Not safe to access, property or id is not in properties",
       );
+    }
+  }
+
+  void undoChanges(String listId) {
+    if (_isListInProperties(listId)) {
+      _properties.forEach((key, value) {
+        _tempProperties[key] = value.copy();
+      });
+    } else {
+      throw ArgumentError("no  list with such id");
     }
   }
 

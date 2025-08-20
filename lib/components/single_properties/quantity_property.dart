@@ -50,8 +50,7 @@ class QuantityProperty extends StatelessWidget {
                 FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
               ],
 
-              onTapOutside: (event) {
-                FocusScope.of(context).unfocus();
+              onChanged: (value) {
                 int? quantityInt = int.tryParse(controller!.text);
                 singleListManager.saveProperty(
                   id,
@@ -60,7 +59,9 @@ class QuantityProperty extends StatelessWidget {
                   isPermanent: false,
                 );
               },
-              onSubmitted: (value) {},
+              onTapOutside: (event) {
+                FocusScope.of(context).unfocus();
+              },
             ),
           ),
         ),

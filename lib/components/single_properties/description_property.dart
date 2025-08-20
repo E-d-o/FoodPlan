@@ -30,8 +30,7 @@ class DescriptionProperty extends StatelessWidget {
         maxLines: null,
         minLines: 3,
         keyboardType: TextInputType.multiline,
-        onTapOutside: (event) {
-          FocusScope.of(context).unfocus();
+        onChanged: (value) {
           String? descriptionText = controller!.text;
 
           singleListManager.saveProperty(
@@ -41,7 +40,9 @@ class DescriptionProperty extends StatelessWidget {
             isPermanent: false,
           );
         },
-        onSubmitted: (value) {},
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
       ),
     );
   }

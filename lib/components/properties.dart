@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:foodplan/components/single_properties/category_property.dart';
 import 'package:foodplan/components/single_properties/date_property.dart';
 import 'package:foodplan/components/single_properties/description_property.dart';
@@ -47,22 +46,27 @@ class _PropertiesState extends State<Properties> {
     final String? category = singleListManager.getProperty(
       widget.id,
       SingleListProperty.category,
+      isPermanent: false,
     );
     final double? price = singleListManager.getProperty(
       widget.id,
       SingleListProperty.price,
+      isPermanent: false,
     );
     final int? quantity = singleListManager.getProperty(
       widget.id,
       SingleListProperty.quantityValue,
+      isPermanent: false,
     );
     final String? subtitle = singleListManager.getProperty(
       widget.id,
       SingleListProperty.subtitle,
+      isPermanent: false,
     );
     final DateTime? expireDate = singleListManager.getProperty(
       widget.id,
       SingleListProperty.expireDate,
+      isPermanent: false,
     );
 
     final Map<String, dynamic> valueBeforeMap = {
@@ -105,7 +109,6 @@ class _PropertiesState extends State<Properties> {
       spacing: 12,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        //TODO: ONLY SAVE ON SAVE BUTTON
         CategoryProperty(
           categoryProperty: property1,
           controller: controllerMap[property1],

@@ -42,8 +42,7 @@ class PriceProperty extends StatelessWidget {
           }),
         ],
 
-        onTapOutside: (event) {
-          FocusScope.of(context).unfocus();
+        onChanged: (value) {
           double? priceDouble = double.tryParse(controller!.text);
           singleListManager.saveProperty(
             id,
@@ -52,7 +51,9 @@ class PriceProperty extends StatelessWidget {
             isPermanent: false,
           );
         },
-        onSubmitted: (value) {},
+        onTapOutside: (event) {
+          FocusScope.of(context).unfocus();
+        },
       ),
     );
   }

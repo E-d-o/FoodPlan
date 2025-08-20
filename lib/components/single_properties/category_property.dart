@@ -25,8 +25,7 @@ class CategoryProperty extends StatelessWidget {
       widget: TextField(
         controller: controller,
         textAlign: TextAlign.center,
-        onTapOutside: (event) {
-          FocusScope.of(context).unfocus();
+        onChanged: (value) {
           String? categoryText = controller!.text;
           singleListManager.saveProperty(
             id,
@@ -36,7 +35,9 @@ class CategoryProperty extends StatelessWidget {
             isPermanent: false,
           );
         },
-        onSubmitted: (value) {},
+        onTapOutside: (value) {
+          FocusScope.of(context).unfocus();
+        },
       ),
     );
   }

@@ -37,6 +37,13 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            singleListManager.undoChanges(widget.id);
+            Navigator.pop(context);
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -50,53 +57,79 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          color: Colors.amber,
-          child: Column(
-            spacing: 20,
-            children: [
-              EditImage(),
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.redAccent, //Background
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Column(
-                  children: [
-                    ModifyTitle(
-                      controller: controller,
-                      widget: widget,
-                      titleStyle: titleStyle,
+      body: Stack(
+        children: [
+          scrollableContent(titleStyle, singleListManager),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
+              child: SizedBox(
+                height: 60,
+                width: MediaQuery.of(context).size.width,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.circular(8),
                     ),
-                    SizedBox(height: 20),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                      ),
-                      child: Properties(id: widget.id),
-                    ),
-                    SizedBox(
-                      height: 50,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          singleListManager.notifyChange();
-                        },
-                        child: Text("Salva"),
-                      ),
-                    ),
-                  ],
+                  ),
+                  onPressed: () {
+                    singleListManager.notifyChange();
+                    Navigator.pop(context);
+                  },
+                  child: Text("Salva"),
                 ),
               ),
-            ],
+            ),
           ),
+        ],
+      ),
+    );
+  }
+
+  SingleChildScrollView scrollableContent(
+    TextStyle? titleStyle,
+    SingleListManager singleListManager,
+  ) {
+    return SingleChildScrollView(
+      child: Container(
+        padding: EdgeInsets.only(bottom: 100),
+        color: Colors.amber,
+        child: Column(
+          spacing: 20,
+          children: [
+            EditImage(),
+            Container(
+              padding: EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: Colors.redAccent, //Background
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Column(
+                children: [
+                  ModifyTitle(
+                    controller: controller,
+                    widget: widget,
+                    titleStyle: titleStyle,
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey,
+
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      ),
+                    ),
+                    child: Properties(id: widget.id),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -134,9 +167,9 @@ class ModifyTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          height: 100,
+          height: 90,
           decoration: BoxDecoration(
-            color: Colors.blueAccent,
+            color: Colors.amber,
             border: Border(bottom: BorderSide(color: Colors.black, width: 2.0)),
           ),
           child: Center(
