@@ -27,15 +27,16 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "Roboto",
         textTheme: TextTheme(
-          bodyMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          bodyMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
           titleMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           titleLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
           labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+          titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
 
         colorScheme: colorScheme,
         splashColor: colorScheme.onPrimary,
-        scaffoldBackgroundColor: colorScheme.primaryContainer,
+        scaffoldBackgroundColor: null,
         appBarTheme: AppBarTheme(
           backgroundColor: colorScheme.primary,
           foregroundColor: colorScheme.onPrimary,

@@ -43,6 +43,9 @@ class QuantityProperty extends StatelessWidget {
           child: ModifyListProperty(
             propertyName: quantityProperty,
             widget: TextField(
+              style: (Theme.of(context).textTheme.titleSmall)!.copyWith(
+                color: Theme.of(context).colorScheme.onSecondaryContainer,
+              ),
               controller: controller,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
@@ -67,7 +70,9 @@ class QuantityProperty extends StatelessWidget {
         ),
         DropdownMenu(
           width: 100,
-
+          textStyle: (Theme.of(context).textTheme.bodyMedium)!.copyWith(
+            color: Theme.of(context).colorScheme.onSecondaryContainer,
+          ),
           initialSelection:
               singleListManager.getProperty(
                 id,

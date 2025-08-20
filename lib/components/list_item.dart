@@ -18,11 +18,33 @@ class ListItem extends StatelessWidget {
       key: Key(id),
       background: Container(color: dismissBackground),
       direction: DismissDirection.endToStart,
-      /*TODO: confirmDismiss on dismissable item
-      confirmDismiss: (direction) {
-        return 
+
+      confirmDismiss: (direction) async {
+        return await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Conferma eliminazione?"),
+              content: Text("Vuoi davvero eliminare questo elemento?"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text("Annulla"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text("ELIMINA"),
+                ),
+              ],
+            );
+          },
+        );
       },
-      */
+
       onDismissed: (direction) {
         singleListManager.removeItem(id);
         ScaffoldMessenger.of(

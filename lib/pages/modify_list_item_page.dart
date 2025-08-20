@@ -47,11 +47,14 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
         actions: [
           IconButton(
             onPressed: () {
+              Navigator.pop(
+                context,
+              ); //ATTENZIONE AL REBUILD DEL EDITABLETITLE PRIMA DEL POP, CAUSA ERRORI PERCHE REBUILDA ANCHE SE ID E' ELIMINATO
               singleListManager.removeItem(widget.id);
+
               ScaffoldMessenger.of(
                 context,
               ).showSnackBar(SnackBar(content: Text("Eliminato")));
-              Navigator.pop(context);
             },
             icon: Icon(Icons.delete_outline_rounded),
           ),
@@ -96,7 +99,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.only(bottom: 100),
-        color: Colors.amber,
+
         child: Column(
           spacing: 20,
           children: [
@@ -104,7 +107,9 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.redAccent, //Background
+                color: Theme.of(
+                  context,
+                ).colorScheme.secondaryContainer, //Background
                 borderRadius: BorderRadius.circular(30),
               ),
               child: Column(
@@ -117,8 +122,6 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
                   SizedBox(height: 20),
                   Container(
                     decoration: BoxDecoration(
-                      color: Colors.grey,
-
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
@@ -126,6 +129,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
                     ),
                     child: Properties(id: widget.id),
                   ),
+                  SizedBox(height: 300),
                 ],
               ),
             ),
@@ -167,14 +171,13 @@ class ModifyTitle extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          height: 90,
+          height: 70,
           decoration: BoxDecoration(
-            color: Colors.amber,
+            color: Theme.of(context).colorScheme.primaryContainer,
             border: Border(bottom: BorderSide(color: Colors.black, width: 2.0)),
           ),
           child: Center(
             child: EditableTitle<SingleListManager>(
-              //TODO:save on title also
               textEditingController: controller,
               id: widget.id,
               context: context,

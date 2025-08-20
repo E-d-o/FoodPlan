@@ -41,9 +41,11 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
               cursorColor: Theme.of(context).colorScheme.onPrimary,
               enableInteractiveSelection: false,
               textAlign: textAlign,
+              textAlignVertical: TextAlignVertical.center,
               decoration: InputDecoration(
-                //TODO: do better decoration for editableTitle when clicked
+                border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
+                counterText: "",
                 isCollapsed: false,
               ),
 

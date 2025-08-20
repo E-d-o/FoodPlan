@@ -139,6 +139,7 @@ class SingleListManager extends Editable {
       title: title,
       isBeingEdited: true,
     );
+    _tempProperties[listId] = _properties[listId]!.copy();
   }
 
   void addNewItem(String title) {
@@ -151,6 +152,7 @@ class SingleListManager extends Editable {
 
   void _removeProperty(String listId) {
     _properties.remove(listId);
+    _tempProperties.remove(listId);
   }
 
   void _addExistingItemToList(String listId, List<ListItem> list) {
@@ -196,7 +198,11 @@ class SingleListManager extends Editable {
 
   @override // since title is always editable will always return true
   bool getEditStatus(String id) {
-    return getProperty(id, SingleListProperty.isBeingEdited);
+    if (_isListInProperties(id)) {
+      return getProperty(id, SingleListProperty.isBeingEdited);
+    } else {
+      return true;
+    }
   }
 
   void _addNewTitle(String listId, String newTitle) {
