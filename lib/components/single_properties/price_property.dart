@@ -11,14 +11,12 @@ class PriceProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
-    required this.propertyMap,
   });
 
   final String priceProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
-  final Map<String, SingleListProperty> propertyMap;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +44,7 @@ class PriceProperty extends StatelessWidget {
           double? priceDouble = double.tryParse(controller!.text);
           singleListManager.saveProperty(
             id,
-            propertyMap[priceProperty]!,
+            SingleListProperty.price,
             priceDouble,
             isPermanent: false,
           );

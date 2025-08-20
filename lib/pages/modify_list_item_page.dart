@@ -66,7 +66,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 0,
+            bottom: 20,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
               child: SizedBox(
@@ -75,6 +75,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
+                      side: BorderSide(color: Colors.black),
                       borderRadius: BorderRadiusGeometry.circular(8),
                     ),
                   ),

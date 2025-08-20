@@ -103,7 +103,7 @@ class SingleListProperties {
         if (value is DateTime) {
           expireDate = value;
         } else {
-          throw UnimplementedError(); //TODO: fix when click outside and value is null i think
+          throw UnimplementedError();
         }
     }
   }

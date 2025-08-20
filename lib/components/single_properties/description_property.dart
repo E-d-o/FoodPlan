@@ -10,14 +10,12 @@ class DescriptionProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
-    required this.propertyMap,
   });
 
   final String descriptionProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
-  final Map<String, SingleListProperty> propertyMap;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,8 @@ class DescriptionProperty extends StatelessWidget {
 
           singleListManager.saveProperty(
             id,
-            propertyMap[descriptionProperty]!, //TODO: refactor without property map, i already know that im in quantity
+            SingleListProperty
+                .subtitle, //TODO: refactor without property map, i already know that im in quantity
             descriptionText,
             isPermanent: false,
           );

@@ -64,7 +64,6 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //TODO: add floating action button to go back up ONLY when i scrolled down and the appbar is not visible
       floatingActionButton: HidableActionButton(),
 
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,

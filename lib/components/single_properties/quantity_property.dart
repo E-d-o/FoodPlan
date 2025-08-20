@@ -11,14 +11,13 @@ class QuantityProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
-    required this.propertyMap,
   });
 
   final String quantityProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
-  final Map<String, SingleListProperty> propertyMap;
+
   final List<String> measuramentUnits = ["g", "hg", "kg", "mg", ""];
 
   List<DropdownMenuEntry> getDropdownEntries() {
@@ -57,7 +56,7 @@ class QuantityProperty extends StatelessWidget {
                 int? quantityInt = int.tryParse(controller!.text);
                 singleListManager.saveProperty(
                   id,
-                  propertyMap[quantityProperty]!, //TODO: refactor without property map, i already know that im in quantity
+                  SingleListProperty.quantityValue,
                   quantityInt,
                   isPermanent: false,
                 );

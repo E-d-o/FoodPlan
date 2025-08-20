@@ -19,8 +19,6 @@ class HomepageManager extends ChangeNotifier {
   void _scrollListener() {
     int scrollTresh = 200;
     bool shouldShow = scrollController.offset > scrollTresh;
-    print("HEYYY");
-    print(shouldShow);
 
     if (shouldShow != isFloatingButtonVisible) {
       isFloatingButtonVisible = !isFloatingButtonVisible;

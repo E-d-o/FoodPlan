@@ -120,14 +120,12 @@ class _PropertiesState extends State<Properties> {
           controller: controllerMap[property2],
           singleListManager: singleListManager,
           id: widget.id,
-          propertyMap: propertyMap,
         ),
         QuantityProperty(
           quantityProperty: property3,
           controller: controllerMap[property3],
           singleListManager: singleListManager,
           id: widget.id,
-          propertyMap: propertyMap,
         ),
 
         DateProperty(
@@ -141,7 +139,6 @@ class _PropertiesState extends State<Properties> {
           controller: controllerMap[property4],
           singleListManager: singleListManager,
           id: widget.id,
-          propertyMap: propertyMap,
         ),
       ],
     );
