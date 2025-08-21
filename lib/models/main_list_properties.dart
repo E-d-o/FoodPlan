@@ -8,6 +8,7 @@ class MainListProperties extends HiveObject {
     required this.title,
     required this.progress,
     required this.isBeingEdited,
+    required this.timeOfAddition,
   });
   @HiveField(0)
   String title;
@@ -15,6 +16,9 @@ class MainListProperties extends HiveObject {
   double progress;
   @HiveField(2)
   bool isBeingEdited;
+
+  @HiveField(3)
+  DateTime timeOfAddition = DateTime(2024, 4, 30);
   bool hasProperty(MainListProperty property) {
     return true; //add logic here if you want to check that you wrote all of the mainListProperties specified in the enum MainLIstProperty
   }
@@ -39,11 +43,11 @@ class MainListProperties extends HiveObject {
         } else {
           throw ArgumentError("isbeingEdited non e' un bool");
         }
-      // ignore: unreachable_switch_default
-      default:
-        throw ArgumentError(
-          "Ti sei dimenticato di inserire una Mainlistproperty nello switch ",
-        );
+      case MainListProperty.timeOfAddition:
+        if (value is DateTime) {
+        } else {
+          throw ArgumentError("timeOfAddition non e' un Datetime");
+        }
     }
   }
 
@@ -55,11 +59,9 @@ class MainListProperties extends HiveObject {
         return progress;
       case MainListProperty.isBeingEdited:
         return isBeingEdited;
-      // ignore: unreachable_switch_default
-      default:
-        throw ArgumentError(
-          "Ti sei dimenticato di inserire una Mainlistproperty nello switch ",
-        );
+
+      case MainListProperty.timeOfAddition:
+        return timeOfAddition;
     }
   }
 }

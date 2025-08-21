@@ -13,6 +13,7 @@ import '../components/logo.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(MainListPropertiesAdapter());
+
   await Hive.openBox("storage");
 
   runApp(const MyApp());

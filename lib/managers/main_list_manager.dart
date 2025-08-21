@@ -48,6 +48,7 @@ class MainListManager extends Editable {
           title: startupTitle,
           progress: progressOfNewList,
           isBeingEdited: startupEditState,
+          timeOfAddition: DateTime.timestamp(),
         ),
       );
       _mainListPages.add(firstList);
@@ -60,13 +61,26 @@ class MainListManager extends Editable {
   Future<void> _loadHiveLists() async {
     _mainListPages.clear();
 
+    final Map<DateTime, String> timestampToId = {};
     for (var key in _box.keys) {
       MainListProperties properties = _box.get(key);
-      MainList mainList = MainList(id: key.toString());
-      print(properties.isBeingEdited);
-      _mainListPages.add(mainList);
-      print("caricata lista con titolo ${properties.title}");
+
+      timestampToId[properties.timeOfAddition] = key.toString();
     }
+    List<DateTime> timestamps = timestampToId.keys.toList();
+    timestamps.sort();
+    print(timestamps.toString());
+
+    for (var time in timestamps) {
+      String? id = timestampToId[time];
+      MainList mainList = MainList(id: id.toString());
+
+      _mainListPages.add(mainList);
+
+      print("aggiunta lista con timestamp $time");
+    }
+
+    print("fine loading");
   }
 
   String get selectedId => _selectedId;
@@ -147,6 +161,7 @@ class MainListManager extends Editable {
         title: defaultTitle,
         progress: progressOfNewList,
         isBeingEdited: defaultEditState,
+        timeOfAddition: DateTime.timestamp(),
       ),
     );
   }
