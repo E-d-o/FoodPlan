@@ -1,4 +1,4 @@
-import 'package:foodplan/models/single_list_property.dart';
+import 'package:foodplan/models/enums/single_list_property.dart';
 
 class SingleListProperties {
   SingleListProperties({

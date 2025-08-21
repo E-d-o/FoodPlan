@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodplan/managers/editable.dart';
 import 'package:foodplan/managers/main_list_manager.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/models/single_list_property.dart';
+import 'package:foodplan/models/enums/single_list_property.dart';
 
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
                 counterText: "",
-                isCollapsed: false,
+                isCollapsed: true,
               ),
 
               controller: textEditingController,
@@ -57,7 +57,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
                 listManager.renameItem(id, newTitle);
               },
 
-              onTapOutside: (event) {
+              onTapOutside: (event) async {
                 switch (listManager) {
                   case SingleListManager():
                     FocusScope.of(context).unfocus();
@@ -68,7 +68,8 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
                       isPermanent: false,
                     );
                     break;
-                  case MainListManager():
+                  case MainListManager(): //TODO:FIX CANT SAVE BC IT GETS CALLED BEFORE RENAME IN BUTTON IN MAINLIST
+
                     FocusScope.of(context).unfocus();
                     listManager.changeEditState(id);
                     textEditingController.text = changedTitle;

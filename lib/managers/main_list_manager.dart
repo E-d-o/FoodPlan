@@ -2,7 +2,7 @@ import 'package:foodplan/components/mainlist.dart';
 import 'package:foodplan/managers/editable.dart';
 
 import 'package:foodplan/models/main_list_properties.dart';
-import 'package:foodplan/models/main_list_property.dart';
+import 'package:foodplan/models/enums/main_list_property.dart';
 import 'package:hive/hive.dart';
 
 import 'package:uuid/uuid.dart';

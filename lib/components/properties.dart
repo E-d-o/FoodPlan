@@ -5,7 +5,7 @@ import 'package:foodplan/components/single_properties/description_property.dart'
 import 'package:foodplan/components/single_properties/price_property.dart';
 import 'package:foodplan/components/single_properties/quantity_property.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/models/single_list_property.dart';
+import 'package:foodplan/models/enums/single_list_property.dart';
 import 'package:provider/provider.dart';
 
 class Properties extends StatefulWidget {
@@ -30,13 +30,6 @@ class _PropertiesState extends State<Properties> {
 
   @override
   void initState() {
-    propertyMap = {
-      property1: SingleListProperty.category,
-      property2: SingleListProperty.price,
-      property3: SingleListProperty.quantityValue,
-      property4: SingleListProperty.subtitle,
-      property5: SingleListProperty.expireDate,
-    };
     super.initState();
   }
 

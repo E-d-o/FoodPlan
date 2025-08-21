@@ -67,46 +67,50 @@ class _MainListState extends State<MainList> {
 
             id: widget.id,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 0,
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [listSetting(context)],
+
+          Container(
+            height: boxHeight,
+            padding: EdgeInsets.only(left: 18, right: 4, top: 4, bottom: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                EditableTitle<MainListManager>(
+                  textEditingController: textEditingController,
+                  id: widget.id,
+                  context: context,
+                  isAutofocused: true,
+                  textAlign: TextAlign.start,
+                  maxLength: 26,
+                  titleStyle: titleStyle,
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 18),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    EditableTitle<MainListManager>(
-                      textEditingController: textEditingController,
-                      id: widget.id,
-                      context: context,
-                      isAutofocused: true,
-                      textAlign: TextAlign.start,
-                      maxLength: 26,
-                      titleStyle: titleStyle,
-                    ),
-                    //TODO:show save button to save EditableTitle changes
-                    Text(
-                      //TODO: use mainlistProperty to show proper value
-                      "0/0",
-                      style: titleStyle,
-                    ),
-                  ],
+
+                //TODO:show save button to save EditableTitle changes
+                RightPartMain(
+                  titleStyle: titleStyle,
+                  id: widget.id,
+                  controller: textEditingController,
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
     );
   }
+}
+
+class RightPartMain extends StatelessWidget {
+  const RightPartMain({
+    super.key,
+    required this.titleStyle,
+    required this.id,
+    required this.controller,
+  });
+
+  final TextStyle? titleStyle;
+  final String id;
+  final TextEditingController controller;
 
   Material listSetting(BuildContext context) {
     double inkBorderRadius = 5;
@@ -122,7 +126,7 @@ class _MainListState extends State<MainList> {
             context,
             listen: false,
           );
-          listManager.selectedId = widget.id;
+          listManager.selectedId = id;
 
           showModalBottomSheet(
             showDragHandle: true,
@@ -144,5 +148,40 @@ class _MainListState extends State<MainList> {
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final MainListManager listManager = context.watch<MainListManager>();
+    if (listManager.getEditStatus(id)) {
+      return ElevatedButton(
+        onPressed: () {
+          listManager.renameItem(id, controller.text);
+        },
+        child: Icon(Icons.check),
+      );
+    } else {
+      return Row(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 12.0),
+                child: Text(
+                  //TODO: use mainlistProperty to show proper value
+                  "0/0",
+                  style: titleStyle,
+                ),
+              ),
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [listSetting(context)],
+          ),
+        ],
+      );
+    }
   }
 }

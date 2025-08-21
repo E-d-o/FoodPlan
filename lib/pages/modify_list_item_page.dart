@@ -5,7 +5,7 @@ import 'package:foodplan/components/editable_title.dart';
 import 'package:foodplan/components/properties.dart';
 
 import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/models/single_list_property.dart';
+import 'package:foodplan/models/enums/single_list_property.dart';
 
 import 'package:provider/provider.dart';
 

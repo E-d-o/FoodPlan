@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/modify_list_property.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/models/single_list_property.dart';
+import 'package:foodplan/models/enums/single_list_property.dart';
 
 class DescriptionProperty extends StatelessWidget {
   const DescriptionProperty({
@@ -33,8 +33,7 @@ class DescriptionProperty extends StatelessWidget {
 
           singleListManager.saveProperty(
             id,
-            SingleListProperty
-                .subtitle, //TODO: refactor without property map, i already know that im in quantity
+            SingleListProperty.subtitle,
             descriptionText,
             isPermanent: false,
           );

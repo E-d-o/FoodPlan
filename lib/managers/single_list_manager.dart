@@ -3,7 +3,7 @@ import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/managers/editable.dart';
 
 import 'package:foodplan/models/single_list_properties.dart';
-import 'package:foodplan/models/single_list_property.dart';
+import 'package:foodplan/models/enums/single_list_property.dart';
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
