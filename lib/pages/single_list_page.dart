@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
 import 'package:foodplan/components/list_item.dart';
-import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:foodplan/managers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class SingleListPage extends StatefulWidget {

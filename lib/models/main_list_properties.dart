@@ -1,14 +1,19 @@
-import 'package:foodplan/properties/main_list_property.dart';
+import 'package:foodplan/models/main_list_property.dart';
+import 'package:hive/hive.dart';
+part 'main_list_properties.g.dart';
 
-class MainListProperties {
+@HiveType(typeId: 0)
+class MainListProperties extends HiveObject {
   MainListProperties({
     required this.title,
     required this.progress,
     required this.isBeingEdited,
   });
-
+  @HiveField(0)
   String title;
+  @HiveField(1)
   double progress;
+  @HiveField(2)
   bool isBeingEdited;
   bool hasProperty(MainListProperty property) {
     return true; //add logic here if you want to check that you wrote all of the mainListProperties specified in the enum MainLIstProperty

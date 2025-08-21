@@ -1,14 +1,16 @@
 import 'package:foodplan/components/mainlist.dart';
-import 'package:foodplan/notifiers/editable.dart';
+import 'package:foodplan/managers/editable.dart';
 
-import 'package:foodplan/properties/main_list_properties.dart';
-import 'package:foodplan/properties/main_list_property.dart';
+import 'package:foodplan/models/main_list_properties.dart';
+import 'package:foodplan/models/main_list_property.dart';
+import 'package:hive/hive.dart';
+
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
 
 class MainListManager extends Editable {
-  final List<MainList> _mainListPages = [MainList(id: uuid.v4())];
+  final List<MainList> _mainListPages = [];
   List<MainList> get mainListPages => _mainListPages;
   String _selectedId = "";
   String defaultTitle = "Nuova Lista";
@@ -17,7 +19,8 @@ class MainListManager extends Editable {
       true; //defualt edit state true but is startUpEditState for startup list
   bool startupEditState = false;
   String startupTitle = "Supermercato";
-  final Map<String, MainListProperties> _mainListProperties = {};
+
+  final _box = Hive.box("storage"); //is Map String, MainlistProperties
 
   set selectedId(String myId) {
     if (myId.isNotEmpty) {
@@ -31,21 +34,45 @@ class MainListManager extends Editable {
     _initProperties();
   }
 
-  void _initProperties() {
-    for (int i = 0; i < mainListPages.length; i++) {
-      _mainListProperties[_mainListPages[i].id] = MainListProperties(
-        title: startupTitle, //special title for the list thats already present
-        progress: progressOfNewList,
-        isBeingEdited:
-            startupEditState, //the list thats already there has a special value since we dont want to start the app having to rename it
+  void _initProperties() async {
+    await _loadExistingLists();
+  }
+
+  Future<void> _loadExistingLists() async {
+    if (_box.isEmpty) {
+      print("box vuota, creo prima lista");
+      MainList firstList = MainList(id: uuid.v4());
+      _box.put(
+        firstList.id,
+        MainListProperties(
+          title: startupTitle,
+          progress: progressOfNewList,
+          isBeingEdited: startupEditState,
+        ),
       );
+      _mainListPages.add(firstList);
+    } else {
+      print("carico liste esistenti, sono: ${_box.length}");
+      await _loadHiveLists();
+    }
+  }
+
+  Future<void> _loadHiveLists() async {
+    _mainListPages.clear();
+
+    for (var key in _box.keys) {
+      MainListProperties properties = _box.get(key);
+      MainList mainList = MainList(id: key.toString());
+      print(properties.isBeingEdited);
+      _mainListPages.add(mainList);
+      print("caricata lista con titolo ${properties.title}");
     }
   }
 
   String get selectedId => _selectedId;
 
   bool _isListInProperties(String listId) {
-    if (_mainListProperties.containsKey(listId)) {
+    if (_box.containsKey(listId)) {
       return true;
     } else {
       return false;
@@ -54,24 +81,24 @@ class MainListManager extends Editable {
 
   bool _isPropertyInProperties(String listId, MainListProperty property) {
     //assumes listId is in properties
-    return _mainListProperties[listId]!.hasProperty(property);
+    return _box.get(listId)!.hasProperty(property);
   }
 
   bool _isSafeToAccessProperty(String listId, MainListProperty property) {
     if (_isListInProperties(listId)) {
       if (_isPropertyInProperties(listId, property)) {
         return true;
-      } else {
-        throw ArgumentError("property given is not in properties");
       }
-    } else {
-      throw ArgumentError("id is not in properties");
+      throw Exception("property is not in property");
     }
+    throw (Exception("list is not in box"));
   }
 
   void _setProperty(String listId, MainListProperty property, dynamic value) {
     if (_isSafeToAccessProperty(listId, property)) {
-      _mainListProperties[listId]!.setProperty(property, value);
+      MainListProperties properties = _box.get(listId);
+      properties.setProperty(property, value);
+      _box.put(listId, properties);
     } else {
       throw ArgumentError(
         "Not safe to access, property or id is not in properties",
@@ -81,7 +108,7 @@ class MainListManager extends Editable {
 
   dynamic getProperty(String listId, MainListProperty property) {
     if (_isSafeToAccessProperty(listId, property)) {
-      return _mainListProperties[listId]!.getProperty(property);
+      return _box.get(listId)!.getProperty(property);
     } else {
       throw ArgumentError(
         "Not safe to access, property or id is not in properties",
@@ -110,24 +137,27 @@ class MainListManager extends Editable {
   }
 
   void _removeProperties(String listId) {
-    _mainListProperties.remove(listId);
+    _box.delete(listId);
   }
 
   void _addProperties(String listId) {
-    _mainListProperties[listId] = MainListProperties(
-      title: defaultTitle,
-      progress: progressOfNewList,
-      isBeingEdited: defaultEditState,
+    _box.put(
+      listId,
+      MainListProperties(
+        title: defaultTitle,
+        progress: progressOfNewList,
+        isBeingEdited: defaultEditState,
+      ),
     );
   }
 
   void addMainList() {
     String generatedId = uuid.v4();
-
+    MainList newList = MainList(id: generatedId, givenTitle: defaultTitle);
     _mainListPages.insert(
       //inserisco nella lista
       _mainListPages.length,
-      MainList(id: generatedId, givenTitle: defaultTitle),
+      newList,
     );
     _addProperties(
       generatedId,
@@ -139,6 +169,7 @@ class MainListManager extends Editable {
   void removeMainList(String removeId) {
     _mainListPages.removeWhere((mainlist) => mainlist.id == removeId);
     _removeProperties(removeId);
+    _box.delete(removeId);
     notifyListeners();
   }
 

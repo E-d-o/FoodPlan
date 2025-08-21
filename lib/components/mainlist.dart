@@ -3,7 +3,7 @@ import 'package:foodplan/components/custom_progress_indicator.dart';
 import 'package:foodplan/components/editable_title.dart';
 
 import 'package:foodplan/pages/main_list_bottom_sheet.dart';
-import 'package:foodplan/notifiers/main_list_manager.dart';
+import 'package:foodplan/managers/main_list_manager.dart';
 
 import 'package:provider/provider.dart';
 

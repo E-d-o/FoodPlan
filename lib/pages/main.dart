@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
-import 'package:foodplan/notifiers/homepage_manager.dart';
+import 'package:foodplan/managers/homepage_manager.dart';
 
-import 'package:foodplan/notifiers/main_list_manager.dart';
+import 'package:foodplan/managers/main_list_manager.dart';
+import 'package:foodplan/models/main_list_properties.dart';
+
+import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'drawer_page.dart';
 import '../components/logo.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(MainListPropertiesAdapter());
+  await Hive.openBox("storage");
+
   runApp(const MyApp());
 }
 
@@ -17,7 +24,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final Color seedColor = const Color.fromARGB(255, 115, 203, 127);
+    final Color seedColor = const Color.fromARGB(255, 182, 68, 97);
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.light,

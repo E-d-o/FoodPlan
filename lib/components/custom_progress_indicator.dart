@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/notifiers/main_list_manager.dart';
-import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:foodplan/managers/main_list_manager.dart';
+import 'package:foodplan/managers/single_list_manager.dart';
 import 'package:foodplan/pages/single_list_page.dart';
 import 'package:provider/provider.dart';
 

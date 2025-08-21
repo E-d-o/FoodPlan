@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/modify_list_property.dart';
-import 'package:foodplan/notifiers/single_list_manager.dart';
+import 'package:foodplan/managers/single_list_manager.dart';
 
 class DateProperty extends StatelessWidget {
   const DateProperty({
