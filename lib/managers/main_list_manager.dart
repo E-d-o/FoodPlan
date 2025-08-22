@@ -41,7 +41,8 @@ class MainListManager extends Editable {
   Future<void> _loadExistingLists() async {
     if (_box.isEmpty) {
       print("box vuota, creo prima lista");
-      MainList firstList = MainList(id: uuid.v4());
+      String id = uuid.v4();
+      MainList firstList = MainList(id: id, nameOfBox: id);
       _box.put(
         firstList.id,
         MainListProperties(
@@ -62,20 +63,25 @@ class MainListManager extends Editable {
     _mainListPages.clear();
 
     final Map<DateTime, String> timestampToId = {};
+    final List<String> nameOfBoxes = [];
     for (var key in _box.keys) {
       MainListProperties properties = _box.get(key);
-
+      nameOfBoxes.add(key);
       timestampToId[properties.timeOfAddition] = key.toString();
     }
     List<DateTime> timestamps = timestampToId.keys.toList();
     timestamps.sort();
     print(timestamps.toString());
-
+    int i = 0;
     for (var time in timestamps) {
       String? id = timestampToId[time];
-      MainList mainList = MainList(id: id.toString());
+      MainList mainList = MainList(
+        id: id.toString(),
+        nameOfBox: nameOfBoxes[i],
+      );
 
       _mainListPages.add(mainList);
+      i += 1;
 
       print("aggiunta lista con timestamp $time");
     }
@@ -168,7 +174,11 @@ class MainListManager extends Editable {
 
   void addMainList() {
     String generatedId = uuid.v4();
-    MainList newList = MainList(id: generatedId, givenTitle: defaultTitle);
+    MainList newList = MainList(
+      id: generatedId,
+      givenTitle: defaultTitle,
+      nameOfBox: generatedId,
+    );
     _mainListPages.insert(
       //inserisco nella lista
       _mainListPages.length,

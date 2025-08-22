@@ -4,6 +4,7 @@ import 'package:foodplan/managers/homepage_manager.dart';
 
 import 'package:foodplan/managers/main_list_manager.dart';
 import 'package:foodplan/models/main_list_properties.dart';
+import 'package:foodplan/models/single_list_properties.dart';
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ import '../components/logo.dart';
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(MainListPropertiesAdapter());
+  Hive.registerAdapter(SingleListPropertiesAdapter());
 
   await Hive.openBox("storage");
 

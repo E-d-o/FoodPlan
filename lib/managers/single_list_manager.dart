@@ -4,16 +4,15 @@ import 'package:foodplan/managers/editable.dart';
 
 import 'package:foodplan/models/single_list_properties.dart';
 import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:hive_flutter/adapters.dart';
+
 import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
 
 class SingleListManager extends Editable {
-  final List<ListItem> requiredItemsList = [
-    ListItem(id: "1"),
-    ListItem(id: "2"),
-  ];
-  final List<ListItem> homeItemsList = [ListItem(id: "3")];
+  final List<ListItem> requiredItemsList = [];
+  final List<ListItem> homeItemsList = [];
 
   bool _isHomeItemsVisible = true;
   double _paddingHomeItems = 16.0;
@@ -21,40 +20,48 @@ class SingleListManager extends Editable {
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
 
-  final Map<String, SingleListProperties> _properties = {};
-  SingleListManager() {
+  late final Box box;
+
+  SingleListManager({required this.box}) {
     _initProperties();
   }
   final Map<String, SingleListProperties> _tempProperties = {};
 
   void _initProperties() {
-    _initItems(requiredItemsList, false);
-    _initItems(homeItemsList, true);
-    _properties.forEach((key, value) {
-      //copio tutte le proprieta' iniziali
-      _tempProperties[key] = value.copy();
-    });
-  }
-
-  void _initItems(List<ListItem> list, bool isAtHome) {
-    for (int i = 0; i < list.length; i++) {
-      _properties[list[i].id] = SingleListProperties(
-        isChecked: isAtHome,
-
-        title: 'Cipolla',
-
-        price: 2.7,
-        priceMeasurementUnit: "\$",
-        quantityMeasurementUnit: "g",
-        quantityValue: 200,
-        isBeingEdited: true,
-        category: "Salumi",
-      );
+    if (box.isEmpty) {
+      boxIsEmptyLoading();
+    } else {
+      boxNotEmptyLoading();
     }
   }
 
+  void boxNotEmptyLoading() {
+    homeItemsList.clear();
+    requiredItemsList.clear();
+    for (var key in box.keys) {
+      SingleListProperties value = box.get(key);
+
+      _tempProperties[key] = value.copy();
+      if (value.isChecked) {
+        //isAtHome=true
+        homeItemsList.add(ListItem(id: key));
+      } else {
+        requiredItemsList.add(ListItem(id: key));
+      }
+    }
+  }
+
+  void boxIsEmptyLoading() {
+    print("box is empty, adding single item");
+    String newid = uuid.v4();
+    ListItem firstItem = ListItem(id: newid);
+
+    requiredItemsList.add(firstItem);
+    _addProperty(newid, "banana");
+  }
+
   bool _isListInProperties(String listId) {
-    if (_properties.containsKey(listId)) {
+    if (box.containsKey(listId)) {
       return true;
     } else {
       return false;
@@ -80,7 +87,9 @@ class SingleListManager extends Editable {
 
   void setProperty(String listId, SingleListProperty property, dynamic value) {
     if (_isSafeToAccessProperty(listId, property)) {
-      _properties[listId]!.setProperty(property, value);
+      SingleListProperties properties = box.get(listId);
+      properties.setProperty(property, value);
+      box.put(listId, properties);
     } else {
       throw ArgumentError(
         "Not safe to access, property or id is not in properties",
@@ -95,7 +104,7 @@ class SingleListManager extends Editable {
   }) {
     if (_isSafeToAccessProperty(listId, property)) {
       if (isPermanent) {
-        return _properties[listId]!.getProperty(property);
+        return box.get(listId).getProperty(property);
       } else {
         return _tempProperties[listId]!.getProperty(property);
       }
@@ -108,15 +117,16 @@ class SingleListManager extends Editable {
 
   void undoChanges(String listId) {
     if (_isListInProperties(listId)) {
-      _properties.forEach((key, value) {
+      for (var key in box.keys) {
+        SingleListProperties value = box.get(key);
         _tempProperties[key] = value.copy();
-      });
+      }
     } else {
       throw ArgumentError("no  list with such id");
     }
   }
 
-  void _checkForEmptyHomeItems() {
+  void checkForEmptyHomeItems() {
     if (homeItemsList.isEmpty) {
       _paddingHomeItems = 0;
     } else {
@@ -126,6 +136,7 @@ class SingleListManager extends Editable {
 
   void changeHomeItemsVisibility() {
     _isHomeItemsVisible = !isHomeItemsVisible;
+    checkForEmptyHomeItems();
     notifyListeners();
   }
 
@@ -134,12 +145,17 @@ class SingleListManager extends Editable {
   }
 
   void _addProperty(String listId, String title) {
-    _properties[listId] = SingleListProperties(
-      isChecked: false,
-      title: title,
-      isBeingEdited: true,
+    box.put(
+      listId,
+      SingleListProperties(
+        isChecked: false,
+        title: title,
+        isBeingEdited: true,
+        priceMeasurementUnit: "\$",
+      ),
     );
-    _tempProperties[listId] = _properties[listId]!.copy();
+
+    _tempProperties[listId] = box.get(listId).copy();
   }
 
   void addNewItem(String title) {
@@ -151,7 +167,7 @@ class SingleListManager extends Editable {
   }
 
   void _removeProperty(String listId) {
-    _properties.remove(listId);
+    box.delete(listId);
     _tempProperties.remove(listId);
   }
 
@@ -178,7 +194,7 @@ class SingleListManager extends Editable {
     if (getProperty(listId, SingleListProperty.isChecked)) {
       //if is checked that means its at home
       homeItemsList.removeWhere((element) => element.id == listId);
-      _checkForEmptyHomeItems();
+      checkForEmptyHomeItems();
     } else {
       //in required items
 
@@ -192,7 +208,7 @@ class SingleListManager extends Editable {
     bool isAtHome = getProperty(listId, SingleListProperty.isChecked);
 
     _changeToOtherList(listId, isAtHome);
-    _checkForEmptyHomeItems();
+    checkForEmptyHomeItems();
     notifyListeners();
   }
 
@@ -252,7 +268,7 @@ class SingleListManager extends Editable {
 
   void notifyChange() {
     _tempProperties.forEach((key, value) {
-      _properties[key] = value.copy();
+      box.put(key, value.copy());
     });
     notifyListeners();
   }
@@ -261,7 +277,7 @@ class SingleListManager extends Editable {
     String id,
     BuildContext context,
     TextEditingController controller,
-    Map<String, SingleListProperties> properties,
+    bool isPermanent,
   ) async {
     DateTime? firstAllowedDate = DateTime.now().subtract(
       Duration(days: 365 * 1),
@@ -274,7 +290,15 @@ class SingleListManager extends Editable {
     );
 
     if (pickedDate != null) {
-      properties[id]!.setProperty(SingleListProperty.expireDate, pickedDate);
+      if (isPermanent) {
+        setProperty(id, SingleListProperty.expireDate, pickedDate);
+      } else {
+        _tempProperties[id]!.setProperty(
+          SingleListProperty.expireDate,
+          pickedDate,
+        );
+      }
+
       controller.text =
           '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
     }
@@ -287,10 +311,11 @@ class SingleListManager extends Editable {
     bool isPermanent = true,
   }) async {
     if (isPermanent) {
-      _setDate(id, context, controller, _properties);
+      _setDate(id, context, controller, true);
       notifyListeners();
+    } else {
+      _setDate(id, context, controller, false); //non e' permanent
     }
-    _setDate(id, context, controller, _tempProperties);
   }
 
   void saveQuantity(String id, String quantityString) {

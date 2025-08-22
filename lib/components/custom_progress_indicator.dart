@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/managers/main_list_manager.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/pages/single_list_page.dart';
+
 import 'package:provider/provider.dart';
 
 class CustomProgressIndicator extends StatelessWidget {
@@ -72,19 +71,7 @@ class CustomProgressIndicator extends StatelessWidget {
                 highlightShape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(borderRadius),
                 containedInkWell: true,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return ChangeNotifierProvider(
-                          create: (context) => SingleListManager(),
-                          builder: (context, child) => SingleListPage(),
-                        );
-                      },
-                    ),
-                  );
-                },
+                onTap: () {},
               ),
             ),
           ],

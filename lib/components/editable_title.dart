@@ -68,12 +68,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
                       isPermanent: false,
                     );
                     break;
-                  case MainListManager(): //TODO:FIX CANT SAVE BC IT GETS CALLED BEFORE RENAME IN BUTTON IN MAINLIST
-
-                    FocusScope.of(context).unfocus();
-                    listManager.changeEditState(id);
-                    textEditingController.text = changedTitle;
-                    break;
+                  case MainListManager():
                 }
               },
             ),

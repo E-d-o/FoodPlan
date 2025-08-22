@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
 import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
+
 import 'package:provider/provider.dart';
 
 class SingleListPage extends StatefulWidget {
@@ -12,7 +13,6 @@ class SingleListPage extends StatefulWidget {
 }
 
 class _SingleListPageState extends State<SingleListPage> {
-  final SingleListManager singleListManager = SingleListManager();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,6 +75,7 @@ class _AtHomeItems extends StatelessWidget {
   Widget build(BuildContext context) {
     final singleListManager = context.watch<SingleListManager>();
     final atHomeItems = singleListManager.homeItemsList;
+    singleListManager.checkForEmptyHomeItems();
 
     return Selector<SingleListManager, bool>(
       //handles the rebuilding of _AtHomeItems based on the changing of only the value of isHomeItemsVisible

@@ -1,5 +1,9 @@
 import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:hive/hive.dart';
 
+part 'single_list_properties.g.dart';
+
+@HiveType(typeId: 1)
 class SingleListProperties {
   SingleListProperties({
     required this.isChecked,
@@ -14,19 +18,27 @@ class SingleListProperties {
     this.category,
     this.expireDate,
   });
-
+  @HiveField(0)
   bool isChecked;
-
+  @HiveField(1)
   String title;
+  @HiveField(2)
   String? subtitle; //
+  @HiveField(3)
   double? price; //
+  @HiveField(4)
   String? priceMeasurementUnit; //
+  @HiveField(5)
   int? quantityValue; //
+  @HiveField(6)
   String? quantityMeasurementUnit; //
 
   //are optional
+  @HiveField(7)
   bool isBeingEdited;
+  @HiveField(8)
   String? category; //
+  @HiveField(9)
   DateTime? expireDate; //
 
   SingleListProperties copy() {
