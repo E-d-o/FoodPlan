@@ -17,6 +17,7 @@ class ModifyListProperty extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
+          width: 150,
           padding: EdgeInsets.only(top: 20, bottom: 20, left: 10, right: 40),
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.secondaryContainer,

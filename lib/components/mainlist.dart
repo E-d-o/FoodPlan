@@ -61,7 +61,7 @@ class _MainListState extends State<MainList> {
   }
 
   Widget mainStructure(BuildContext context) {
-    double boxHeight = 100;
+    double containerHeight = 100;
     final MainListManager listManager = context.read<MainListManager>();
     final String currentTitle = listManager.getTitle(widget.id);
     textEditingController.text = currentTitle;
@@ -80,59 +80,29 @@ class _MainListState extends State<MainList> {
         }
       },
       child: SizedBox(
-        height: boxHeight,
+        height: containerHeight,
         width: double.infinity,
         child: Stack(
           children: [
             CustomProgressIndicator(
               borderRadius: borderRadius,
-              height: boxHeight,
+              height: containerHeight,
 
               id: widget.id,
             ),
 
-            GestureDetector(
-              onTap: () {
-                //TODO: FIX is only clickable on title, maybe do a stack with options and make all the things under clickable
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return ChangeNotifierProvider(
-                        create: (context) => SingleListManager(box: box),
-                        builder: (context, child) => SingleListPage(),
-                      );
-                    },
-                  ),
-                );
-              },
-              child: Container(
-                height: boxHeight,
-                padding: EdgeInsets.only(left: 18, right: 4, top: 4, bottom: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    EditableTitle<MainListManager>(
-                      textEditingController: textEditingController,
-                      id: widget.id,
-                      context: context,
-                      isAutofocused: true,
-                      textAlign: TextAlign.start,
-                      maxLength: 26,
-                      titleStyle: titleStyle,
-                    ),
-
-                    //TODO:show save button to save EditableTitle changes
-                    RightPartMain(
-                      titleStyle: titleStyle,
-                      id: widget.id,
-                      controller: textEditingController,
-                    ),
-                  ],
-                ),
-              ),
+            Main(
+              box: box,
+              containerHeight: containerHeight,
+              textEditingController: textEditingController,
+              widget: widget,
+              titleStyle: titleStyle,
             ),
+            Positioned(
+              right: 0,
+              top: 10,
+              child: ListSetting(context: context, id: widget.id),
+            ), //TODO:FIX ON CHANGE EDIT STATE STILL VISIBLE
           ],
         ),
       ),
@@ -140,20 +110,18 @@ class _MainListState extends State<MainList> {
   }
 }
 
-class RightPartMain extends StatelessWidget {
-  const RightPartMain({
-    super.key,
-    required this.titleStyle,
-    required this.id,
-    required this.controller,
-  });
+class ListSetting extends StatelessWidget {
+  const ListSetting({super.key, required this.context, required this.id});
 
-  final TextStyle? titleStyle;
+  final BuildContext context;
+
   final String id;
-  final TextEditingController controller;
 
-  Material listSetting(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     double inkBorderRadius = 5;
+    MainListManager mainListManager = context.watch<MainListManager>();
+    if (mainListManager.getEditStatus(id)) return SizedBox.shrink();
     return Material(
       color: Colors.transparent,
       child: InkResponse(
@@ -189,6 +157,125 @@ class RightPartMain extends StatelessWidget {
       ),
     );
   }
+}
+
+class Main extends StatelessWidget {
+  const Main({
+    super.key,
+    required this.box,
+    required this.containerHeight,
+    required this.textEditingController,
+    required this.widget,
+    required this.titleStyle,
+  });
+
+  final Box box;
+  final double containerHeight;
+  final TextEditingController textEditingController;
+  final MainList widget;
+  final TextStyle? titleStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    //TODO: TEMP SOLUTION TO INKWELL NOT WORKING WITH TEXTFIELD FOR SOME REASON SHOWS DARKER COLOR
+    MainListManager mainListManager = context.watch<MainListManager>();
+    if (!mainListManager.getEditStatus(widget.id)) {
+      return Material(
+        color: Colors.transparent,
+        child: InkWell(
+          splashColor: Theme.of(context).splashColor.withValues(alpha: 0.40),
+          highlightColor: Colors.transparent,
+
+          onTap: () async {
+            print("sdfk");
+            await Future.delayed(Duration(milliseconds: 200));
+            if (!context.mounted) {
+              return; //check if widget is still in tree
+            }
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return ChangeNotifierProvider(
+                    create: (context) => SingleListManager(box: box),
+                    builder: (context, child) => SingleListPage(),
+                  );
+                },
+              ),
+            );
+          },
+          child: Container(
+            height: containerHeight,
+
+            width: double.infinity,
+            padding: EdgeInsets.only(left: 18, right: 4, top: 4, bottom: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                EditableTitle<MainListManager>(
+                  textEditingController: textEditingController,
+                  id: widget.id,
+                  context: context,
+                  isAutofocused: true,
+                  textAlign: TextAlign.start,
+                  maxLength: 26,
+                  titleStyle: titleStyle,
+                ),
+
+                RightPartMain(
+                  titleStyle: titleStyle,
+                  id: widget.id,
+                  controller: textEditingController,
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Container(
+        height: containerHeight,
+
+        width: double.infinity,
+        padding: EdgeInsets.only(left: 18, right: 4, top: 4, bottom: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            EditableTitle<MainListManager>(
+              textEditingController: textEditingController,
+              id: widget.id,
+              context: context,
+              isAutofocused: true,
+              textAlign: TextAlign.start,
+              maxLength: 26,
+              titleStyle: titleStyle,
+            ),
+
+            RightPartMain(
+              titleStyle: titleStyle,
+              id: widget.id,
+              controller: textEditingController,
+            ),
+          ],
+        ),
+      );
+    }
+  }
+}
+
+class RightPartMain extends StatelessWidget {
+  const RightPartMain({
+    super.key,
+    required this.titleStyle,
+    required this.id,
+    required this.controller,
+  });
+
+  final TextStyle? titleStyle;
+  final String id;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -201,24 +288,16 @@ class RightPartMain extends StatelessWidget {
         child: Icon(Icons.check),
       );
     } else {
-      return Row(
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 12.0),
-                child: Text(
-                  //TODO: use mainlistProperty to show proper value
-                  "0/0",
-                  style: titleStyle,
-                ),
-              ),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [listSetting(context)],
+          Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: Text(
+              //TODO: use mainlistProperty to show proper value
+              "0/0",
+              style: titleStyle,
+            ),
           ),
         ],
       );
