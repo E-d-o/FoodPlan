@@ -57,7 +57,7 @@ class SingleListManager extends Editable {
     ListItem firstItem = ListItem(id: newid);
 
     requiredItemsList.add(firstItem);
-    _addProperty(newid, "banana");
+    _addProperty(newid, "banana", false);
   }
 
   bool _isListInProperties(String listId) {
@@ -144,11 +144,11 @@ class SingleListManager extends Editable {
     return getProperty(listId, SingleListProperty.isChecked);
   }
 
-  void _addProperty(String listId, String title) {
+  void _addProperty(String listId, String title, bool isChecked) {
     box.put(
       listId,
       SingleListProperties(
-        isChecked: false,
+        isChecked: isChecked,
         title: title,
         isBeingEdited: true,
         priceMeasurementUnit: "\$",
@@ -161,7 +161,19 @@ class SingleListManager extends Editable {
   void addNewItem(String title) {
     String newid = uuid.v4();
     requiredItemsList.add(ListItem(id: newid));
-    _addProperty(newid, title);
+    _addProperty(newid, title, false);
+
+    notifyListeners();
+  }
+
+  void _addNewItemBoth(String title, bool isChecked) {
+    if (isChecked) {
+      String newid = uuid.v4();
+      homeItemsList.add(ListItem(id: newid));
+      _addProperty(newid, title, true);
+    } else {
+      addNewItem(title);
+    }
 
     notifyListeners();
   }
@@ -329,6 +341,14 @@ class SingleListManager extends Editable {
     changeEditState(renameId);
     _addNewTitle(renameId, newTitle);
     notifyListeners();
+  }
+
+  void copyItem(String copyId) {
+    if (getProperty(copyId, SingleListProperty.isChecked)) {
+      _addNewItemBoth(getProperty(copyId, SingleListProperty.title), true);
+    } else {
+      _addNewItemBoth(getProperty(copyId, SingleListProperty.title), false);
+    }
   }
 
   @override

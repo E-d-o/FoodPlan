@@ -61,6 +61,71 @@ class ListItem extends StatelessWidget {
           highlightShape: BoxShape.rectangle,
           borderRadius: BorderRadius.circular(3.0),
           containedInkWell: true,
+          onLongPress: () {
+            showModalBottomSheet(
+              showDragHandle: true,
+              context: context,
+              backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
+              barrierColor: Colors.transparent,
+              builder: (context) {
+                return SizedBox(
+                  height: 200,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            singleListManager.renameItem(
+                              id,
+                              "sdfkj",
+                            ); //TODO:editable title in listitem
+                          },
+                          child: Row(
+                            spacing: 20,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Rinomina"),
+                              Icon(Icons.edit_square),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            singleListManager.removeItem(id);
+                          },
+                          child: Row(
+                            spacing: 20,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [Text("Elimina"), Icon(Icons.delete)],
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            singleListManager.copyItem(id);
+                          },
+                          child: Row(
+                            spacing: 20,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Copia"),
+                              Icon(Icons.copy_all_outlined),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
           onTap: () {
             Navigator.push(
               context,

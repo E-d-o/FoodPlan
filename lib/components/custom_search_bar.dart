@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/pages/add_page.dart';
 
 class CustomSearchBar extends StatefulWidget {
   const CustomSearchBar({super.key});
@@ -35,6 +36,17 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       hintStyle: WidgetStateProperty.all(
         Theme.of(context).textTheme.labelMedium,
       ),
+
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return AddPage();
+            },
+          ),
+        );
+      },
 
       onTapOutside: (event) {
         _searchFocusNode.unfocus();

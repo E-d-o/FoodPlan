@@ -19,7 +19,7 @@ class MainList extends StatefulWidget {
   });
   final String givenTitle;
   final String id;
-  final String nameOfBox;
+  final String nameOfBox; //TODO:refactor, nameOfBox not used
 
   @override
   State<MainList> createState() => _MainListState();
@@ -29,7 +29,8 @@ class _MainListState extends State<MainList> {
   late String title;
   late TextEditingController textEditingController;
   final double borderRadius = 10.0;
-  late final Box box;
+  late Future<Box>
+  _boxFuture; //TODO:FIX BUG THAT OPENS IT BEFORE ITS INITIALIZED
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _MainListState extends State<MainList> {
   }
 
   void openBox(String nameOfBox) async {
-    box = await Hive.openBox(nameOfBox);
+    _boxFuture = Hive.openBox(nameOfBox);
   }
 
   @override
@@ -52,15 +53,32 @@ class _MainListState extends State<MainList> {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BorderRadius.circular(borderRadius),
+    return FutureBuilder(
+      future: _boxFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        }
+        if (snapshot.hasError) {
+          return Text("Errore:${snapshot.error}");
+        }
+        //data is loaded
 
-      child: mainStructure(context),
+        if (!snapshot.hasData) {
+          return Text("snapshot non ha data della box");
+        }
+        final Box box = snapshot.data!;
+        return Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(borderRadius),
+
+          child: mainStructure(context, box),
+        );
+      },
     );
   }
 
-  Widget mainStructure(BuildContext context) {
+  Widget mainStructure(BuildContext context, Box box) {
     double containerHeight = 100;
     final MainListManager listManager = context.read<MainListManager>();
     final String currentTitle = listManager.getTitle(widget.id);
@@ -102,7 +120,7 @@ class _MainListState extends State<MainList> {
               right: 0,
               top: 10,
               child: ListSetting(context: context, id: widget.id),
-            ), //TODO:FIX ON CHANGE EDIT STATE STILL VISIBLE
+            ),
           ],
         ),
       ),
