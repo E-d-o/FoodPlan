@@ -18,10 +18,10 @@ class QuantityProperty extends StatelessWidget {
   final SingleListManager singleListManager;
   final String id;
 
-  final List<String> measuramentUnits = ["g", "hg", "kg", "mg", ""];
+  final List<String> measuramentUnits = ["g", "hg", "kg", "mg", "x"];
 
-  List<DropdownMenuEntry> getDropdownEntries() {
-    List<DropdownMenuEntry> dropdownList = [];
+  List<DropdownMenuEntry<String>> getDropdownEntries() {
+    List<DropdownMenuEntry<String>> dropdownList = [];
     for (int i = 0; i < measuramentUnits.length; i++) {
       dropdownList.add(
         DropdownMenuEntry<String>(
@@ -67,18 +67,15 @@ class QuantityProperty extends StatelessWidget {
             ),
           ),
         ),
-        DropdownMenu(
+        DropdownMenu<String>(
           width: 100,
           textStyle: (Theme.of(context).textTheme.bodyMedium)!.copyWith(
             color: Theme.of(context).colorScheme.onSecondaryContainer,
           ),
-          initialSelection:
-              singleListManager.getProperty(
-                id,
-                SingleListProperty.quantityMeasurementUnit,
-              ) ??
-              getDropdownEntries().last,
+
+          initialSelection: getInitialSelection(),
           dropdownMenuEntries: getDropdownEntries(),
+
           onSelected: (value) {
             singleListManager.saveProperty(
               id,
@@ -90,5 +87,22 @@ class QuantityProperty extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String getInitialSelection() {
+    if (singleListManager.getProperty(
+          id,
+          SingleListProperty.quantityMeasurementUnit,
+        ) !=
+        null) {
+      return singleListManager.getProperty(
+        id,
+        SingleListProperty.quantityMeasurementUnit,
+      );
+    } else {
+      return getDropdownEntries()
+          .last
+          .value; //careful with default selection, has to be compatible with default value when listitem is created
+    }
   }
 }

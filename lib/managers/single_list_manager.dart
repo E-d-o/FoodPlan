@@ -163,6 +163,7 @@ class SingleListManager extends Editable {
         title: title,
         isBeingEdited: true,
         priceMeasurementUnit: "\$",
+        quantityMeasurementUnit: "x",
       ),
     );
 

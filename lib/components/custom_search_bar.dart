@@ -17,6 +17,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
   void dispose() {
     _searchFocusNode.dispose();
+    _textEditingController.dispose();
     super.dispose();
   }
 

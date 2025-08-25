@@ -38,7 +38,7 @@ class ListItem extends StatelessWidget {
                   onPressed: () {
                     Navigator.of(context).pop(true);
                   },
-                  child: Text("ELIMINA"),
+                  child: Text("Elimina"),
                 ),
               ],
             );
