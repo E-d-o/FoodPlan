@@ -5,7 +5,7 @@ import 'package:foodplan/managers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class AddPage extends StatelessWidget {
-  AddPage({super.key});
+  const AddPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,11 @@ class AddPage extends StatelessWidget {
       padding: EdgeInsets.all(12),
       child: Column(
         spacing: 20,
-        children: [CustomSearchBar(isAutoFocused: true), ...suggestionItems],
+        children: [
+          CustomSearchBar(isAutoFocused: true),
+          ...suggestionItems,
+          SizedBox(height: 200),
+        ],
       ),
     );
   }

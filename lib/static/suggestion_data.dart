@@ -1,5 +1,5 @@
 class SuggestionData {
-  static List<String> foodItems = [
+  static Set<String> foodItems = {
     "Mele",
     "Cioccolato fondente",
     "Acqua minerale",
@@ -41,7 +41,7 @@ class SuggestionData {
     "Insalata",
     "Carote",
     "Zucchine",
-    "Mele",
+
     "Arance",
     "Pere",
     "Limoni",
@@ -80,7 +80,7 @@ class SuggestionData {
     "Batterie",
     "Spugne",
     "Guanti",
-    "Insalata",
+
     "Succo di frutta",
     "Bibite gassate",
     "Vino",
@@ -88,9 +88,12 @@ class SuggestionData {
     "Succhi di frutta",
     "Olio di semi",
     "Sale grosso",
+    "Banane",
+    "Frutti di Bosco",
+
     "Pepe",
     "Spezie",
     "Erbe aromatiche",
     "Lievito",
-  ];
+  };
 }

@@ -22,6 +22,7 @@ class SuggestionItem extends StatelessWidget {
           singleListManager.addNewItem(title);
           singleListManager.changeAddingState();
         },
+        trailing: Icon(Icons.arrow_forward),
       ),
     );
   }

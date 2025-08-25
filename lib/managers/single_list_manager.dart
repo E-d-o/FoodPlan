@@ -21,7 +21,9 @@ class SingleListManager extends Editable {
 
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
-  final List<String> _suggestions = SuggestionData.foodItems;
+  static const int maxSuggestions = 20;
+  final List<String> _suggestions = SuggestionData.foodItems.toList();
+
   List<String> _filteredsuggestions = [];
 
   List<String> get filteredSuggestions => _filteredsuggestions;
@@ -387,7 +389,7 @@ class SingleListManager extends Editable {
 
   void resetSuggestions() {
     _filteredsuggestions.clear();
-    for (var element in _suggestions) {
+    for (var element in _suggestions.take(maxSuggestions).toList()) {
       _filteredsuggestions.add(element);
     }
   }

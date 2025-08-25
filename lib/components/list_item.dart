@@ -5,6 +5,7 @@ import 'package:foodplan/models/enums/single_list_property.dart';
 import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {
+  //TODO:implement multiple selectable items
   const ListItem({super.key, required this.id});
 
   final String id;
