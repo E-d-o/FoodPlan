@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
+import 'package:foodplan/components/suggestion_item.dart';
 import 'package:foodplan/managers/editable.dart';
 
 import 'package:foodplan/models/single_list_properties.dart';
 import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:foodplan/static/suggestion_data.dart';
 import 'package:hive_flutter/adapters.dart';
 
 import 'package:uuid/uuid.dart';
@@ -19,8 +21,14 @@ class SingleListManager extends Editable {
 
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
+  final List<String> _suggestions = SuggestionData.foodItems;
+  List<String> _filteredsuggestions = [];
+
+  List<String> get filteredSuggestions => _filteredsuggestions;
 
   late final Box box;
+  bool _isAdding = false;
+  bool get isAdding => _isAdding;
 
   SingleListManager({required this.box}) {
     _initProperties();
@@ -28,6 +36,7 @@ class SingleListManager extends Editable {
   final Map<String, SingleListProperties> _tempProperties = {};
 
   void _initProperties() {
+    resetSuggestions();
     if (box.isEmpty) {
       boxIsEmptyLoading();
     } else {
@@ -348,6 +357,44 @@ class SingleListManager extends Editable {
       _addNewItemBoth(getProperty(copyId, SingleListProperty.title), true);
     } else {
       _addNewItemBoth(getProperty(copyId, SingleListProperty.title), false);
+    }
+  }
+
+  //TODO: could be a separate manager, would be better for single responsibility
+  void changeAddingState() {
+    _isAdding = !_isAdding;
+    notifyListeners();
+  }
+
+  SuggestionItem _convertToSuggestionItem(String title) {
+    return SuggestionItem(title: title);
+  }
+
+  List<SuggestionItem> convertToSuggestionList(List<String> suggestionList) {
+    List<SuggestionItem> finalList = [];
+    for (var element in suggestionList) {
+      finalList.add(_convertToSuggestionItem(element));
+    }
+    return finalList;
+  }
+
+  void filterSuggestions(String filter) {
+    _filteredsuggestions = _suggestions.where((element) {
+      return element.toLowerCase().startsWith(filter.toLowerCase());
+    }).toList();
+    notifyListeners();
+  }
+
+  void resetSuggestions() {
+    _filteredsuggestions.clear();
+    for (var element in _suggestions) {
+      _filteredsuggestions.add(element);
+    }
+  }
+
+  void editingTextSuggestion(String text) {
+    if (text.isNotEmpty) {
+      _filteredsuggestions.add(text);
     }
   }
 

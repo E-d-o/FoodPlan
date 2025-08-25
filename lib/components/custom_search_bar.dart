@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/pages/add_page.dart';
+import 'package:foodplan/managers/single_list_manager.dart';
+
+import 'package:provider/provider.dart';
 
 class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({super.key});
-
+  const CustomSearchBar({super.key, this.isAutoFocused = false});
+  final bool isAutoFocused;
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
   final _searchFocusNode = FocusNode();
+  final TextEditingController _textEditingController = TextEditingController();
 
   @override
   void dispose() {
@@ -19,10 +22,27 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
 
   @override
   Widget build(BuildContext context) {
+    SingleListManager singleListManager = context.read<SingleListManager>();
     return SearchBar(
+      autoFocus: widget.isAutoFocused,
       focusNode: _searchFocusNode,
-      leading: Icon(Icons.search),
-      trailing: <Widget>[Icon(Icons.add_circle_outline)],
+      controller: _textEditingController,
+      leading: IconButton(
+        onPressed: () {
+          singleListManager.changeAddingState();
+        },
+        icon: singleListManager.isAdding
+            ? Icon(Icons.arrow_back)
+            : Icon(Icons.search),
+      ),
+      trailing: <Widget>[
+        IconButton(
+          onPressed: () {
+            singleListManager.changeAddingState();
+          },
+          icon: Icon(Icons.add_circle_outline),
+        ),
+      ],
       padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
       hintText: "Aggiungi elemento",
       shape: WidgetStateProperty.all(
@@ -38,14 +58,13 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       ),
 
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return AddPage();
-            },
-          ),
-        );
+        if (!singleListManager.isAdding) {
+          singleListManager.changeAddingState();
+        }
+      },
+      onChanged: (value) {
+        singleListManager.filterSuggestions(value);
+        singleListManager.editingTextSuggestion(value);
       },
 
       onTapOutside: (event) {
