@@ -16,6 +16,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
     required this.textAlign,
     required this.maxLength,
     required this.titleStyle,
+    this.width = 300,
   });
 
   final TextEditingController textEditingController;
@@ -25,6 +26,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
   final TextAlign textAlign;
   final int maxLength;
   final TextStyle? titleStyle;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +37,8 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
         String changedTitle = listManager.getTitle(id);
         if (listManager.getEditStatus(id)) {
           return SizedBox(
-            width: 280,
-            height: 24,
+            width: width,
+            height: 28,
             child: TextField(
               cursorColor: Theme.of(context).colorScheme.onPrimary,
               enableInteractiveSelection: false,

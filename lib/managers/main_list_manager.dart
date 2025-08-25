@@ -40,6 +40,7 @@ class MainListManager extends Editable {
 
   Future<void> _loadExistingLists() async {
     if (_box.isEmpty) {
+      // ignore: avoid_print
       print("box vuota, creo prima lista");
       String id = uuid.v4();
       MainList firstList = MainList(id: id, nameOfBox: id);
@@ -54,6 +55,7 @@ class MainListManager extends Editable {
       );
       _mainListPages.add(firstList);
     } else {
+      // ignore: avoid_print
       print("carico liste esistenti, sono: ${_box.length}");
       await _loadHiveLists();
     }
@@ -71,7 +73,7 @@ class MainListManager extends Editable {
     }
     List<DateTime> timestamps = timestampToId.keys.toList();
     timestamps.sort();
-    print(timestamps.toString());
+
     int i = 0;
     for (var time in timestamps) {
       String? id = timestampToId[time];
@@ -82,11 +84,7 @@ class MainListManager extends Editable {
 
       _mainListPages.add(mainList);
       i += 1;
-
-      print("aggiunta lista con timestamp $time");
     }
-
-    print("fine loading");
   }
 
   String get selectedId => _selectedId;
@@ -124,6 +122,10 @@ class MainListManager extends Editable {
         "Not safe to access, property or id is not in properties",
       );
     }
+  }
+
+  void setProgress(String listId, double value) {
+    _setProperty(listId, MainListProperty.progress, value);
   }
 
   dynamic getProperty(String listId, MainListProperty property) {

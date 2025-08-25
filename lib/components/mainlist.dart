@@ -19,7 +19,7 @@ class MainList extends StatefulWidget {
   });
   final String givenTitle;
   final String id;
-  final String nameOfBox; //TODO:refactor, nameOfBox not used
+  final String nameOfBox;
 
   @override
   State<MainList> createState() => _MainListState();
@@ -29,19 +29,18 @@ class _MainListState extends State<MainList> {
   late String title;
   late TextEditingController textEditingController;
   final double borderRadius = 10.0;
-  late Future<Box>
-  _boxFuture; //TODO:FIX BUG THAT OPENS IT BEFORE ITS INITIALIZED
+  late Future<Box> _boxFuture;
 
   @override
   void initState() {
     title = widget.givenTitle;
     textEditingController = TextEditingController(text: title);
-    openBox(widget.nameOfBox);
+    _openBox(widget.nameOfBox);
 
     super.initState();
   }
 
-  void openBox(String nameOfBox) async {
+  void _openBox(String nameOfBox) async {
     _boxFuture = Hive.openBox(nameOfBox);
   }
 
@@ -91,7 +90,6 @@ class _MainListState extends State<MainList> {
       onTapOutside: (event) {
         //handles editing status of title
         if (listManager.getEditStatus(widget.id)) {
-          print("tappato fuori");
           FocusScope.of(context).unfocus();
           listManager.changeEditState(widget.id);
           textEditingController.text = currentTitle;
@@ -195,91 +193,60 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //TODO: TEMP SOLUTION TO INKWELL NOT WORKING WITH TEXTFIELD FOR SOME REASON SHOWS DARKER COLOR
     MainListManager mainListManager = context.watch<MainListManager>();
-    if (!mainListManager.getEditStatus(widget.id)) {
-      return Material(
-        color: Colors.transparent,
-        child: InkWell(
-          splashColor: Theme.of(context).splashColor.withValues(alpha: 0.40),
-          highlightColor: Colors.transparent,
 
-          onTap: () async {
-            print("sdfk");
-            await Future.delayed(Duration(milliseconds: 200));
-            if (!context.mounted) {
-              return; //check if widget is still in tree
-            }
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return ChangeNotifierProvider(
-                    create: (context) => SingleListManager(box: box),
-                    builder: (context, child) => SingleListPage(),
-                  );
-                },
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        splashColor: Theme.of(context).splashColor.withValues(alpha: 0.40),
+        highlightColor: Colors.transparent,
+
+        onTap: mainListManager.getEditStatus(widget.id)
+            ? null //Disable inkwell onTap when editing, for some reason shows a darker color when onChanged text
+            : () async {
+                await Future.delayed(Duration(milliseconds: 200));
+                if (!context.mounted) {
+                  return; //check if widget is still in tree
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ChangeNotifierProvider(
+                        create: (context) => SingleListManager(box: box),
+                        builder: (context, child) => SingleListPage(),
+                      );
+                    },
+                  ),
+                );
+              },
+        child: Container(
+          padding: EdgeInsets.only(left: 20),
+          height: containerHeight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              EditableTitle<MainListManager>(
+                textEditingController: textEditingController,
+                id: widget.id,
+                context: context,
+                isAutofocused: true,
+                textAlign: TextAlign.start,
+                maxLength: 26,
+                titleStyle: titleStyle,
               ),
-            );
-          },
-          child: Container(
-            height: containerHeight,
 
-            width: double.infinity,
-            padding: EdgeInsets.only(left: 18, right: 4, top: 4, bottom: 4),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                EditableTitle<MainListManager>(
-                  textEditingController: textEditingController,
-                  id: widget.id,
-                  context: context,
-                  isAutofocused: true,
-                  textAlign: TextAlign.start,
-                  maxLength: 26,
-                  titleStyle: titleStyle,
-                ),
-
-                RightPartMain(
-                  titleStyle: titleStyle,
-                  id: widget.id,
-                  controller: textEditingController,
-                ),
-              ],
-            ),
+              RightPartMain(
+                titleStyle: titleStyle,
+                id: widget.id,
+                controller: textEditingController,
+              ),
+            ],
           ),
         ),
-      );
-    } else {
-      return Container(
-        height: containerHeight,
-
-        width: double.infinity,
-        padding: EdgeInsets.only(left: 18, right: 4, top: 4, bottom: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            EditableTitle<MainListManager>(
-              textEditingController: textEditingController,
-              id: widget.id,
-              context: context,
-              isAutofocused: true,
-              textAlign: TextAlign.start,
-              maxLength: 26,
-              titleStyle: titleStyle,
-            ),
-
-            RightPartMain(
-              titleStyle: titleStyle,
-              id: widget.id,
-              controller: textEditingController,
-            ),
-          ],
-        ),
-      );
-    }
+      ),
+    );
   }
 }
 

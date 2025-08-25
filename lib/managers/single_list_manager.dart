@@ -63,12 +63,17 @@ class SingleListManager extends Editable {
   }
 
   void boxIsEmptyLoading() {
+    // ignore: avoid_print
     print("box is empty, adding single item");
     String newid = uuid.v4();
     ListItem firstItem = ListItem(id: newid);
 
     requiredItemsList.add(firstItem);
     _addProperty(newid, "banana", false);
+  }
+
+  int getNumberOfListItems() {
+    return requiredItemsList.length + homeItemsList.length;
   }
 
   bool _isListInProperties(String listId) {
@@ -174,6 +179,7 @@ class SingleListManager extends Editable {
     String newid = uuid.v4();
     requiredItemsList.add(ListItem(id: newid));
     _addProperty(newid, title, false);
+    //TODO:handle progress in passing data to mainlist manager
 
     notifyListeners();
   }

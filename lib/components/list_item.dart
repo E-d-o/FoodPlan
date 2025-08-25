@@ -50,7 +50,7 @@ class ListItem extends StatelessWidget {
         singleListManager.removeItem(id);
         ScaffoldMessenger.of(
           context,
-        ).showSnackBar(SnackBar(content: Text("Rimosso elemento :D")));
+        ).showSnackBar(SnackBar(content: Text("Rimosso elemento")));
       },
       child: Material(
         color: backgroundColor,
@@ -240,18 +240,19 @@ class HidableSubtitle extends StatelessWidget {
 
   final String? subtitle;
   final TextStyle? subtitleStyle;
+  static const maxSubtitleLenght = 24;
 
   @override
   Widget build(BuildContext context) {
-    bool isVisible = true;
     if (subtitle == null) {
-      isVisible = false;
       return SizedBox.shrink();
-    } else {
-      return Visibility(
-        visible: isVisible,
-        child: Text(subtitle!, style: subtitleStyle),
+    } else if (subtitle!.length > maxSubtitleLenght) {
+      return Text(
+        "${subtitle!.substring(0, maxSubtitleLenght)} ...",
+        style: subtitleStyle,
       );
+    } else {
+      return Text(subtitle!, style: subtitleStyle);
     }
   }
 }

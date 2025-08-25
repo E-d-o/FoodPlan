@@ -32,7 +32,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
   @override
   Widget build(BuildContext context) {
     final singleListManager = context.read<SingleListManager>();
-    final TextStyle? titleStyle = Theme.of(context).textTheme.titleLarge
+    final TextStyle? titleStyle = Theme.of(context).textTheme.titleMedium
         ?.copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer);
 
     return Scaffold(
@@ -47,14 +47,50 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.pop(
-                context,
-              ); //ATTENZIONE AL REBUILD DEL EDITABLETITLE PRIMA DEL POP, CAUSA ERRORI PERCHE REBUILDA ANCHE SE ID E' ELIMINATO
-              singleListManager.removeItem(widget.id);
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadiusGeometry.all(
+                        Radius.circular(10),
+                      ),
+                    ),
+                    title: Row(children: [Text("Attenzione!")]),
+                    content: Text("Vuoi veramente eliminare questo oggetto?"),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Annulla"),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: WidgetStatePropertyAll(
+                            Colors.redAccent,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(
+                            context,
+                          ); //ATTENZIONE AL REBUILD DEL EDITABLETITLE PRIMA DEL POP, CAUSA ERRORI PERCHE REBUILDA ANCHE SE ID E' ELIMINATO
+                          Navigator.pop(context);
+                          singleListManager.removeItem(widget.id);
 
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text("Eliminato")));
+                          ScaffoldMessenger.of(
+                            context,
+                          ).showSnackBar(SnackBar(content: Text("Eliminato")));
+                        },
+                        child: Text(
+                          "Elimina Definitivamente",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
             },
             icon: Icon(Icons.delete_outline_rounded),
           ),
@@ -130,7 +166,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
                     ),
                     child: Properties(id: widget.id),
                   ),
-                  SizedBox(height: 300),
+                  SizedBox(height: 200),
                 ],
               ),
             ),
@@ -184,8 +220,9 @@ class ModifyTitle extends StatelessWidget {
               context: context,
               isAutofocused: false,
               textAlign: TextAlign.center,
-              maxLength: 20,
+              maxLength: 24,
               titleStyle: titleStyle,
+              width: 400,
             ),
           ),
         ),

@@ -112,7 +112,6 @@ class HidableActionButton extends StatelessWidget {
   }
 }
 
-//TODO: when i pop out of single list dont destroy and create another singlelistmanager provider or idk maybe with DB i just need to pull the data
 class _MainContent extends StatelessWidget {
   const _MainContent();
 

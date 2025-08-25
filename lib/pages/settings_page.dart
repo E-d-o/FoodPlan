@@ -74,6 +74,7 @@ class _SettingsPageState extends State<SettingsPage> {
           size: 24,
           color: Colors.black,
         ),
+        onTap: () {},
       ),
       ListTile(
         leading: Text(
@@ -85,6 +86,7 @@ class _SettingsPageState extends State<SettingsPage> {
           size: 24,
           color: Colors.black,
         ),
+        onTap: () {},
       ),
     ];
     return allSettings;
