@@ -1,5 +1,6 @@
 import 'package:foodplan/components/mainlist.dart';
 import 'package:foodplan/managers/editable.dart';
+import 'package:foodplan/managers/settings_manager.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
 
 import 'package:foodplan/models/main_list_properties.dart';
@@ -20,13 +21,16 @@ class MainListManager extends Editable {
       true; //defualt edit state true but is startUpEditState for startup list
   bool startupEditState = false;
   String startupTitle = "Supermercato";
+  final SettingsManager settingsManager;
 
   final _box = Hive.box("mainlist"); //is Map String, MainlistProperties
 
   SingleListManager createSingleListManager(Box box, String listId) {
     //SingleListManager depends on Mainlist, used to pass function and its values back to Mainlistmanager, there probably is a better way
+
     return SingleListManager(
       box: box,
+      settingsManager: settingsManager,
       onChanged: (requiredLenght, homeLength) =>
           onChangedHandler(requiredLenght, homeLength, listId),
     );
@@ -40,7 +44,7 @@ class MainListManager extends Editable {
     }
   }
 
-  MainListManager() {
+  MainListManager({required this.settingsManager}) {
     _initProperties();
   }
 

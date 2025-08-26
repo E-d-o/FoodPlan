@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/components/suggestion_item.dart';
 import 'package:foodplan/managers/editable.dart';
+import 'package:foodplan/managers/settings_manager.dart';
 
 import 'package:foodplan/models/single_list_properties.dart';
 import 'package:foodplan/models/enums/single_list_property.dart';
@@ -27,6 +28,7 @@ class SingleListManager extends Editable {
   double get paddingHomeItems => _paddingHomeItems;
   static const int maxSuggestions = 20;
   final List<String> _suggestions = SuggestionData.foodItems.toList();
+  final SettingsManager settingsManager;
 
   List<String> _filteredsuggestions = [];
 
@@ -37,17 +39,37 @@ class SingleListManager extends Editable {
   bool get isAdding => _isAdding;
   final Function(int, int)? onChanged;
 
-  SingleListManager({required this.box, this.onChanged}) {
+  SingleListManager({
+    required this.box,
+    required this.settingsManager,
+    this.onChanged,
+  }) {
     _initProperties();
   }
   final Map<String, SingleListProperties> _tempProperties = {};
 
   void _initProperties() {
     resetSuggestions();
+
     if (box.isEmpty) {
       boxIsEmptyLoading();
     } else {
       boxNotEmptyLoading();
+    }
+    checkForChangedSettings();
+  }
+
+  void checkForChangedSettings() {
+    for (var key in box.keys) {
+      SingleListProperties value = box.get(key);
+
+      if (value.priceMeasurementUnit != settingsManager.priceMeasurementUnit) {
+        setProperty(
+          key,
+          SingleListProperty.priceMeasurementUnit,
+          settingsManager.priceMeasurementUnit,
+        );
+      }
     }
   }
 
@@ -174,7 +196,7 @@ class SingleListManager extends Editable {
         isChecked: isChecked,
         title: title,
         isBeingEdited: true,
-        priceMeasurementUnit: "\$",
+        priceMeasurementUnit: settingsManager.priceMeasurementUnit,
         quantityMeasurementUnit: "x",
       ),
     );
@@ -186,7 +208,7 @@ class SingleListManager extends Editable {
     String newid = uuid.v4();
     requiredItemsList.add(ListItem(id: newid));
     _addProperty(newid, title, false);
-    //TODO:handle progress in passing data to mainlist manager
+
     notifyProgress();
     notifyListeners();
   }

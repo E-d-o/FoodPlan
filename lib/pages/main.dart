@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
 import 'package:foodplan/managers/homepage_manager.dart';
 import 'package:foodplan/managers/main_list_manager.dart';
+import 'package:foodplan/managers/settings_manager.dart';
 import 'package:foodplan/models/main_list_properties.dart';
 import 'package:foodplan/models/single_list_properties.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -25,42 +26,54 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final SettingsManager settingsManager = SettingsManager();
     final Color seedColor = const Color.fromARGB(255, 147, 205, 119);
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.light,
     );
-    return MaterialApp(
-      title: 'FoodPlan',
-      theme: ThemeData(
-        fontFamily: "Roboto",
-        textTheme: TextTheme(
-          bodyMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-          titleMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
-          labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
-          titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: settingsManager,
+        ), //pass as value so i can pass it so mainlistmanager aswell
+        ChangeNotifierProvider(
+          create: (context) =>
+              MainListManager(settingsManager: settingsManager),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'FoodPlan',
+        theme: ThemeData(
+          fontFamily: "Roboto",
+          textTheme: TextTheme(
+            bodyMedium: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+            titleMedium: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            titleLarge: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
+            labelMedium: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+            titleSmall: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+
+          colorScheme: colorScheme,
+          splashColor: colorScheme.onPrimary,
+          scaffoldBackgroundColor: null,
+          appBarTheme: AppBarTheme(
+            backgroundColor: colorScheme.primary,
+            foregroundColor: colorScheme.onPrimary,
+          ),
         ),
 
-        colorScheme: colorScheme,
-        splashColor: colorScheme.onPrimary,
-        scaffoldBackgroundColor: null,
-        appBarTheme: AppBarTheme(
-          backgroundColor: colorScheme.primary,
-          foregroundColor: colorScheme.onPrimary,
+        darkTheme: ThemeData.dark(), //DarkTheme
+        home: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => HomepageManager()),
+          ],
+          child: MyHomePage(title: 'FoodPlan'),
         ),
-      ),
 
-      darkTheme: ThemeData.dark(), //DarkTheme
-      home: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (context) => MainListManager()),
-          ChangeNotifierProvider(create: (context) => HomepageManager()),
-        ],
-        child: MyHomePage(title: 'FoodPlan'),
+        debugShowCheckedModeBanner: false,
       ),
-
-      debugShowCheckedModeBanner: false,
     );
   }
 }

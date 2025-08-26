@@ -17,22 +17,22 @@ class HoldListItemBottomSheet extends StatelessWidget {
       height: 200,
       child: Column(
         children: [
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                singleListManager.renameItem(
-                  id,
-                  "sdfkj",
-                ); //TODO:editable title in listitem
-              },
-              child: Row(
-                spacing: 20,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [Text("Rinomina"), Icon(Icons.edit_square)],
-              ),
-            ),
-          ),
+          // SizedBox(
+          //   width: double.infinity,
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       singleListManager.renameItem(
+          //         id,
+          //         "sdfkj",
+          //       ); //TODO:editable title in listitem
+          //     },
+          //     child: Row(
+          //       spacing: 20,
+          //       mainAxisAlignment: MainAxisAlignment.center,
+          //       children: [Text("Rinomina"), Icon(Icons.edit_square)],
+          //     ),
+          //   ),
+          // ),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
