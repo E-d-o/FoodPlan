@@ -64,14 +64,14 @@ class MyApp extends StatelessWidget {
           ),
         ),
 
-        darkTheme: ThemeData.dark(), //DarkTheme
+        // darkTheme: ThemeData.dark(), //DarkTheme
         home: MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (context) => HomepageManager()),
           ],
           child: MyHomePage(title: 'FoodPlan'),
         ),
-
+        themeMode: ThemeMode.light,
         debugShowCheckedModeBanner: false,
       ),
     );

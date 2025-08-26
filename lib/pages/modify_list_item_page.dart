@@ -99,35 +99,37 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          scrollableContent(titleStyle, singleListManager, widget.id),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 20,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
-              child: SizedBox(
-                height: 60,
-                width: MediaQuery.of(context).size.width,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.black),
-                      borderRadius: BorderRadiusGeometry.circular(8),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            scrollableContent(titleStyle, singleListManager, widget.id),
+            Positioned(
+              left: 0,
+              right: 0,
+              bottom: 20,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 5, left: 10, right: 10),
+                child: SizedBox(
+                  height: 60,
+                  width: MediaQuery.of(context).size.width,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        side: BorderSide(color: Colors.black),
+                        borderRadius: BorderRadiusGeometry.circular(8),
+                      ),
                     ),
+                    onPressed: () {
+                      singleListManager.notifyChange();
+                      Navigator.pop(context);
+                    },
+                    child: Text("Salva"),
                   ),
-                  onPressed: () {
-                    singleListManager.notifyChange();
-                    Navigator.pop(context);
-                  },
-                  child: Text("Salva"),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
