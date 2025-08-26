@@ -17,6 +17,7 @@ class SingleListProperties {
     required this.isBeingEdited,
     this.category,
     this.expireDate,
+    this.imagePath,
   });
   @HiveField(0)
   bool isChecked;
@@ -40,6 +41,8 @@ class SingleListProperties {
   String? category; //
   @HiveField(9)
   DateTime? expireDate; //
+  @HiveField(10)
+  String? imagePath; //
 
   SingleListProperties copy() {
     return SingleListProperties(
@@ -53,6 +56,7 @@ class SingleListProperties {
       quantityMeasurementUnit: quantityMeasurementUnit,
       category: category,
       expireDate: expireDate,
+      imagePath: imagePath,
     );
   }
 
@@ -121,6 +125,12 @@ class SingleListProperties {
         } else {
           throw UnimplementedError();
         }
+      case SingleListProperty.imagePath:
+        if (value is String?) {
+          imagePath = value;
+        } else {
+          throw UnimplementedError();
+        }
     }
   }
 
@@ -147,6 +157,8 @@ class SingleListProperties {
         return category;
       case SingleListProperty.expireDate:
         return expireDate;
+      case SingleListProperty.imagePath:
+        return imagePath;
     }
   }
 }

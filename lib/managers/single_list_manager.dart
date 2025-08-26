@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/components/suggestion_item.dart';
@@ -7,6 +9,8 @@ import 'package:foodplan/models/single_list_properties.dart';
 import 'package:foodplan/models/enums/single_list_property.dart';
 import 'package:foodplan/static/suggestion_data.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:uuid/uuid.dart';
 
@@ -412,6 +416,35 @@ class SingleListManager extends Editable {
   void editingTextSuggestion(String text) {
     if (text.isNotEmpty) {
       _filteredsuggestions.add(text);
+    }
+  }
+
+  String getImagePath(String id) {
+    String? imagePath = getProperty(
+      id,
+      SingleListProperty.imagePath,
+      isPermanent: false,
+    );
+    imagePath ??= "assets/images/noimage.png";
+    return imagePath;
+  }
+
+  void _setImagePath(String id, String path) {
+    saveProperty(id, SingleListProperty.imagePath, path, isPermanent: false);
+  }
+
+  void setImage(String id, ImageSource imageSource) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: imageSource);
+    if (image != null) {
+      final Directory appDir = await getApplicationDocumentsDirectory();
+      final String savePath = "${appDir.path}/${DateTime.timestamp()}";
+      await File(image.path).copy(savePath); //copy picked image into savepath
+      _setImagePath(
+        id,
+        savePath,
+      ); //update properties of single list( its imagePath)
+      notifyListeners();
     }
   }
 

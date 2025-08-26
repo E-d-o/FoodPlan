@@ -19,7 +19,7 @@ class _SingleListPageState extends State<SingleListPage> {
     return Scaffold(
       appBar: AppBar(
         actions: [Icon(Icons.mode_edit_outlined, size: 28)],
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         actionsPadding: EdgeInsets.symmetric(horizontal: 12),
       ),
       body: BodyContent(),

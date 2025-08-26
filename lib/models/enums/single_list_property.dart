@@ -9,4 +9,5 @@ enum SingleListProperty {
   isBeingEdited,
   category,
   expireDate,
+  imagePath,
 }

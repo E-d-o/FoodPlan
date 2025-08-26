@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:foodplan/components/editable_title.dart';
@@ -6,6 +8,7 @@ import 'package:foodplan/components/properties.dart';
 
 import 'package:foodplan/managers/single_list_manager.dart';
 import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:provider/provider.dart';
 
@@ -98,7 +101,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
       ),
       body: Stack(
         children: [
-          scrollableContent(titleStyle, singleListManager),
+          scrollableContent(titleStyle, singleListManager, widget.id),
           Positioned(
             left: 0,
             right: 0,
@@ -132,6 +135,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
   SingleChildScrollView scrollableContent(
     TextStyle? titleStyle,
     SingleListManager singleListManager,
+    String id,
   ) {
     return SingleChildScrollView(
       child: Container(
@@ -140,7 +144,7 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
         child: Column(
           spacing: 20,
           children: [
-            EditImage(),
+            EditImage(id: id),
             Container(
               padding: EdgeInsets.all(10),
               decoration: BoxDecoration(
@@ -178,14 +182,70 @@ class _ModifyListItemPageState extends State<ModifyListItemPage> {
 }
 
 class EditImage extends StatelessWidget {
-  const EditImage({super.key});
+  const EditImage({super.key, required this.id});
+
+  final String id;
+  @override
+  Widget build(BuildContext context) {
+    SingleListManager singleListManager = context.watch<SingleListManager>();
+    final String imagePath = singleListManager.getImagePath(id);
+
+    return Container(
+      height: 320,
+      padding: EdgeInsets.only(right: 50, left: 50, top: 20, bottom: 20),
+      child: Center(
+        child: Stack(
+          children: [
+            showImage(imagePath),
+            AddPitcure(singleListManager: singleListManager, id: id),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Image showImage(String imagePath) {
+    if (imagePath.startsWith("/")) {
+      //se inizia con / allora e' un percorso nel file system, altrimenti e' un asset!
+      return Image.file(File(imagePath));
+    } else {
+      return Image.asset(imagePath);
+    }
+  }
+}
+
+class AddPitcure extends StatelessWidget {
+  const AddPitcure({
+    super.key,
+    required this.singleListManager,
+    required this.id,
+  });
+
+  final SingleListManager singleListManager;
+  final String id;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 300,
-      padding: EdgeInsets.only(right: 50, left: 50, top: 20, bottom: 20),
-      child: Center(child: Placeholder()),
+    return Positioned(
+      top: 0,
+      right: 0,
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              singleListManager.setImage(id, ImageSource.camera);
+            },
+            icon: Icon(Icons.camera_alt),
+          ),
+
+          IconButton(
+            onPressed: () {
+              singleListManager.setImage(id, ImageSource.gallery);
+            },
+            icon: Icon(Icons.add_photo_alternate),
+          ),
+        ],
+      ),
     );
   }
 }
