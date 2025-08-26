@@ -9,18 +9,21 @@ class DateProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
+    required this.fieldStyle,
   });
 
   final String property5;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
+  final TextStyle fieldStyle;
 
   @override
   Widget build(BuildContext context) {
     return ModifyListProperty(
       propertyName: property5,
       widget: TextField(
+        style: fieldStyle,
         controller: controller,
         textAlign: TextAlign.center,
         readOnly: true,

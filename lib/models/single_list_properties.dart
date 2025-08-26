@@ -79,7 +79,11 @@ class SingleListProperties {
         if (value is double) {
           price = value;
         } else {
-          throw UnimplementedError();
+          if (value == null) {
+            price = value;
+          } else {
+            throw UnimplementedError();
+          }
         }
       case SingleListProperty.priceMeasurementUnit:
         if (value is String) {

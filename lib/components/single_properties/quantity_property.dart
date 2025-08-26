@@ -11,12 +11,14 @@ class QuantityProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
+    required this.fieldStyle,
   });
 
   final String quantityProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
+  final TextStyle fieldStyle;
 
   final List<String> measuramentUnits = ["g", "hg", "kg", "mg", "x"];
 
@@ -42,9 +44,8 @@ class QuantityProperty extends StatelessWidget {
           child: ModifyListProperty(
             propertyName: quantityProperty,
             widget: TextField(
-              style: (Theme.of(context).textTheme.titleSmall)!.copyWith(
-                color: Theme.of(context).colorScheme.onSecondaryContainer,
-              ),
+              style: fieldStyle,
+              maxLength: 6,
               controller: controller,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,

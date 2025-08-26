@@ -20,7 +20,7 @@ class MainListManager extends Editable {
   bool startupEditState = false;
   String startupTitle = "Supermercato";
 
-  final _box = Hive.box("storage"); //is Map String, MainlistProperties
+  final _box = Hive.box("mainlist"); //is Map String, MainlistProperties
 
   set selectedId(String myId) {
     if (myId.isNotEmpty) {

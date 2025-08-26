@@ -36,6 +36,9 @@ class _PropertiesState extends State<Properties> {
   @override
   Widget build(BuildContext context) {
     final SingleListManager singleListManager = context.read();
+    TextStyle fieldStyle = (Theme.of(context).textTheme.titleSmall)!.copyWith(
+      color: Theme.of(context).colorScheme.onSecondaryContainer,
+    );
     final String? category = singleListManager.getProperty(
       widget.id,
       SingleListProperty.category,
@@ -107,18 +110,21 @@ class _PropertiesState extends State<Properties> {
           controller: controllerMap[property1],
           singleListManager: singleListManager,
           id: widget.id,
+          fieldStyle: fieldStyle,
         ),
         PriceProperty(
           priceProperty: property2,
           controller: controllerMap[property2],
           singleListManager: singleListManager,
           id: widget.id,
+          fieldStyle: fieldStyle,
         ),
         QuantityProperty(
           quantityProperty: property3,
           controller: controllerMap[property3],
           singleListManager: singleListManager,
           id: widget.id,
+          fieldStyle: fieldStyle,
         ),
 
         DateProperty(
@@ -126,12 +132,14 @@ class _PropertiesState extends State<Properties> {
           controller: controllerMap[property5],
           singleListManager: singleListManager,
           id: widget.id,
+          fieldStyle: fieldStyle,
         ),
         DescriptionProperty(
           descriptionProperty: property4,
           controller: controllerMap[property4],
           singleListManager: singleListManager,
           id: widget.id,
+          fieldStyle: fieldStyle,
         ),
       ],
     );

@@ -10,21 +10,25 @@ class DescriptionProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
+    required this.fieldStyle,
   });
 
   final String descriptionProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
+  final TextStyle fieldStyle;
 
   @override
   Widget build(BuildContext context) {
     return ModifyListProperty(
       propertyName: descriptionProperty,
-      fieldHeight: 200,
+      fieldHeight: 250,
 
       widget: TextField(
         controller: controller,
+        style: fieldStyle,
+        maxLength: 200,
         maxLines: null,
         minLines: 3,
         keyboardType: TextInputType.multiline,

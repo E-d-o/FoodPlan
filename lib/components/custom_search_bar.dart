@@ -28,6 +28,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       autoFocus: widget.isAutoFocused,
       focusNode: _searchFocusNode,
       controller: _textEditingController,
+
       leading: IconButton(
         onPressed: () {
           singleListManager.changeAddingState();
@@ -44,7 +45,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
           icon: Icon(Icons.add_circle_outline),
         ),
       ],
-      padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
+      padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 2)),
       hintText: "Aggiungi elemento",
       shape: WidgetStateProperty.all(
         RoundedRectangleBorder(

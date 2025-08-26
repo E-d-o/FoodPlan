@@ -10,12 +10,14 @@ class CategoryProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
+    required this.fieldStyle,
   });
 
   final String categoryProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
+  final TextStyle fieldStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +27,8 @@ class CategoryProperty extends StatelessWidget {
       widget: TextField(
         controller: controller,
         textAlign: TextAlign.center,
+        style: fieldStyle,
+        maxLength: 26,
         onChanged: (value) {
           String? categoryText = controller!.text;
           singleListManager.saveProperty(

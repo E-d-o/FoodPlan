@@ -11,12 +11,14 @@ class PriceProperty extends StatelessWidget {
     required this.controller,
     required this.singleListManager,
     required this.id,
+    required this.fieldStyle,
   });
 
   final String priceProperty;
   final TextEditingController? controller;
   final SingleListManager singleListManager;
   final String id;
+  final TextStyle fieldStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,9 @@ class PriceProperty extends StatelessWidget {
 
       widget: TextField(
         controller: controller,
+        maxLength: 10,
         keyboardType: TextInputType.numberWithOptions(),
+        style: fieldStyle,
         textAlign: TextAlign.center,
         inputFormatters: [
           FilteringTextInputFormatter.allow(RegExp(r'[0-9.,]')),

@@ -76,6 +76,14 @@ class SingleListManager extends Editable {
     return requiredItemsList.length + homeItemsList.length;
   }
 
+  double getProgress() {
+    if (getNumberOfListItems() != 0) {
+      return (requiredItemsList.length) / getNumberOfListItems();
+    } else {
+      return 0;
+    }
+  }
+
   bool _isListInProperties(String listId) {
     if (box.containsKey(listId)) {
       return true;

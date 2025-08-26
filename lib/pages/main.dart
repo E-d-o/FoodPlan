@@ -16,7 +16,7 @@ void main() async {
   Hive.registerAdapter(MainListPropertiesAdapter());
   Hive.registerAdapter(SingleListPropertiesAdapter());
 
-  await Hive.openBox("storage");
+  await Hive.openBox("mainlist");
 
   runApp(const MyApp());
 }
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    final Color seedColor = const Color.fromARGB(255, 182, 68, 97);
+    final Color seedColor = const Color.fromARGB(255, 147, 205, 119);
     final ColorScheme colorScheme = ColorScheme.fromSeed(
       seedColor: seedColor,
       brightness: Brightness.light,
