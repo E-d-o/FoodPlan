@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -25,9 +26,38 @@ class NeededItems extends StatelessWidget {
               ),
             ],
           ),
-          Column(spacing: 10, children: [...itemsList]),
+          ItemsList(itemsList: itemsList),
         ],
       ),
     );
+  }
+}
+
+class ItemsList extends StatelessWidget {
+  const ItemsList({super.key, required this.itemsList});
+
+  final List<ListItem> itemsList;
+
+  @override
+  Widget build(BuildContext context) {
+    final singleListManager = context.read<SingleListManager>();
+    if (singleListManager.isBoxFirstEmpty) {
+      return Row(
+        children: [
+          Flexible(
+            child: Wrap(
+              children: [
+                Text(
+                  "Aggiungi un elemento cliccando sulla barra di ricerca!",
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Column(spacing: 10, children: [...itemsList]);
+    }
   }
 }

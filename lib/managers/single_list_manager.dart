@@ -23,7 +23,7 @@ class SingleListManager extends Editable {
 
   bool _isHomeItemsVisible = true;
   double _paddingHomeItems = 16.0;
-
+  bool isBoxFirstEmpty = true;
   bool get isHomeItemsVisible => _isHomeItemsVisible;
   double get paddingHomeItems => _paddingHomeItems;
   static const int maxSuggestions = 20;
@@ -76,6 +76,8 @@ class SingleListManager extends Editable {
   void boxNotEmptyLoading() {
     homeItemsList.clear();
     requiredItemsList.clear();
+    isBoxFirstEmpty = false;
+
     for (var key in box.keys) {
       SingleListProperties value = box.get(key);
 
@@ -89,15 +91,7 @@ class SingleListManager extends Editable {
     }
   }
 
-  void boxIsEmptyLoading() {
-    // ignore: avoid_print
-    print("box is empty, adding single item");
-    String newid = uuid.v4();
-    ListItem firstItem = ListItem(id: newid);
-
-    requiredItemsList.add(firstItem);
-    _addProperty(newid, "banana", false);
-  }
+  void boxIsEmptyLoading() {}
 
   void notifyProgress() {
     if (onChanged != null) {
@@ -189,7 +183,12 @@ class SingleListManager extends Editable {
     return getProperty(listId, SingleListProperty.isChecked);
   }
 
-  void _addProperty(String listId, String title, bool isChecked) {
+  void _addProperty(
+    String listId,
+    String title,
+    bool isChecked, {
+    String? subtitle,
+  }) {
     box.put(
       listId,
       SingleListProperties(
@@ -198,6 +197,7 @@ class SingleListManager extends Editable {
         isBeingEdited: true,
         priceMeasurementUnit: settingsManager.priceMeasurementUnit,
         quantityMeasurementUnit: "x",
+        subtitle: subtitle,
       ),
     );
 
@@ -207,6 +207,8 @@ class SingleListManager extends Editable {
   void addNewItem(String title) {
     String newid = uuid.v4();
     requiredItemsList.add(ListItem(id: newid));
+    isBoxFirstEmpty = false;
+
     _addProperty(newid, title, false);
 
     notifyProgress();
@@ -218,6 +220,8 @@ class SingleListManager extends Editable {
       String newid = uuid.v4();
       homeItemsList.add(ListItem(id: newid));
       _addProperty(newid, title, true);
+      isBoxFirstEmpty = false;
+
       notifyProgress();
     } else {
       addNewItem(title);
