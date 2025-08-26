@@ -19,6 +19,11 @@ class MainListProperties extends HiveObject {
 
   @HiveField(3)
   DateTime timeOfAddition = DateTime(2024, 4, 30);
+  @HiveField(4)
+  int requiredLenght = 0;
+  @HiveField(5)
+  int homeLenght = 0;
+
   bool hasProperty(MainListProperty property) {
     return true; //add logic here if you want to check that you wrote all of the mainListProperties specified in the enum MainLIstProperty
   }
@@ -45,8 +50,21 @@ class MainListProperties extends HiveObject {
         }
       case MainListProperty.timeOfAddition:
         if (value is DateTime) {
+          timeOfAddition = value;
         } else {
           throw ArgumentError("timeOfAddition non e' un Datetime");
+        }
+      case MainListProperty.requiredLenght:
+        if (value is int) {
+          requiredLenght = value;
+        } else {
+          throw UnimplementedError();
+        }
+      case MainListProperty.homeLenght:
+        if (value is int) {
+          homeLenght = value;
+        } else {
+          throw UnimplementedError();
         }
     }
   }
@@ -62,6 +80,10 @@ class MainListProperties extends HiveObject {
 
       case MainListProperty.timeOfAddition:
         return timeOfAddition;
+      case MainListProperty.requiredLenght:
+        return requiredLenght;
+      case MainListProperty.homeLenght:
+        return homeLenght;
     }
   }
 }

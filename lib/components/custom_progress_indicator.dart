@@ -22,7 +22,7 @@ class CustomProgressIndicator extends StatelessWidget {
     MainListManager mainManager = context.watch<MainListManager>();
 
     double progress = mainManager.getListProgress(id);
-    progress = 0.6; //for testing purpuses
+
     final Color backgroundColor = Theme.of(
       context,
     ).colorScheme.secondaryContainer;

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_progress_indicator.dart';
 import 'package:foodplan/components/editable_title.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
 
 import 'package:foodplan/components/main_list_bottom_sheet.dart';
 import 'package:foodplan/managers/main_list_manager.dart';
+import 'package:foodplan/models/enums/main_list_property.dart';
 import 'package:foodplan/pages/single_list_page.dart';
 import 'package:hive/hive.dart';
 
@@ -216,7 +216,8 @@ class Main extends StatelessWidget {
                       return MultiProvider(
                         providers: [
                           ChangeNotifierProvider(
-                            create: (context) => SingleListManager(box: box),
+                            create: (context) => mainListManager
+                                .createSingleListManager(box, widget.id),
                           ),
                           ChangeNotifierProvider.value(
                             value: mainListManager,
@@ -273,6 +274,12 @@ class RightPartMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainListManager listManager = context.watch<MainListManager>();
+    int homeLenght = listManager.getProperty(id, MainListProperty.homeLenght);
+    int requiredLenght = listManager.getProperty(
+      id,
+      MainListProperty.requiredLenght,
+    );
+    int total = homeLenght + requiredLenght;
     if (listManager.getEditStatus(id)) {
       return ElevatedButton(
         onPressed: () {
@@ -286,11 +293,7 @@ class RightPartMain extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(right: 12.0),
-            child: Text(
-              //TODO: use mainlistProperty to show proper value
-              "0/0",
-              style: titleStyle,
-            ),
+            child: Text("$homeLenght/$total", style: titleStyle),
           ),
         ],
       );

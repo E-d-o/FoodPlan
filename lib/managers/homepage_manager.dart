@@ -5,6 +5,12 @@ class HomepageManager extends ChangeNotifier {
     scrollController.addListener(_scrollListener);
   }
 
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   bool isFloatingButtonVisible = false;
   ScrollController scrollController = ScrollController();
 

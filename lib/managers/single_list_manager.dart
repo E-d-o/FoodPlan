@@ -35,8 +35,9 @@ class SingleListManager extends Editable {
   late final Box box;
   bool _isAdding = false;
   bool get isAdding => _isAdding;
+  final Function(int, int)? onChanged;
 
-  SingleListManager({required this.box}) {
+  SingleListManager({required this.box, this.onChanged}) {
     _initProperties();
   }
   final Map<String, SingleListProperties> _tempProperties = {};
@@ -76,15 +77,9 @@ class SingleListManager extends Editable {
     _addProperty(newid, "banana", false);
   }
 
-  int getNumberOfListItems() {
-    return requiredItemsList.length + homeItemsList.length;
-  }
-
-  double getProgress() {
-    if (getNumberOfListItems() != 0) {
-      return (requiredItemsList.length) / getNumberOfListItems();
-    } else {
-      return 0;
+  void notifyProgress() {
+    if (onChanged != null) {
+      onChanged!(requiredItemsList.length, homeItemsList.length);
     }
   }
 
@@ -192,7 +187,7 @@ class SingleListManager extends Editable {
     requiredItemsList.add(ListItem(id: newid));
     _addProperty(newid, title, false);
     //TODO:handle progress in passing data to mainlist manager
-
+    notifyProgress();
     notifyListeners();
   }
 
@@ -201,6 +196,7 @@ class SingleListManager extends Editable {
       String newid = uuid.v4();
       homeItemsList.add(ListItem(id: newid));
       _addProperty(newid, title, true);
+      notifyProgress();
     } else {
       addNewItem(title);
     }
@@ -236,6 +232,7 @@ class SingleListManager extends Editable {
     if (getProperty(listId, SingleListProperty.isChecked)) {
       //if is checked that means its at home
       homeItemsList.removeWhere((element) => element.id == listId);
+
       checkForEmptyHomeItems();
     } else {
       //in required items
@@ -243,6 +240,8 @@ class SingleListManager extends Editable {
       requiredItemsList.removeWhere((element) => element.id == listId);
     }
     _removeProperty(listId);
+    notifyProgress();
+
     notifyListeners();
   }
 
@@ -251,6 +250,8 @@ class SingleListManager extends Editable {
 
     _changeToOtherList(listId, isAtHome);
     checkForEmptyHomeItems();
+    notifyProgress();
+
     notifyListeners();
   }
 
@@ -439,7 +440,9 @@ class SingleListManager extends Editable {
     if (image != null) {
       final Directory appDir = await getApplicationDocumentsDirectory();
       final String savePath = "${appDir.path}/${DateTime.timestamp()}";
-      await File(image.path).copy(savePath); //copy picked image into savepath
+      await File(image.path).copy(
+        savePath,
+      ); //copy picked image into savepath, is the old image saved at the oldpath still there?
       _setImagePath(
         id,
         savePath,
