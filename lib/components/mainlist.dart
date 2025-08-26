@@ -3,7 +3,7 @@ import 'package:foodplan/components/custom_progress_indicator.dart';
 import 'package:foodplan/components/editable_title.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
 
-import 'package:foodplan/pages/main_list_bottom_sheet.dart';
+import 'package:foodplan/components/main_list_bottom_sheet.dart';
 import 'package:foodplan/managers/main_list_manager.dart';
 import 'package:foodplan/pages/single_list_page.dart';
 import 'package:hive/hive.dart';
@@ -208,12 +208,20 @@ class Main extends StatelessWidget {
                 if (!context.mounted) {
                   return; //check if widget is still in tree
                 }
+                mainListManager.selectedId = widget.id;
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return ChangeNotifierProvider(
-                        create: (context) => SingleListManager(box: box),
+                      return MultiProvider(
+                        providers: [
+                          ChangeNotifierProvider(
+                            create: (context) => SingleListManager(box: box),
+                          ),
+                          ChangeNotifierProvider.value(
+                            value: mainListManager,
+                          ), //?? works but i have doubts
+                        ],
                         builder: (context, child) => SingleListPage(),
                       );
                     },

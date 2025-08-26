@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
 import 'package:foodplan/managers/homepage_manager.dart';
-
 import 'package:foodplan/managers/main_list_manager.dart';
 import 'package:foodplan/models/main_list_properties.dart';
 import 'package:foodplan/models/single_list_properties.dart';
-
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'drawer_page.dart';

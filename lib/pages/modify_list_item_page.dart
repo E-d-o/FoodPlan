@@ -187,21 +187,37 @@ class EditImage extends StatelessWidget {
   final String id;
   @override
   Widget build(BuildContext context) {
-    SingleListManager singleListManager = context.watch<SingleListManager>();
-    final String imagePath = singleListManager.getImagePath(id);
-
-    return Container(
-      height: 320,
-      padding: EdgeInsets.only(right: 50, left: 50, top: 20, bottom: 20),
-      child: Center(
-        child: Stack(
-          children: [
-            showImage(imagePath),
-            AddPitcure(singleListManager: singleListManager, id: id),
-          ],
-        ),
-      ),
+    return Selector<SingleListManager, String>(
+      builder: (context, value, child) {
+        final String imagePath = value;
+        if (imagePath == '') {
+          //check if rebuild when deleted
+          return SizedBox.shrink();
+        }
+        SingleListManager singleListManager = context.read<SingleListManager>();
+        return Container(
+          height: 320,
+          padding: EdgeInsets.only(right: 50, left: 50, top: 20, bottom: 20),
+          child: Center(
+            child: Stack(
+              children: [
+                showImage(imagePath),
+                AddPitcure(singleListManager: singleListManager, id: id),
+              ],
+            ),
+          ),
+        );
+      },
+      selector: (context, provider) {
+        try {
+          return provider.getImagePath(id);
+        } catch (e) {
+          return '';
+        }
+      },
     );
+    //SingleListManager singleListManager = context.watch<SingleListManager>();
+    //optimization: rebuild on imagepath changing
   }
 
   Image showImage(String imagePath) {

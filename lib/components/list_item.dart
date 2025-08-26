@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/components/hold_list_item_bottom_sheet.dart';
 import 'package:foodplan/managers/single_list_manager.dart';
 import 'package:foodplan/pages/modify_list_item_page.dart';
 import 'package:foodplan/models/enums/single_list_property.dart';
@@ -69,60 +70,9 @@ class ListItem extends StatelessWidget {
               backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
               barrierColor: Colors.transparent,
               builder: (context) {
-                return SizedBox(
-                  height: 200,
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            singleListManager.renameItem(
-                              id,
-                              "sdfkj",
-                            ); //TODO:editable title in listitem
-                          },
-                          child: Row(
-                            spacing: 20,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Rinomina"),
-                              Icon(Icons.edit_square),
-                            ],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            singleListManager.removeItem(id);
-                          },
-                          child: Row(
-                            spacing: 20,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Text("Elimina"), Icon(Icons.delete)],
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            singleListManager.copyItem(id);
-                          },
-                          child: Row(
-                            spacing: 20,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Copia"),
-                              Icon(Icons.copy_all_outlined),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                return HoldListItemBottomSheet(
+                  singleListManager: singleListManager,
+                  id: id,
                 );
               },
             );
