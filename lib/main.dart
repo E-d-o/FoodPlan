@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
+import 'package:foodplan/controllers/homepage_controller.dart';
 import 'package:foodplan/managers/homepage_manager.dart';
 import 'package:foodplan/managers/main_list_manager.dart';
 import 'package:foodplan/managers/settings_manager.dart';
@@ -7,7 +8,7 @@ import 'package:foodplan/models/main_list_properties.dart';
 import 'package:foodplan/models/single_list_properties.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
-import 'drawer_page.dart';
+import 'pages/drawer_page.dart';
 import '../components/logo.dart';
 
 void main() async {
@@ -68,6 +69,10 @@ class MyApp extends StatelessWidget {
         home: MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (context) => HomepageManager()),
+             ProxyProvider<HomepageManager, HomepageController>(
+              update: (context, homepageManager, previous) => 
+                HomepageController(homepageManager: homepageManager),
+            ),
           ],
           child: MyHomePage(title: 'FoodPlan'),
         ),
@@ -111,11 +116,12 @@ class HidableActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     HomepageManager homepageManager = context.watch<HomepageManager>();
+    HomepageController controller = context.read<HomepageController>();
     return Visibility(
       visible: homepageManager.isFloatingButtonVisible,
       child: FloatingActionButton(
         onPressed: () {
-          homepageManager.scrollToTop();
+          controller.scrollToTop();
         },
         child: Icon(Icons.keyboard_arrow_up),
       ),

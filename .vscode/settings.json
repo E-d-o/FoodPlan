@@ -1,4 +1,5 @@
 {
-    "dart.flutterSdkPath": "C:\\Users\\Edo\\Flutter\\flutter",
+
+    "dart.flutterSdkPath": "/home/edo/Coding/Sdks/flutter",
     "java.configuration.updateBuildConfiguration": "interactive"
 }
