@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
 import 'package:foodplan/components/suggestion_item.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
+import 'package:foodplan/models/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class AddPage extends StatelessWidget {

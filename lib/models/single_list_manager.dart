@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
 import 'package:foodplan/components/suggestion_item.dart';
-import 'package:foodplan/managers/editable.dart';
-import 'package:foodplan/managers/settings_manager.dart';
+import 'package:foodplan/components/editable.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
+import 'package:foodplan/models/settings_manager.dart';
 
-import 'package:foodplan/models/single_list_properties.dart';
-import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:foodplan/properties/single_list_properties.dart';
+import 'package:foodplan/properties/enums/single_list_property.dart';
 import 'package:foodplan/static/suggestion_data.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,18 +34,23 @@ class SingleListManager extends Editable {
   List<String> _filteredsuggestions = [];
 
   List<String> get filteredSuggestions => _filteredsuggestions;
+  late final MainListController _mainListController;
+  final String mainListId;
 
   late final Box box;
   bool _isAdding = false;
   bool get isAdding => _isAdding;
-  final Function(int, int)? onChanged;
+
 
   SingleListManager({
     required this.box,
     required this.settingsManager,
-    this.onChanged,
+    required mainListManager,
+    required this.mainListId
+   
   }) {
     _initProperties();
+    _mainListController=MainListController(mainListManager: mainListManager);
   }
   final Map<String, SingleListProperties> _tempProperties = {};
 
@@ -94,9 +100,7 @@ class SingleListManager extends Editable {
   void boxIsEmptyLoading() {}
 
   void notifyProgress() {
-    if (onChanged != null) {
-      onChanged!(requiredItemsList.length, homeItemsList.length);
-    }
+    _mainListController.onChangedHandler(requiredItemsList.length, homeItemsList.length, mainListId);
   }
 
   bool _isListInProperties(String listId) {

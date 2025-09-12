@@ -4,8 +4,8 @@ import 'package:foodplan/components/single_properties/date_property.dart';
 import 'package:foodplan/components/single_properties/description_property.dart';
 import 'package:foodplan/components/single_properties/price_property.dart';
 import 'package:foodplan/components/single_properties/quantity_property.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:foodplan/models/single_list_manager.dart';
+import 'package:foodplan/properties/enums/single_list_property.dart';
 import 'package:provider/provider.dart';
 
 class Properties extends StatefulWidget {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:foodplan/components/modify_list_property.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:foodplan/models/single_list_manager.dart';
+import 'package:foodplan/properties/enums/single_list_property.dart';
 
 class PriceProperty extends StatelessWidget {
   const PriceProperty({

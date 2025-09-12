@@ -3,8 +3,9 @@ import 'package:foodplan/components/custom_progress_indicator.dart';
 import 'package:foodplan/components/editable_title.dart';
 
 import 'package:foodplan/components/main_list_bottom_sheet.dart';
-import 'package:foodplan/managers/main_list_manager.dart';
-import 'package:foodplan/models/enums/main_list_property.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
+import 'package:foodplan/models/main_list_manager.dart';
+import 'package:foodplan/properties/enums/main_list_property.dart';
 import 'package:foodplan/pages/single_list_page.dart';
 import 'package:hive/hive.dart';
 
@@ -194,6 +195,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     MainListManager mainListManager = context.watch<MainListManager>();
+    MainListController mainListController=context.read<MainListController>();
 
     return Material(
       color: Colors.transparent,
@@ -221,7 +223,9 @@ class Main extends StatelessWidget {
                           ),
                           ChangeNotifierProvider.value(
                             value: mainListManager,
-                          ), //?? works but i have doubts
+                          ),
+                          //TODO: figure out how to pass mainlistController
+                          Provider.value(value: mainListController),
                         ],
                         builder: (context, child) => SingleListPage(),
                       );
@@ -274,8 +278,10 @@ class RightPartMain extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainListManager listManager = context.watch<MainListManager>();
-    int homeLenght = listManager.getProperty(id, MainListProperty.homeLenght);
-    int requiredLenght = listManager.getProperty(
+    final MainListController mainListController=context.read<MainListController>();
+
+    int homeLenght = mainListController.getProperty(id, MainListProperty.homeLenght);
+    int requiredLenght = mainListController.getProperty(
       id,
       MainListProperty.requiredLenght,
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/hold_list_item_bottom_sheet.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
+import 'package:foodplan/models/single_list_manager.dart';
 import 'package:foodplan/pages/modify_list_item_page.dart';
-import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:foodplan/properties/enums/single_list_property.dart';
 import 'package:provider/provider.dart';
 
 class ListItem extends StatelessWidget {

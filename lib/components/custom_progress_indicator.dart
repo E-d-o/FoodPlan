@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/managers/main_list_manager.dart';
+
+import 'package:foodplan/controllers/main_list_controller.dart';
+import 'package:foodplan/models/main_list_manager.dart';
+
 
 import 'package:provider/provider.dart';
 
@@ -19,10 +22,13 @@ class CustomProgressIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    MainListManager mainManager = context.watch<MainListManager>();
-
-    double progress = mainManager.getListProgress(id);
-
+   
+   
+    MainListController mainListController=context.read<MainListController>();
+    
+    context.watch<MainListManager>();
+    double progress = mainListController.getListProgress(id);
+    
     final Color backgroundColor = Theme.of(
       context,
     ).colorScheme.secondaryContainer;

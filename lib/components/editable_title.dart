@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/managers/editable.dart';
-import 'package:foodplan/managers/main_list_manager.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
-import 'package:foodplan/models/enums/single_list_property.dart';
+import 'package:foodplan/components/editable.dart';
+import 'package:foodplan/models/main_list_manager.dart';
+import 'package:foodplan/models/single_list_manager.dart';
+import 'package:foodplan/properties/enums/single_list_property.dart';
 
 import 'package:provider/provider.dart';
 

@@ -3,8 +3,8 @@ import 'package:foodplan/components/at_home_items.dart';
 import 'package:foodplan/components/needed_items.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
 import 'package:foodplan/components/single_list_bottom_sheet.dart';
-import 'package:foodplan/managers/main_list_manager.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
+import 'package:foodplan/models/main_list_manager.dart';
+import 'package:foodplan/models/single_list_manager.dart';
 import 'package:foodplan/pages/add_page.dart';
 import 'package:provider/provider.dart';
 

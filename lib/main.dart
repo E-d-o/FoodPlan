@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/add_main_list.dart';
 import 'package:foodplan/controllers/homepage_controller.dart';
-import 'package:foodplan/managers/homepage_manager.dart';
-import 'package:foodplan/managers/main_list_manager.dart';
-import 'package:foodplan/managers/settings_manager.dart';
-import 'package:foodplan/models/main_list_properties.dart';
-import 'package:foodplan/models/single_list_properties.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
+import 'package:foodplan/models/homepage_manager.dart';
+import 'package:foodplan/models/main_list_manager.dart';
+import 'package:foodplan/models/settings_manager.dart';
+import 'package:foodplan/properties/main_list_properties.dart';
+import 'package:foodplan/properties/single_list_properties.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
 import 'pages/drawer_page.dart';
@@ -43,6 +44,11 @@ class MyApp extends StatelessWidget {
           create: (context) =>
               MainListManager(settingsManager: settingsManager),
         ),
+        ProxyProvider<MainListManager, MainListController>(
+              update: (context, mainListManager, previous) => 
+                MainListController(mainListManager: mainListManager),
+            ),
+
       ],
       child: MaterialApp(
         title: 'FoodPlan',
@@ -117,11 +123,13 @@ class HidableActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     HomepageManager homepageManager = context.watch<HomepageManager>();
     HomepageController controller = context.read<HomepageController>();
+  
     return Visibility(
       visible: homepageManager.isFloatingButtonVisible,
       child: FloatingActionButton(
         onPressed: () {
           controller.scrollToTop();
+          
         },
         child: Icon(Icons.keyboard_arrow_up),
       ),

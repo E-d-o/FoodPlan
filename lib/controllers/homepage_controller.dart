@@ -1,4 +1,4 @@
-import 'package:foodplan/managers/homepage_manager.dart';
+import 'package:foodplan/models/homepage_manager.dart';
 
 class HomepageController {
   late final  HomepageManager _homepageManager;

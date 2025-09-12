@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/managers/settings_manager.dart';
+import 'package:foodplan/models/settings_manager.dart';
 import 'package:provider/provider.dart';
 
 class SettingsPage extends StatefulWidget {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/list_item.dart';
-import 'package:foodplan/managers/single_list_manager.dart';
+import 'package:foodplan/models/single_list_manager.dart';
 import 'package:provider/provider.dart';
 
 class NeededItems extends StatelessWidget {

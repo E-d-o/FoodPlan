@@ -1,4 +1,4 @@
-import 'package:foodplan/models/enums/main_list_property.dart';
+import 'package:foodplan/properties/enums/main_list_property.dart';
 import 'package:hive/hive.dart';
 part 'main_list_properties.g.dart';
 
