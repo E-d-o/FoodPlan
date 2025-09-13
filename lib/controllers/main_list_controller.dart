@@ -1,8 +1,9 @@
+import 'package:foodplan/components/editable.dart';
 import 'package:foodplan/models/main_list_manager.dart';
 import 'package:foodplan/properties/enums/main_list_property.dart';
 
 
-class MainListController {
+class MainListController with Editable {
 
   late final MainListManager _mainListManager;
 
@@ -12,66 +13,28 @@ class MainListController {
 
 
 
-
-  bool _isValidListId(String listId) {
-    return true;
-  }
-
-
-  // bool _isSafeToAccessProperty(String listId, MainListProperty property) {
-  //   if (_isValidListId(listId)) {
-  //     if (_isPropertyInProperties(listId, property)) {
-  //       return true;
-  //     }
-  //     throw Exception("property is not in property");
-  //   }
-  //   throw (Exception("list is not in box"));
-  // }
-
-
-  // bool _isPropertyInProperties(String listId, MainListProperty property) {
-  //   if(_isValidListId(listId)){
-  //     return _mainListManager.queryDbGet(listId)!.hasProperty(property);
-
-  //   }
-  //   return false;
-
-  // }
-
- 
-
    void onChangedHandler(int requiredLenght, int homeLenght, String listId) {
-    if(_isValidListId(listId)&&_isValidListLenghts(requiredLenght, homeLenght)){
-      try{
-      _mainListManager.onChangedHandler(requiredLenght, homeLenght, listId);
-
-      }catch(e){
-        throw(Exception("Eccezione di tipo $e nel changed handler"));
-      }
-
-    }else{
-      throw(Exception("Something went wrong when changing progress"));
-    }
+    _checkPresentListId(listId);
+    _checkValidListLenghts(requiredLenght, homeLenght);
+    _mainListManager.onChangedHandler(requiredLenght, homeLenght, listId);
+    
   }
 
 
   
   dynamic getProperty(String listId, MainListProperty property) {
-    if(_isValidListId(listId)&& _isValidMainListProperty(property)){
-      return _mainListManager.getProperty(listId, property);
+    _checkValidMainListProperty(property);
+    _checkPresentListId(listId);
+    return _mainListManager.getProperty(listId, property);
+      
 
-    }else{
-      throw(Exception("Something went wrong in get main list property"));
-    }
+    
   }
 
   double getListProgress(String listId) {//getter without knowing implementations, all properties should be like this
     return getProperty(listId, MainListProperty.progress);
   }
-  String getTitle(String listId) {
-    return getProperty(listId, MainListProperty.title);
-  }
-
+ 
 
 
  void addMainList() {
@@ -79,58 +42,85 @@ class MainListController {
   }
 
   void removeMainList(String removeId) {
-    if(_isValidListId(removeId)){
-      _mainListManager.removeMainList(removeId);
+    _checkPresentListId(removeId);
+     _mainListManager.removeMainList(removeId);
+  }
+
+    
+  
+  //only check for valid list id, throws when not valid
+  void _checkPresentListId(String listId) {
+    if(!_mainListManager.containsListId(listId)){
+      throw(ArgumentError.value(listId,"listId" ,"listId is not in Db"));
     }
   }
 
+  
+
+   void _checkValidListLenghts(int requiredLenght, int homeLenght){
+   
+      if(requiredLenght<0){
+        throw(ArgumentError.value(requiredLenght, "requiredLenght","is negative"));
+      }
+      if(homeLenght<0){
+        throw(ArgumentError.value(homeLenght, "homeLenght","is negative"));
+      }
+      if(requiredLenght+homeLenght==0){
+        throw(ArgumentError.value([requiredLenght,homeLenght], "requiredLenght, homeLenght","are both 0"));
+      }
+    }
+   
 
 
+
+
+  void _checkValidMainListProperty(MainListProperty property) {
+    
+  }
+
+void _checkValidTitle(String newTitle) {
+  if(newTitle.length>26){
+    throw(ArgumentError.value(newTitle,"newTitle","is too long, exceeds 26 chars"));
+  }
+}
+
+ @override
+  String getTitle(String listId) {
+
+    return getProperty(listId, MainListProperty.title);//get property perfomes validation
+  }
+
+
+  @override
   void changeEditState(String listId) {
-    if(_isValidListId(listId)){
-      _mainListManager.changeEditState(listId);
-    }
+    _checkPresentListId(listId);
+     _mainListManager.changeEditState(listId);
+    
   }
 
-  
-  
  
+  @override
   void renameItem(String renameId, String newTitle) {
-    if(_isValidListId(renameId)&& newTitle.length<26){
-      _mainListManager.renameItem(renameId, newTitle);
-    }else{
-      throw(Exception("renaming went wrong"));
-    }
+    _checkPresentListId(renameId);
+    _checkValidTitle(newTitle);
+     _mainListManager.renameItem(renameId,newTitle);
   }
 
   
+  @override
   bool getEditStatus(String listId) {
-    if(_isValidListId(listId)){
-      return getProperty(listId, MainListProperty.isBeingEdited);
-
-    }else{
-      throw(Exception("getting edit status went wrong"));
-    }
+    _checkPresentListId(listId);
+    return _mainListManager.getEditStatus(listId);
   }
-
-  //TODO:refactor code in other files to use this instead of model
+  
+  
+//TODO: crash on rename item when clicked
+ 
 
 
 
   
- bool _isValidListLenghts(int requiredLenght, int homeLenght){
-    if(requiredLenght>=0 && homeLenght>=0 && requiredLenght+homeLenght!=0){
-      return true;
-    }
-    return false;
-  } 
 
-
-
-
-  bool _isValidMainListProperty(MainListProperty property) {
-    return true;
-  }
 
 
 

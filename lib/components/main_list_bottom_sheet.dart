@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
 import 'package:foodplan/models/main_list_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -42,11 +43,12 @@ class RenameButton extends StatelessWidget {
           padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
         ),
         onPressed: () {
-          final listManager = Provider.of<MainListManager>(
+          final listController = Provider.of<MainListController>(
             context,
             listen: false,
           );
-          listManager.changeEditState(listManager.selectedId);
+          final listManager= context.read<MainListManager>();
+          listController.changeEditState(listManager.selectedId);
           Navigator.pop(context);
         },
         child: Text("Rinomina"),
@@ -55,7 +57,7 @@ class RenameButton extends StatelessWidget {
   }
 }
 
-class DeleteButton extends StatelessWidget {
+class DeleteButton extends StatelessWidget {//TODO: Refactor into abstract class button
   const DeleteButton({super.key});
 
   @override
@@ -75,11 +77,12 @@ class DeleteButton extends StatelessWidget {
           padding: WidgetStatePropertyAll(EdgeInsets.all(10)),
         ),
         onPressed: () {
-          final listManager = Provider.of<MainListManager>(
+          final listController = Provider.of<MainListController>(
             context,
             listen: false,
           );
-          listManager.removeMainList(listManager.selectedId);
+          final listManager= context.read<MainListManager>();
+          listController.removeMainList(listManager.selectedId);
           Navigator.pop(context);
         },
         child: Row(

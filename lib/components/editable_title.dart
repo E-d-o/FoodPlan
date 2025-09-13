@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:foodplan/components/editable.dart';
-import 'package:foodplan/models/main_list_manager.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
+
 import 'package:foodplan/models/single_list_manager.dart';
 import 'package:foodplan/properties/enums/single_list_property.dart';
 
@@ -33,7 +34,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
     return Selector<T, bool>(
       selector: (context, provider) => provider.getEditStatus(id),
       builder: (context, isEditing, child) {
-        final listManager = Provider.of<T>(context, listen: false);
+        final listManager = context.read<T>();
         String changedTitle = listManager.getTitle(id);
         if (listManager.getEditStatus(id)) {
           return SizedBox(
@@ -70,7 +71,7 @@ class EditableTitle<T extends Editable> extends StatelessWidget {
                       isPermanent: false,
                     );
                     break;
-                  case MainListManager():
+                  case MainListController():
                 }
               },
             ),

@@ -18,7 +18,7 @@ import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
 
-class SingleListManager extends Editable {
+class SingleListManager extends Editable with ChangeNotifier {
   final List<ListItem> requiredItemsList = [];
   final List<ListItem> homeItemsList = [];
 

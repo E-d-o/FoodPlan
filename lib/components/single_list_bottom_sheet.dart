@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
 import 'package:foodplan/models/main_list_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -8,6 +9,7 @@ class SingleListBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final MainListManager mainListManager = context.read<MainListManager>();
+    final MainListController mainListController = context.read<MainListController>();
     return SizedBox(
       height: 200,
       child: Center(
@@ -16,7 +18,7 @@ class SingleListBottomSheet extends StatelessWidget {
           children: [
             ElevatedButton(
               onPressed: () {
-                mainListManager.removeMainList(mainListManager.selectedId);
+                mainListController.removeMainList(mainListManager.selectedId);
                 Navigator.pop(context);
                 Navigator.pop(context);
               },

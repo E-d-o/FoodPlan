@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:foodplan/models/main_list_manager.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
+
 import 'package:provider/provider.dart';
 
 class AddMainList extends StatelessWidget {
@@ -21,11 +22,8 @@ class AddMainList extends StatelessWidget {
         containedInkWell: true,
         onTap: () {
           //notifies body in order to add a new list
-          final managerLists = Provider.of<MainListManager>(
-            context,
-            listen: false,
-          );
-          managerLists.addMainList();
+          final MainListController mainListController=context.read<MainListController>();
+          mainListController.addMainList();
         },
         child: Container(
           height: 100,

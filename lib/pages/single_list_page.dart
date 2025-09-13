@@ -3,6 +3,7 @@ import 'package:foodplan/components/at_home_items.dart';
 import 'package:foodplan/components/needed_items.dart';
 import 'package:foodplan/components/custom_search_bar.dart';
 import 'package:foodplan/components/single_list_bottom_sheet.dart';
+import 'package:foodplan/controllers/main_list_controller.dart';
 import 'package:foodplan/models/main_list_manager.dart';
 import 'package:foodplan/models/single_list_manager.dart';
 import 'package:foodplan/pages/add_page.dart';
@@ -24,13 +25,20 @@ class _SingleListPageState extends State<SingleListPage> {
           IconButton(
             onPressed: () {
               MainListManager mainListManager = context.read<MainListManager>();
+              MainListController mainListController = context
+                  .read<MainListController>();
               showModalBottomSheet(
                 showDragHandle: true,
                 context: context,
                 builder: (context) {
-                  return ChangeNotifierProvider.value(
-                    value: mainListManager,
-                    builder: (context, child) => SingleListBottomSheet(),
+                  return MultiProvider(
+                    providers: [
+                      ChangeNotifierProvider.value(
+                        value: mainListManager,
+                        builder: (context, child) => SingleListBottomSheet(),
+                      ),
+                      Provider.value(value: mainListController),
+                    ],
                   );
                 },
               );

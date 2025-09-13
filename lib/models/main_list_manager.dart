@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:foodplan/components/mainlist.dart';
 import 'package:foodplan/components/editable.dart';
 import 'package:foodplan/models/settings_manager.dart';
@@ -9,30 +11,17 @@ import 'package:uuid/uuid.dart';
 
 final uuid = Uuid();
 
-class MainListManager extends Editable {
+class MainListManager extends Editable with ChangeNotifier{
   final List<MainList> _mainListPages = [];
   List<MainList> get mainListPages => _mainListPages;
   String _selectedId = "";
   String defaultTitle = "Nuova Lista";
   double progressOfNewList = 0;
-  bool defaultEditState =
-      true; //defualt edit state true but is startUpEditState for startup list
+  bool defaultEditState = true; //defualt edit state true but is startUpEditState for startup list
   bool startupEditState = false;
   String startupTitle = "Supermercato";
   final SettingsManager settingsManager;
-
   final _box = Hive.box("mainlist"); //is Map String, MainlistProperties
-
-  SingleListManager createSingleListManager(Box box, String listId) {
-    //SingleListManager depends on Mainlist, used to pass function and its values back to Mainlistmanager, there probably is a better way
-
-    return SingleListManager(
-      box: box,
-      settingsManager: settingsManager,
-      mainListManager: this,
-      mainListId: listId,
-    );
-  }
 
   set selectedId(String myId) {
     if (myId.isNotEmpty) {
@@ -45,6 +34,19 @@ class MainListManager extends Editable {
   MainListManager({required this.settingsManager}) {
     _initProperties();
   }
+  SingleListManager createSingleListManager(Box box, String listId) {
+    //SingleListManager depends on Mainlist, used to pass function and its values back to Mainlistmanager, there probably is a better way
+
+    return SingleListManager(
+      box: box,
+      settingsManager: settingsManager,
+      mainListManager: this,
+      mainListId: listId,
+    );
+  }
+
+
+
 
   void _initProperties() async {
     await _loadExistingLists();
@@ -54,9 +56,15 @@ class MainListManager extends Editable {
   String get selectedId => _selectedId;
 
   dynamic queryDbGet(String listId) {
-    return _box.get(listId);
+    
+    return _box.get(listId);     
+    
   }
 
+
+  bool containsListId(String listId){
+    return _box.containsKey(listId);
+  }
  
 
   void onChangedHandler(int requiredLenght, int homeLenght, String listId) {
@@ -210,3 +218,5 @@ class MainListManager extends Editable {
     return getProperty(listId, MainListProperty.isBeingEdited);
   }
 }
+
+

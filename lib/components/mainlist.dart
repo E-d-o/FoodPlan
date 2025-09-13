@@ -80,8 +80,8 @@ class _MainListState extends State<MainList> {
 
   Widget mainStructure(BuildContext context, Box box) {
     double containerHeight = 100;
-    final MainListManager listManager = context.read<MainListManager>();
-    final String currentTitle = listManager.getTitle(widget.id);
+    final MainListController listController = context.read<MainListController>();
+    final String currentTitle = listController.getTitle(widget.id);
     textEditingController.text = currentTitle;
     final TextStyle? titleStyle = Theme.of(context).textTheme.bodyMedium
         ?.copyWith(color: Theme.of(context).colorScheme.onPrimary);
@@ -90,9 +90,9 @@ class _MainListState extends State<MainList> {
       onTapInside: (event) {},
       onTapOutside: (event) {
         //handles editing status of title
-        if (listManager.getEditStatus(widget.id)) {
+        if (listController.getEditStatus(widget.id)) {
           FocusScope.of(context).unfocus();
-          listManager.changeEditState(widget.id);
+          listController.changeEditState(widget.id);
           textEditingController.text = currentTitle;
         }
       },
@@ -137,8 +137,9 @@ class ListSetting extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double inkBorderRadius = 5;
-    MainListManager mainListManager = context.watch<MainListManager>();
-    if (mainListManager.getEditStatus(id)) return SizedBox.shrink();
+    final MainListManager listManager = context.watch<MainListManager>();
+    final MainListController listController = context.read<MainListController>();
+    if (listController.getEditStatus(id)) return SizedBox.shrink();
     return Material(
       color: Colors.transparent,
       child: InkResponse(
@@ -147,10 +148,7 @@ class ListSetting extends StatelessWidget {
         borderRadius: BorderRadius.circular(inkBorderRadius),
         containedInkWell: true,
         onTap: () {
-          final listManager = Provider.of<MainListManager>(
-            context,
-            listen: false,
-          );
+          
           listManager.selectedId = id;
 
           showModalBottomSheet(
@@ -159,10 +157,15 @@ class ListSetting extends StatelessWidget {
             backgroundColor: Theme.of(context).colorScheme.onInverseSurface,
             barrierColor: Colors.transparent,
             builder: (context) {
-              return ChangeNotifierProvider.value(
+              return MultiProvider(providers: [
+                ChangeNotifierProvider.value(
                 value: listManager,
-                child: MainListBottomSheet(),
-              );
+                
+              ),
+              Provider.value(value: listController),
+              
+              ],
+              child: MainListBottomSheet(),);
             },
           );
         },
@@ -203,7 +206,7 @@ class Main extends StatelessWidget {
         splashColor: Theme.of(context).splashColor.withValues(alpha: 0.40),
         highlightColor: Colors.transparent,
 
-        onTap: mainListManager.getEditStatus(widget.id)
+        onTap: mainListController.getEditStatus(widget.id)
             ? null //Disable inkwell onTap when editing, for some reason shows a darker color when onChanged text
             : () async {
                 await Future.delayed(Duration(milliseconds: 200));
@@ -224,7 +227,7 @@ class Main extends StatelessWidget {
                           ChangeNotifierProvider.value(
                             value: mainListManager,
                           ),
-                          //TODO: figure out how to pass mainlistController
+                          
                           Provider.value(value: mainListController),
                         ],
                         builder: (context, child) => SingleListPage(),
@@ -240,7 +243,7 @@ class Main extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              EditableTitle<MainListManager>(
+              EditableTitle<MainListController>(
                 textEditingController: textEditingController,
                 id: widget.id,
                 context: context,
@@ -277,7 +280,7 @@ class RightPartMain extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MainListManager listManager = context.watch<MainListManager>();
+    context.watch<MainListManager>();
     final MainListController mainListController=context.read<MainListController>();
 
     int homeLenght = mainListController.getProperty(id, MainListProperty.homeLenght);
@@ -286,10 +289,10 @@ class RightPartMain extends StatelessWidget {
       MainListProperty.requiredLenght,
     );
     int total = homeLenght + requiredLenght;
-    if (listManager.getEditStatus(id)) {
+    if (mainListController.getEditStatus(id)) {
       return ElevatedButton(
         onPressed: () {
-          listManager.renameItem(id, controller.text);
+          mainListController.renameItem(id, controller.text);
         },
         child: Icon(Icons.check),
       );

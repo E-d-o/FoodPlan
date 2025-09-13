@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 
-abstract class Editable extends ChangeNotifier {
+
+ abstract mixin class Editable {
   //MAKE MULTIPLE ABSTRACT CLASSES
   bool getEditStatus(String id);
   String getTitle(String listId); //Change in generic
