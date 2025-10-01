@@ -1,16 +1,19 @@
-# foodplan
+# Foodplan
+A mobile app developed in Flutter in order to keep track of foods in various shopping lists.
 
-A new Flutter project.
+## Tech stack
 
-## Getting Started
++ **Framework:** Flutter
++ **Language:** Dart
++ **Database:** Hive (NoSQL)
++ **State Management:** Provider
 
-This project is a starting point for a Flutter application.
+## Features
+- Creation and management of foods and shopping lists.
+- Custom food properties:price, quantity, unit of measure, expiration date, description
+- Photo assignment to food via camera or gallery
+- Autocomplete when adding items for faster input
 
-A few resources to get you started if this is your first Flutter project:
+## Installation guide
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
