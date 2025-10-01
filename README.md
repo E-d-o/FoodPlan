@@ -44,3 +44,8 @@ cd build/app/outputs/flutter-apk/
 
 6) Transfer the app-realease.apk file to your android device
 7) Install it using a file manager
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+![License](https://img.shields.io/badge/License-MIT-blue.svg)
